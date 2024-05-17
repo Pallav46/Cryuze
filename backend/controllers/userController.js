@@ -3,10 +3,11 @@ const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const sendToken = require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail");
-const crypto = require("crypto")
+const crypto = require("crypto");
 
 exports.createUser = catchAsyncError(async (req, res, next) => {
   const { name, email, password, phoneNumber } = req.body;
+  // console.log(req.body);
   const user = await User.create({
     name,
     email,
@@ -17,7 +18,7 @@ exports.createUser = catchAsyncError(async (req, res, next) => {
       url: "profilepicurl",
     },
   });
-
+  console.log(user);
   sendToken(user, 201, res);
 });
 
@@ -99,7 +100,10 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
   const resetToken = req.params.token;
 
   // Hash the reset token to match with the stored hashed token in the database
-  const hashedResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+  const hashedResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
 
   // Find user by the hashed reset token and check if the token has expired
   const user = await User.findOne({
@@ -115,7 +119,9 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
   // Check if both password and confirm password are provided
   const { password, confirmPassword } = req.body;
   if (!password || !confirmPassword) {
-    return next(new ErrorHandler("Please provide both password and confirm password", 400));
+    return next(
+      new ErrorHandler("Please provide both password and confirm password", 400)
+    );
   }
 
   // Check if password and confirm password match
@@ -132,7 +138,6 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
   // Send token to the user
   sendToken(user, 200, res);
 });
-
 
 exports.getAllUsers = catchAsyncError(async (req, res, next) => {
   const users = await User.find();
@@ -154,12 +159,22 @@ exports.updateUserPassword = catchAsyncError(async (req, res, next) => {
   // Check if both current password, new password, and confirm new password are provided
   const { currentPassword, newPassword, confirmNewPassword } = req.body;
   if (!currentPassword || !newPassword || !confirmNewPassword) {
-    return next(new ErrorHandler("Please provide current password, new password, and confirm new password", 400));
+    return next(
+      new ErrorHandler(
+        "Please provide current password, new password, and confirm new password",
+        400
+      )
+    );
   }
 
   // Check if new password and confirm new password match
   if (newPassword !== confirmNewPassword) {
-    return next(new ErrorHandler("New password and confirm new password do not match", 400));
+    return next(
+      new ErrorHandler(
+        "New password and confirm new password do not match",
+        400
+      )
+    );
   }
 
   // Check if the current password matches the user's password
@@ -175,13 +190,13 @@ exports.updateUserPassword = catchAsyncError(async (req, res, next) => {
   // Send token to the user
   sendToken(user, 200, res);
 });
- 
+
 exports.updateUserProfile = catchAsyncError(async (req, res, next) => {
   // Get the current user
   const newUserData = {
     name: req.body.name,
     email: req.body.email,
-    phoneNumber: req.body.phoneNumber
+    phoneNumber: req.body.phoneNumber,
   };
 
   // Update user data

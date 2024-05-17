@@ -1,5 +1,5 @@
 const Service = require("../models/serviceModel");
-
+const Subcategory = require("../models/subCategoryModel")
 const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const ApiFeatures = require("../utils/apifeatures");
@@ -23,6 +23,7 @@ exports.getAllService = catchAsyncError(async (req, res, next) => {
 exports.getServiceById = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   const service = await Service.findById(id).populate("subCategories");
+  console.log(service);
   if (!service) {
     return next(new ErrorHandler("Service not found", 404));
   }
@@ -52,3 +53,40 @@ exports.deleteServiceById = catchAsyncError(async (req, res, next) => {
     .status(200)
     .json({ success: true, message: "Service deleted successfully" });
 });
+
+// Add Subcategory to Service -- Admin
+exports.addSubCategoryToService = catchAsyncError(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { subCategoryIds } = req.body;
+
+    // Find the service by ID
+    const service = await Service.findById(id);
+    if (!service) {
+      return next(new ErrorHandler("Service not found", 404));
+    }
+
+    // Find the subcategories by their IDs
+    const subcategories = await Subcategory.find({
+      _id: { $in: subCategoryIds },
+    });
+
+    // Add only the unique subcategories to the service's subcategories array
+    subcategories.forEach((subcategory) => {
+      if (!service.subCategories.includes(subcategory._id)) {
+        service.subCategories.push(subcategory._id);
+      }
+    });
+
+    // Save the updated service
+    await service.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Subcategories added to the service successfully",
+    });
+  } catch (err) {
+    return next(err);
+  }
+});
+

@@ -14,7 +14,7 @@ const serviceRoutes = require("./routes/serviceRoute");
 const userRoutes = require("./routes/userRoute");
 const messageRoute = require("./routes/messageRoute")
 // const serviceProviderRoutes = require("./routes/serviceProviderRoute");
-// const subCategoryRoutes = require("./routes/subCategoryRoute");
+const subCategoryRoutes = require("./routes/subCategoryRoute");
 // const serviceRequestRoutes = require("./routes/serviceRequestRoute");
 // const reviewRoutes = require("./routes/reviewRoute");
 
@@ -23,7 +23,7 @@ app.use("/api/v1", serviceRoutes);
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", messageRoute);
 // app.use("/api/v1/service-providers", serviceProviderRoutes);
-// app.use("/api/v1/subcategories", subCategoryRoutes);
+app.use("/api/v1/subcategories", subCategoryRoutes);
 // app.use("/api/v1/service-requests", serviceRequestRoutes);
 // app.use("/api/v1/reviews", reviewRoutes);
 
