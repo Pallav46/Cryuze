@@ -1,5 +1,5 @@
-import React from "react";
-import useGetServices from "../hooks/useGetServices";
+// import React from "react";
+import useGetServices from "../../hooks/useGetServices";
 
 function Cards() {
   const { data: services, loading, error } = useGetServices();

@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import Button from './Button';
 import Location from './Location';
 import Search from './Search';
@@ -17,7 +17,7 @@ function Navbar() {
             // aspectRatio: '3 / 1' 
           }} 
           loading="eager" 
-          fetchpriority="high" 
+          // fetchpriority="high" 
           srcSet="https://res.cloudinary.com/urbanclap/image/upload/t_high_res_category/w_144,dpr_1,fl_progressive:steep,q_auto:low,f_auto,c_limit/images/growth/home-screen/1687285683825-e6cf23.jpeg 1x, https://res.cloudinary.com/urbanclap/image/upload/t_high_res_category/w_144,dpr_2,fl_progressive:steep,q_auto:low,f_auto,c_limit/images/growth/home-screen/1687285683825-e6cf23.jpeg 2x, https://res.cloudinary.com/urbanclap/image/upload/t_high_res_category/w_144,dpr_3,fl_progressive:steep,q_auto:low,f_auto,c_limit/images/growth/home-screen/1687285683825-e6cf23.jpeg 3x, https://res.cloudinary.com/urbanclap/image/upload/t_high_res_category/w_144,dpr_4,fl_progressive:steep,q_auto:low,f_auto,c_limit/images/growth/home-screen/1687285683825-e6cf23.jpeg 4x"
         />
       </div>
