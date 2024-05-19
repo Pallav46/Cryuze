@@ -29,7 +29,7 @@ function App() {
         <Route path='/providers/register' element={<ProviderSignup />} />
         <Route path='/providers/dashboard' element={<ProviderHome />} />
         <Route path='/providers/services' element={<ProviderEditservice />} />
-        <Route path='/providers/chatt' element={<ProviderChatt />} />
+        <Route path='/providers/chat' element={<ProviderChatt />} />
       </Routes>
       <Toaster />
     </>

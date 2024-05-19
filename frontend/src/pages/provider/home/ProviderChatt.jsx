@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../../components/provider/Sidebar";
 import useProviderChatt from "../../../hooks/provider/useProviderChatt";
@@ -10,9 +10,9 @@ const ProviderChatt = () => {
   const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
-    if (error) {
-      navigate("/providers/login");
-    }
+    // if (error) {
+    //   navigate("/providers/login");
+    // }
   }, [error, navigate]);
 
   useEffect(() => {
