@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 const useUserLogout = () => {
     const [data, setData] = useState(null); // Changed initial state to null
