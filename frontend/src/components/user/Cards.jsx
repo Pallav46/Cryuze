@@ -18,7 +18,7 @@ function Cards() {
             <li key={service._id}>
               <a
                 href={`service/${service._id}`} // Interpolate service._id within {}
-                className="hover:scale-[1.1] duration-200 rounded-md flex items-center p-3 text-base font-bold text-white rounded-lg bg-black hover:bg-white group hover:shadow hover:text-black"
+                className="hover:scale-[1.1] duration-200 rounded-lg flex items-center p-3 text-base font-bold text-white bg-black hover:bg-white group hover:shadow hover:text-black"
               >
                 <svg
                   aria-hidden="true"

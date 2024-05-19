@@ -209,6 +209,16 @@ exports.updateUserProfile = catchAsyncError(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
+exports.getUserLoginOrNot = catchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return next(new ErrorHandler("User not found", 404));
+  }
+  res.status(200).json({
+    success: true,
+  });
+});
+
 exports.deleteUserById = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   const deletedUser = await User.findByIdAndDelete(id);

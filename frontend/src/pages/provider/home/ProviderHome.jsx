@@ -1,131 +1,56 @@
-// import { useState } from 'react';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faEdit } from '@fortawesome/free-solid-svg-icons';
-// import Sidebar from '../../../components/provider/Sidebar';
-// // import NavBar from '../../../components/provider/NavBar'; // Assuming NavBar is located here
-
-// const ProviderHome = ({ products, setProducts, removeProduct }) => {
-//   const [isEditing, setIsEditing] = useState(null);
-//   const [editedProduct, setEditedProduct] = useState({
-//     name: '',
-//     price: '',
-//     image: '',
-//     description: ''
-//   });
-
-//   const handleEditClick = (index) => {
-//     setIsEditing(index);
-//     setEditedProduct(products[index]);
-//   };
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setEditedProduct({ ...editedProduct, [name]: value });
-//   };
-
-//   const handleSaveClick = (index) => {
-//     const updatedProducts = products.map((product, i) =>
-//       i === index ? editedProduct : product
-//     );
-//     setProducts(updatedProducts);
-//     setIsEditing(null);
-//   };
-
-//   return (
-//     <>
-//       {/* <NavBar /> */}
-//       <div className="dashboard">
-//         <Sidebar />
-//         <div className="content">
-//           <h1>Admin Dashboard</h1>
-//           <p>Welcome to the admin dashboard.</p>
-//           <h2>Product List</h2>
-//           <ul>
-//             {products.map((product, index) => (
-//               <li key={index} className="product-item">
-//                 {isEditing === index ? (
-//                   <div className="edit-form">
-//                     <div>
-//                       <label>Name:</label>
-//                       <input
-//                         type="text"
-//                         name="name"
-//                         value={editedProduct.name}
-//                         onChange={handleInputChange}
-//                       />
-//                     </div>
-//                     <div>
-//                       <label>Price:</label>
-//                       <input
-//                         type="number"
-//                         name="price"
-//                         value={editedProduct.price}
-//                         onChange={handleInputChange}
-//                       />
-//                     </div>
-//                     <div>
-//                       <label>Image URL:</label>
-//                       <input
-//                         type="text"
-//                         name="image"
-//                         value={editedProduct.image}
-//                         onChange={handleInputChange}
-//                       />
-//                     </div>
-//                     <div>
-//                       <label>Description:</label>
-//                       <textarea
-//                         name="description"
-//                         value={editedProduct.description}
-//                         onChange={handleInputChange}
-//                       ></textarea>
-//                     </div>
-//                     <button onClick={() => handleSaveClick(index)}>Save</button>
-//                   </div>
-//                 ) : (
-//                   <>
-//                     <img src={product.image} alt={product.name} className="product-image" />
-//                     <div className="product-details">
-//                       <h3>{product.name} - ${product.price}</h3>
-//                       <p>{product.description}</p>
-//                     </div>
-//                     <FontAwesomeIcon
-//                       icon={faEdit}
-//                       className="edit-icon"
-//                       onClick={() => handleEditClick(index)}
-//                     />
-//                   </>
-//                 )}
-//                 <button onClick={() => removeProduct(index)}>Remove</button>
-//               </li>
-//             ))}
-//           </ul>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default ProviderHome;
-
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../../components/provider/Sidebar';
+import useProviderServices from '../../../hooks/provider/useProviderServices';
 
 const ProviderHome = () => {
+  const { data, error, isLoading } = useProviderServices();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      navigate('/providers/login');
+    }
+  }, [error, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+        <div className="text-lg font-semibold text-gray-700">Loading...</div>
+      </div>
+    );
+  }
+
   return (
-    <>
-      <div className="flex min-h-screen bg-gray-100">
-        <Sidebar />
-        <div className="flex-grow p-6">
-          <h1 className="text-3xl font-bold mb-4 text-gray-800">Service Provider Dashboard</h1>
-          <p className="mb-6 text-gray-600">Welcome to the service provider dashboard.</p>
+    <div className="flex min-h-screen bg-gray-100">
+      <Sidebar />
+      <div className="flex-grow p-6">
+        <div className="bg-white p-8 rounded-lg shadow-md">
+          <h1 className="text-4xl font-bold mb-6 text-gray-800">Service Provider Dashboard</h1>
+          <p className="mb-8 text-lg text-gray-600">Welcome to the service provider dashboard.</p>
+          <h2 className="text-3xl font-semibold mb-6 text-gray-800">Your Services</h2>
+          {data && data.length > 0 ? (
+            <ul className="list-none grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {data.map(service => (
+                <li key={service._id} className="group transform transition duration-500 hover:scale-105">
+                  <div className="p-6 bg-white rounded-lg shadow-lg group-hover:shadow-2xl transition duration-500">
+                    <div className="text-xl font-semibold text-gray-800 mb-2 group-hover:text-indigo-600 transition duration-500">
+                      {service.name}
+                    </div>
+                    <div className="text-gray-600 group-hover:text-gray-800 transition duration-500">
+                      {service.description}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-lg text-gray-600">No services found.</p>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
 export default ProviderHome;
-

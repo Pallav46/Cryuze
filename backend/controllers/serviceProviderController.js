@@ -281,6 +281,15 @@ exports.updateServiceProviderService = catchAsyncError(async (req, res, next) =>
     sendToken(serviceProvider, 200, res);
 });
 
+exports.getServiceProviderService = catchAsyncError(async (req, res, next) => {
+  
+  const serviceProvider = await ServiceProvider.findById(req.serviceProvider.id).populate('services');
+  if (!serviceProvider) {
+    return next(new ErrorHandler("serviceProvider not found", 404));
+  }
+  res.status(200).json({ success: true, data: serviceProvider.services });
+})
+
 // UPDATE SERVICE PROVIDER BY ID
 exports.updateServiceProviderById = async (req, res) => {
   try {

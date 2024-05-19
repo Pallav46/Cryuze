@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+
 import Sidebar from '../../../components/provider/Sidebar';
 import useGetServices from '../../../hooks/useGetServices';
 import toast from 'react-hot-toast';
 
 const ProviderEditservice = () => {
+  const navigate = useNavigate();
   const { data: services, loading, error } = useGetServices();
   const [selectedServices, setSelectedServices] = useState([]);
 
@@ -31,9 +34,10 @@ const ProviderEditservice = () => {
         }
   
         toast.success('Services updated successfully!');
-      } catch (error) {
+        navigate('/providers/dashboard');
+    } catch (error) {
         toast.error('Error updating services: ' + error.message);
-      }
+    }
   };
 
   if (loading) return <div>Loading...</div>;

@@ -23,7 +23,6 @@ exports.getAllService = catchAsyncError(async (req, res, next) => {
 exports.getServiceById = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   const service = await Service.findById(id).populate("subCategories");
-  console.log(service);
   if (!service) {
     return next(new ErrorHandler("Service not found", 404));
   }

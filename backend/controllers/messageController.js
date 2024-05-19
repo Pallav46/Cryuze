@@ -68,3 +68,28 @@ exports.getMessages = catchAsyncError(async (req, res, next) => {
         }
     });
 });
+
+exports.getAllCustomersOfServiceProvider = catchAsyncError(async (req, res, next) => {
+    const providerId = req.serviceProvider.id;
+
+    // Find all conversations involving the service provider
+    const conversations = await Conversation.find({
+        participants: providerId,
+        onModel: "ServiceProvider"
+    });
+
+    // Extract participant IDs from conversations
+    const participantIds = conversations.reduce((ids, convo) => {
+        return ids.concat(convo.participants.filter(id => id.toString() !== providerId.toString()));
+    }, []);
+
+    // Query the User model to retrieve names of participants
+    const customers = await User.find({ _id: { $in: participantIds } }).select("name");
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            customers: customers.map(customer => customer.name)
+        }
+    });
+});

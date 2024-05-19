@@ -27,7 +27,7 @@ const Sidebar = () => (
         </Link>
       </li>
       <li className="px-6 py-2 hover:bg-blue-700">
-        <Link to="/register" className="flex items-center">
+        <Link to="/providers/logut" className="flex items-center">
           <FontAwesomeIcon icon={faSignOutAlt} className="mr-3" />
           Logout
         </Link>

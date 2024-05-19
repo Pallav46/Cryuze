@@ -10,9 +10,11 @@ const {
   getServiceProviderDetail,
   updateServiceProviderProfile,
   updateServiceProviderService,
+  getServiceProviderService
 } = require("../controllers/serviceProviderController");
 
 const { isAuthenticatedServiceProvider, isAuthenticatedUser, authorizeRoles } = require("../middleware/authentication");
+const { getAllCustomersOfServiceProvider } = require("../controllers/messageController");
 
 const router = express.Router();
 
@@ -26,8 +28,8 @@ router.route('/password/update').put(isAuthenticatedServiceProvider, updateServi
 router.route('/me').get(isAuthenticatedServiceProvider, getServiceProviderDetail)
 router.route('/me/update').put(isAuthenticatedServiceProvider, updateServiceProviderProfile)
 router.route('/me/updateService').put(isAuthenticatedServiceProvider, updateServiceProviderService)
-router.route('/:id').delete(isAuthenticatedUser, authorizeRoles("admin"), deleteServiceProviderById)
-
+router.route('/me/services').get(isAuthenticatedServiceProvider, getServiceProviderService)
+router.route('/chatts').get(isAuthenticatedServiceProvider, getAllCustomersOfServiceProvider)
 // router.route("/:id").get(getServiceProviderById);
 // router.route("/:id").put(updateServiceProviderById);
 // router.route("/:id").delete(deleteServiceProviderById); // -- Admin
