@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTachometerAlt, faPlus, faComments, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTachometerAlt, faPlus, faComments, faSignOutAlt, faNavicon, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => (
   <div className="w-64 h-screen bg-blue-900 text-white flex flex-col">
@@ -17,17 +17,29 @@ const Sidebar = () => (
       <li className="px-6 py-2 hover:bg-blue-700">
         <Link to="/providers/services" className="flex items-center">
           <FontAwesomeIcon icon={faPlus} className="mr-3" />
-          Edit Service
+          Add Service
         </Link>
       </li>
       <li className="px-6 py-2 hover:bg-blue-700">
         <Link to="/providers/chat" className="flex items-center">
           <FontAwesomeIcon icon={faComments} className="mr-3" />
-          Chat
+          Chat  
         </Link>
       </li>
       <li className="px-6 py-2 hover:bg-blue-700">
-        <Link to="/providers/logut" className="flex items-center">
+        <Link to="/providers/notifi" className="flex items-center">
+          <FontAwesomeIcon icon={faNavicon} className="mr-3" />
+          Notification
+        </Link>
+      </li>
+      <li className="px-6 py-2 hover:bg-blue-700">
+        <Link to="/providers/edit" className="flex items-center">
+          <FontAwesomeIcon icon={faEdit} className="mr-3" />
+          Edit Profile
+        </Link>
+      </li>
+      <li className="px-6 py-2 hover:bg-blue-700">
+        <Link to="/providers/logout" className="flex items-center">
           <FontAwesomeIcon icon={faSignOutAlt} className="mr-3" />
           Logout
         </Link>
