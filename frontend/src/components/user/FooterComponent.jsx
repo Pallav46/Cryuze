@@ -18,11 +18,18 @@ export function FooterComponent() {
             />
           </div>
           <div className="grid grid-cols-2 gap-8 sm:mt-4 sm:grid-cols-3 sm:gap-6">
-            <div>
+            {/* <div>
               <Footer.Title title="about" />
               <Footer.LinkGroup col>
                 <Footer.Link href="#">Flowbite</Footer.Link>
                 <Footer.Link href="#">Tailwind CSS</Footer.Link>
+              </Footer.LinkGroup>
+            </div> */}
+            <div>
+              <Footer.Title title="serviceProvider" />
+              <Footer.LinkGroup col>
+                <Footer.Link href="/providers/register">Register</Footer.Link>
+                <Footer.Link href="/providers/login">Login</Footer.Link>
               </Footer.LinkGroup>
             </div>
             <div>

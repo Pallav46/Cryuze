@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
+const ServiceProvider = require("../models/serviceProviderModel")
 const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncError = require("./catchAsyncError");
 
@@ -13,6 +14,19 @@ exports.isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   req.user = await User.findById(decoded.id);
+  next();
+});
+
+exports.isAuthenticatedServiceProvider = catchAsyncError(async (req, res, next) => {
+  // Check if token is available in request cookies
+  const { token } = req.cookies;
+  
+  if (!token) {
+    return next(new ErrorHandler("Please log in to access this resource", 401));
+  }
+
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  req.serviceProvider = await ServiceProvider.findById(decoded.id);
   next();
 });
 

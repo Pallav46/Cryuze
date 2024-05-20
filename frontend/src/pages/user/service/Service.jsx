@@ -1,6 +1,6 @@
 // import React from 'react';
 import { useParams } from 'react-router-dom';
-import useGetService from '../../hooks/useGetService';
+import useGetService from '../../../hooks/useGetService';
 
 const Service = () => {
   const { id } = useParams();
