@@ -1,5 +1,6 @@
 const Service = require("../models/serviceModel");
 const Subcategory = require("../models/subCategoryModel")
+const ServiceProvider = require("../models/serviceProviderModel")
 const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const ApiFeatures = require("../utils/apifeatures");
@@ -89,3 +90,29 @@ exports.addSubCategoryToService = catchAsyncError(async (req, res, next) => {
   }
 });
 
+exports.findNearbyServiceProviders = async (req, res) => {
+  const { lng, lat, distance } = req.query;
+
+  if (!lng || !lat) {
+    return res.status(400).json({ error: "Coordinates are required" });
+  }
+
+  const coordinates = [parseFloat(lng), parseFloat(lat)];
+  const maxDistance = distance ? parseInt(distance) : 100; // default to 100km if not provided
+
+  try {
+    const nearbyProviders = await ServiceProvider.findNearby(coordinates, maxDistance);
+    // Modify the response to include only the desired fields
+    const simplifiedProviders = nearbyProviders.map((provider) => ({
+      _id: provider._id,
+      name: provider.name,
+      email: provider.email,
+      phoneNumber: provider.phoneNumber,
+      distance: provider.distance
+    }));
+
+    res.status(200).json(simplifiedProviders);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

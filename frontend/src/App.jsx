@@ -13,6 +13,7 @@ import ProviderEditservice from './pages/provider/home/ProviderEditservice';
 import ProviderChatt from './pages/provider/home/ProviderChatt';
 import  Signup  from './pages/user/signup/Signup';
 import Logout from './pages/user/logout/Logout';
+import BuyService from './pages/user/service/BuyService';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/service/:id' element={<Service />} />
+        <Route path='/service/:id/buy/:subcatId' element={<BuyService />} />
         <Route path='/login' element={<Login />} />
         <Route path='/logout' element={<Logout />} />
         <Route path='/register' element={<Signup />} />

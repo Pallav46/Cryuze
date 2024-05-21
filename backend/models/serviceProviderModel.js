@@ -46,6 +46,9 @@ const serviceProviderSchema = new Schema({
   resetPasswordExpire: Date,
 });
 
+// Create a geospatial index on the location.coordinates field
+serviceProviderSchema.index({ "location.coordinates": "2dsphere" });
+
 serviceProviderSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();
@@ -84,6 +87,29 @@ serviceProviderSchema.methods.getResetPasswordToken = function () {
     .digest("hex");
   this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
   return resetToken;
+};
+
+// Static method to fetch nearby service providers
+serviceProviderSchema.statics.findNearby = async function (
+  coordinates,
+  maxDistance
+) {
+  return await this.aggregate([
+    {
+      $geoNear: {
+        near: {
+          type: "Point",
+          coordinates: coordinates,
+        },
+        distanceField: "distance",
+        maxDistance: maxDistance, // maxDistance in meters
+        spherical: true,
+      },
+    },
+    {
+      $sort: { distance: 1 }, // Sort by nearest first
+    },
+  ]);
 };
 
 module.exports = mongoose.model("ServiceProvider", serviceProviderSchema);
