@@ -17,6 +17,7 @@ const useUserNearby = (serviceId, subcatId, lng, lat) => {
         }
         const result = await response.json();
         setNearbyServiceProviders(result); 
+        console.log(result);
       } catch (error) {
         setError(error);
       } finally {

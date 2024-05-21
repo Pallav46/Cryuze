@@ -92,6 +92,7 @@ exports.addSubCategoryToService = catchAsyncError(async (req, res, next) => {
 
 exports.findNearbyServiceProviders = async (req, res) => {
   const { lng, lat, distance } = req.query;
+  const {id} = req.params;
 
   if (!lng || !lat) {
     return res.status(400).json({ error: "Coordinates are required" });
@@ -103,16 +104,22 @@ exports.findNearbyServiceProviders = async (req, res) => {
   try {
     const nearbyProviders = await ServiceProvider.findNearby(coordinates, maxDistance);
     // Modify the response to include only the desired fields
-    const simplifiedProviders = nearbyProviders.map((provider) => ({
+    const nearbyServiceProviders = nearbyProviders.filter(provider => {
+      return provider.services.some(service => service.equals(id));
+    });
+
+    const simplifiedProviders = nearbyServiceProviders.map((provider) => ({
       _id: provider._id,
       name: provider.name,
       email: provider.email,
       phoneNumber: provider.phoneNumber,
       distance: provider.distance
     }));
-
+    
     res.status(200).json(simplifiedProviders);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+
