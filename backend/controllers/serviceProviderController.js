@@ -193,7 +193,22 @@ exports.getServiceProviderById = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Service provider not found" });
     }
-    res.status(200).json({ success: true, data: serviceProvider });
+    // Check the structure of serviceProvider and make sure it includes the required properties
+    const { name, email, phoneNumber, location, rating, reviews, services } = serviceProvider;
+
+    res.status(200).json({
+      success: true,
+      data: {
+        name,
+        email,
+        phoneNumber,
+        location,
+        rating,
+        reviews,
+        services
+      }
+    });
+
   } catch (error) {
     console.error(error);
     res

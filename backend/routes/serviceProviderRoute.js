@@ -10,7 +10,8 @@ const {
   getServiceProviderDetail,
   updateServiceProviderProfile,
   updateServiceProviderService,
-  getServiceProviderService
+  getServiceProviderService,
+  getServiceProviderById
 } = require("../controllers/serviceProviderController");
 
 const { isAuthenticatedServiceProvider, isAuthenticatedUser, authorizeRoles } = require("../middleware/authentication");
@@ -30,7 +31,7 @@ router.route('/me/update').put(isAuthenticatedServiceProvider, updateServiceProv
 router.route('/me/updateService').put(isAuthenticatedServiceProvider, updateServiceProviderService)
 router.route('/me/services').get(isAuthenticatedServiceProvider, getServiceProviderService)
 router.route('/chatts').get(isAuthenticatedServiceProvider, getAllCustomersOfServiceProvider)
-// router.route("/:id").get(getServiceProviderById);
+router.route("/:id").get(getServiceProviderById);
 // router.route("/:id").put(updateServiceProviderById);
 // router.route("/:id").delete(deleteServiceProviderById); // -- Admin
 

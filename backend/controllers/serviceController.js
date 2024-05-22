@@ -99,7 +99,7 @@ exports.findNearbyServiceProviders = async (req, res) => {
   }
 
   const coordinates = [parseFloat(lng), parseFloat(lat)];
-  const maxDistance = distance ? parseInt(distance) : 100; // default to 100km if not provided
+  const maxDistance = distance ? parseInt(distance) : 100000000; // default to 100km if not provided
 
   try {
     const nearbyProviders = await ServiceProvider.findNearby(coordinates, maxDistance);
