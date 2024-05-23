@@ -1,15 +1,24 @@
 import  { useState } from 'react';
 import { format } from 'date-fns';
+import useGetProvider from '../../../hooks/user/useGetProvider'
+import { useParams } from 'react-router-dom';
 
 const ChattService = () => {
+  const { providerId } = useParams();
+  const { data, loading, error } = useGetProvider(providerId);
+
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  const userProfile = {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    avatar: 'https://via.placeholder.com/150',
-  };
+  // Check if data is loading or if there's an error
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  // Check if data is null
+  if (!data || !data.data) return <div>No data available</div>;
+
+  const { name, email, avatar } = data.data;
+
 
   const handleSendMessage = () => {
     if (input.trim()) {
@@ -23,10 +32,10 @@ const ChattService = () => {
       <div className="bg-white shadow-lg rounded-lg flex flex-col h-full max-h-[80vh] overflow-hidden">
         {/* Profile Section */}
         <div className="flex items-center p-4 bg-gray-200">
-          <img src={userProfile.avatar} alt="Avatar" className="w-12 h-12 rounded-full mr-4" />
+          <img src={avatar} alt="Avatar" className="w-12 h-12 rounded-full mr-4" />
           <div>
-            <h2 className="text-xl font-bold">{userProfile.name}</h2>
-            <p className="text-gray-700">{userProfile.email}</p>
+            <h2 className="text-xl font-bold">{name}</h2>
+            <p className="text-gray-700">{email}</p>
           </div>
         </div>
 

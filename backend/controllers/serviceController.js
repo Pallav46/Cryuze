@@ -73,7 +73,7 @@ exports.addSubCategoryToService = catchAsyncError(async (req, res, next) => {
 
     // Add only the unique subcategories to the service's subcategories array
     subcategories.forEach((subcategory) => {
-      if (!service.subCategories.includes(subcategory._id)) {
+      if (!service.subCategories.includes(subcategory._id)) {           
         service.subCategories.push(subcategory._id);
       }
     });
@@ -99,7 +99,7 @@ exports.findNearbyServiceProviders = async (req, res) => {
   }
 
   const coordinates = [parseFloat(lng), parseFloat(lat)];
-  const maxDistance = distance ? parseInt(distance) : 100000000; // default to 100km if not provided
+  const maxDistance = distance ? parseInt(distance) : 1000000000; // default to 100km if not provided
 
   try {
     const nearbyProviders = await ServiceProvider.findNearby(coordinates, maxDistance);
