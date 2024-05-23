@@ -14,7 +14,7 @@ const Logout = () => {
         toast.error('Logout failed. Please try again.');
       } else {
         //console.log('Logout successful:', data);
-        toast.success('Successfully logged out!');
+        toast.success('Sucessfully logged out!');
         navigate('/');
       }
     }

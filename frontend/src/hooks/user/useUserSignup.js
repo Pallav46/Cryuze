@@ -1,10 +1,13 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../context/AuthContext";
 
 const useUserSignup = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setAuthUser } = useAuthContext();
+
 
   const signup = async ({
     name,
@@ -35,12 +38,14 @@ const useUserSignup = () => {
         }),
       });
       const data = await response.json();
-      if (response.ok) {
-        toast.success("Signup successful!");
-        navigate("/"); // Home route
-      } else {
-        toast.error(data.error.message);
-      }
+			if (data.error) {
+				throw new Error(data.error);
+			}
+
+			localStorage.setItem("x-user", JSON.stringify(data));
+			setAuthUser(data);
+      toast.success("Signup Successful");
+      navigate("/")
     } catch (error) {
       console.error("Signup error:", error);
       toast.error("Signup failed. Please try again.");
