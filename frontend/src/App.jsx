@@ -16,6 +16,8 @@ import Logout from './pages/user/logout/Logout';
 import BuyService from './pages/user/service/BuyService';
 import ChattService from './pages/user/service/ChattService';
 import Profile from './pages/user/service/Profile';
+import ForgetPassword from './components/user/ForgetPassword';
+import NewPassword from './components/user/NewPassword';
 
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/logout' element={<Logout />} />
         <Route path='/register' element={<Signup />} />
+        <Route path='/forget' element={<ForgetPassword />} />
+        <Route path='/newpassword' element={<NewPassword />} />
         <Route path='/providers/login' element={<ProviderLogin />} />
         <Route path='/providers/register' element={<ProviderSignup />} />
         <Route path='/providers/dashboard' element={<ProviderHome />} />

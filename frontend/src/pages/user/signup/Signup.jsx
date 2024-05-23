@@ -26,14 +26,17 @@ export function Signup() {
 
   return (
     <div>
-      <h1 className="text-white font-bold text-8xl flex justify-center align-middle uppercase bg-zinc-800 p-4 mb-2">
+      {/* <h1 className="text-white font-bold text-8xl flex justify-center align-middle uppercase bg-zinc-800 p-4 mb-2">
         Signup
-      </h1>
-      <div className="w-[40%] absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[40%] flex align-middle justify-center border-2 pt-[2%] bg-zinc-800 rounded-3xl">
+      </h1> */}
+      <div className="w-[100%] absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%] flex align-middle justify-center rounded-3xl">
         <form
-          className="flex max-w-md flex-col gap-4 w-[100%] mb-[2vw]"
+          className="flex max-w-xl flex-col gap-4 bg-zinc-800 border-2 w-[100%] p-[2vw] rounded-3xl"
           onSubmit={handleSubmit}
         >
+          <div className='uppercase font-bold text-[3vw] text-white'>
+            Signup
+          </div>
           <div>
             <div className="mb-2 block">
               <Label
@@ -114,7 +117,7 @@ export function Signup() {
               <Label
                 htmlFor="repeat-password"
                 className="font-semibold text-white"
-                value="Repeat password"
+                value="Confirm Password"
               />
             </div>
             <TextInput
@@ -129,7 +132,7 @@ export function Signup() {
           {error && <p className="text-red-500">{error}</p>}
           <div className="text-white text-sm font-semibold">
             <a
-              href="#"
+              href="/login"
               className="text-cyan-600 hover:underline dark:text-cyan-500"
             >
               Already a member?

@@ -15,12 +15,15 @@ function Login() {
 
   return (
     <div>
-      <h1 className="text-white font-bold text-8xl flex justify-center align-middle uppercase bg-zinc-800 p-4">
+      {/* <h1 className="text-white font-bold text-8xl flex justify-center align-middle uppercase bg-zinc-800 p-4">
         Login
-      </h1>
-      <div className="w-[30%] h-[50%] absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%] flex align-middle justify-center border-2 bg-zinc-800 rounded-3xl">
-        <Card className="max-w-sm bg-zinc-800 border-none w-[100%]">
+      </h1> */}
+      <div className="w-[100%] absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%] flex align-middle justify-center rounded-3xl">
+        <Card className="max-w-sm bg-zinc-800 border-3 w-[100%] rounded-3xl">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <div className='uppercase font-bold text-[3vw] text-white'>
+                    Login
+                </div>
             <div>
               <div className="mb-2 block">
                 <Label
@@ -58,7 +61,7 @@ function Login() {
             </div>
             {error && <p className="text-red-500">{error}</p>}
             <a
-              href="#"
+              href="/forget"
               className="text-cyan-600 hover:underline dark:text-cyan-500"
             >
               Forgot Password?

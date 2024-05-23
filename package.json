@@ -19,7 +19,11 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.6.2",
     "mongoose": "^8.3.4",
+    "node": "^18.20.3",
     "nodemailer": "^6.9.13",
     "validator": "^13.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
