@@ -14,10 +14,11 @@ import ProviderHome from './pages/provider/home/ProviderHome';
 import ProviderEditservice from './pages/provider/home/ProviderEditservice';
 import ProviderChatt from './pages/provider/home/ProviderChatt';
 import Signup  from './pages/user/signup/Signup';
-import Logout from './pages/user/logout/Logout';
+// import Logout from './pages/user/logout/Logout';
 import BuyService from './pages/user/service/BuyService';
 import ChattService from './pages/user/service/ChattService';
 import Profile from './pages/user/service/Profile';
+import Messages from './components/provider/Messages';
 
 
 function App() {
@@ -35,13 +36,14 @@ function App() {
         <Route path='/service/:id/buy/:subcatId/chat/:providerId' element={<ChattService />} />
         <Route path='/service/:id/buy/:subcatId/profile/:providerId' element={<Profile />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/logout' element={<Logout />} />
+        {/* <Route path='/logout' element={<Logout />} /> */}
         <Route path='/register' element={<Signup />} />
         <Route path='/providers/login' element={<ProviderLogin />} />
         <Route path='/providers/register' element={<ProviderSignup />} />
         <Route path='/providers/dashboard' element={<ProviderHome />} />
         <Route path='/providers/services' element={<ProviderEditservice />} />
         <Route path='/providers/chat' element={<ProviderChatt />} />
+        <Route path='/providers/chat/:customerId' element={<Messages />} />
       </Routes>
       <Toaster />
     </>

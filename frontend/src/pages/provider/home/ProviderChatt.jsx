@@ -1,86 +1,49 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
 import Sidebar from "../../../components/provider/Sidebar";
-import useProviderChatt from "../../../hooks/provider/useProviderChatt";
+import Conversations from "../../../components/provider/Conversations";
+// import Messages from "../../../components/provider/Messages";
+// import useProviderChatt from "../../../hooks/provider/useProviderChatt";
 
 const ProviderChatt = () => {
-  const { data, error, isLoading } = useProviderChatt();
-  const navigate = useNavigate();
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
+  // const { data, error, isLoading } = useProviderChatt();
+  // const navigate = useNavigate();
+  // const [messages, setMessages] = useState([]);
+  // const [newMessage, setNewMessage] = useState("");
 
-  useEffect(() => {
-    // if (error) {
-    //   navigate("/providers/login");
-    // }
-  }, [error, navigate]);
+  // useEffect(() => {
+  //   if (error) {
+  //     navigate("/providers/login");
+  //   }
+  // }, [error, navigate]);
 
-  useEffect(() => {
-    if (data) {
-      setMessages(data);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     setMessages(data);
+  //   }
+  // }, [data]);
 
-  const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      const newMsg = {
-        id: messages.length + 1,
-        content: newMessage,
-        sender: "You",
-        timestamp: new Date().toLocaleTimeString(),
-      };
-      setMessages([...messages, newMsg]);
-      setNewMessage("");
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-100">
-        <div className="text-lg font-semibold text-gray-700">Loading...</div>
-      </div>
-    );
-  }
+  // const handleSendMessage = (message) => {
+  //   // Implement the function to send a new message
+  //   // This could involve calling a function from a hook or an API call
+  //   // Then update the messages state with the new message
+  //   setMessages((prevMessages) => [...prevMessages, message]);
+  //   setNewMessage(""); // Clear the input after sending
+  // };
 
   return (
-    <>
-      <div className="flex min-h-screen bg-gray-100">
-        <Sidebar />
-        <div className="flex-grow p-6 flex flex-col">
-          <h1 className="text-4xl font-bold mb-6 text-gray-800">
-            Provider Chat
-          </h1>
-          <div className="flex-grow bg-white p-4 rounded-lg shadow-md overflow-y-auto mb-4">
-            {messages.length > 0 ? (
-              messages.map((msg) => (
-                <div key={msg.id} className="mb-4">
-                  <div className="font-semibold">{msg.sender}</div>
-                  <div>{msg.content}</div>
-                  <div className="text-sm text-gray-500">{msg.timestamp}</div>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-600">No messages yet.</p>
-            )}
-          </div>
-          <div className="flex">
-            <input
-              type="text"
-              className="flex-grow p-2 border border-gray-300 rounded-l-lg focus:outline-none"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Type your message..."
-            />
-            <button
-              onClick={handleSendMessage}
-              className="bg-indigo-600 text-white p-2 rounded-r-lg"
-            >
-              Send
-            </button>
-          </div>
-        </div>
+    <div className="flex min-h-screen bg-gray-100">
+      <Sidebar />
+      <div className="flex-grow p-6 flex flex-col">
+        <Conversations />
+        {/* <Messages 
+          messages={messages}
+          newMessage={newMessage}
+          setNewMessage={setNewMessage}
+          handleSendMessage={handleSendMessage}
+        /> */}
       </div>
-    </>
+    </div>
   );
 };
 

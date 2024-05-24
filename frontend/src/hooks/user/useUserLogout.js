@@ -1,39 +1,36 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-const useUserLogout = () => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const { setAuthUser } = useAuthContext();
+const useLogout = () => {
+	const [loading, setLoading] = useState(false);
+	const { setAuthUser } = useAuthContext();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchLogout = async () => {
-      setLoading(true);
-      setError(null);
+	const logout = async () => {
+		setLoading(true);
+		try {
+			const res = await fetch("/api/v1/logout", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+			});
+			const data = await res.json();
+			if (data.error) {
+				throw new Error(data.error);
+			}
 
-      try {
-        const response = await fetch("/api/v1/logout");
+			localStorage.removeItem("x-user");
+			setAuthUser(null);
+      toast.success("Logout sucessfully");
+      navigate("/")
+		} catch (error) {
+			toast.error(error.message);
+		} finally {
+			setLoading(false);
+		}
+	};
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const result = await response.json();
-        setData(result);
-        localStorage.removeItem("x-user");
-        setAuthUser(null);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLogout();
-  }, [setAuthUser]);
-
-  return { data, error, loading };
+	return { loading, logout };
 };
-
-export default useUserLogout;
+export default useLogout;

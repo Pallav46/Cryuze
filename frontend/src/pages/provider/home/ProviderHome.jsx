@@ -2,39 +2,51 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../../components/provider/Sidebar';
 import useProviderServices from '../../../hooks/provider/useProviderServices';
+import NotificationIcon from '../../../components/provider/Notificationbox.jsx';
+import Summarycomponent from '../../../components/provider/Summarycomponent.jsx';
 
 const ProviderHome = () => {
   const { data, error, isLoading } = useProviderServices();
   const navigate = useNavigate();
-
+  const messages = [
+    { user: 'User 1' },
+    { user: 'User 2' },
+    { user: 'User 3' },
+  ];
   useEffect(() => {
     if (error) {
-      navigate('/providers/login');
+      // navigate('/providers/login');
     }
   }, [error, navigate]);
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-200 to-indigo-200">
-        <div className="text-lg font-semibold text-white">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+        <div className="text-lg font-semibold text-gray-700">Loading...</div>
       </div>
     );
   }
+  const services = 12; // Example data
+  const earnings = 256; // Example data
+  const orders = 5; // Example data
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-r from-blue-200 to-indigo-200">
+    <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
+      <Summarycomponent services={services} earnings={earnings} orders={orders} />
+      <NotificationIcon messages={messages} />
+      
       <div className="flex-grow p-6">
         <div className="bg-white p-8 rounded-lg shadow-md">
-          <h1 className="text-4xl font-bold mb-6 text-indigo-700">Service Provider Dashboard</h1>
+          <h1 className="text-4xl font-bold mb-6 text-gray-800">Service Provider Dashboard</h1>
           <p className="mb-8 text-lg text-gray-600">Welcome to the service provider dashboard.</p>
-          <h2 className="text-3xl font-semibold mb-6 text-indigo-700">Your Services</h2>
+          <h2 className="text-3xl font-semibold mb-6 text-gray-800">Your Services</h2>
           {data && data.length > 0 ? (
             <ul className="list-none grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {data.map(service => (
                 <li key={service._id} className="group transform transition duration-500 hover:scale-105">
                   <div className="p-6 bg-white rounded-lg shadow-lg group-hover:shadow-2xl transition duration-500">
-                    <div className="text-xl font-semibold text-indigo-600 mb-2 group-hover:text-indigo-800 transition duration-500">
+                    <div className="text-xl font-semibold text-gray-800 mb-2 group-hover:text-indigo-600 transition duration-500">
                       {service.name}
                     </div>
                     <div className="text-gray-600 group-hover:text-gray-800 transition duration-500">

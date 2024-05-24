@@ -5,16 +5,12 @@ import useGetProvider from "../../../hooks/user/useGetProvider";
 const Profile = () => {
   const { providerId } = useParams();
   const { data, loading, error } = useGetProvider(providerId);
-
-
+  
   // Check if data is loading or if there's an error
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  // Check if data is null
-  if (!data || !data.data) return <div>No data available</div>;
-
-  const { name, email, phoneNumber, reviews } = data.data;
+  const { name, email, phoneNumber, reviews } = data;
 
   // Calculate average rating
   const calculateAverageRating = () => {
@@ -22,10 +18,7 @@ const Profile = () => {
       return 0; // Return 0 if reviews are undefined or empty
     }
 
-    const totalRating = reviews.reduce(
-      (acc, review) => acc + review.rating,
-      0
-    );
+    const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
     return totalRating / reviews.length;
   };
 

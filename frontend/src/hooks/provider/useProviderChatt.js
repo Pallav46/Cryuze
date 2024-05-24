@@ -12,7 +12,7 @@ const useProviderChatt = () => {
 
       try {
         // Simulate fetching data from an API
-        const response = await fetch('/api/v1/providers/chat');
+        const response = await fetch('/api/v1/providers/chats');
         if (!response.ok) {
           throw new Error('Failed to fetch chat data');
         }

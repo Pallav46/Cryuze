@@ -187,27 +187,16 @@ exports.getAllServiceProvider = async (req, res) => {
 exports.getServiceProviderById = async (req, res) => {
   try {
     const { id } = req.params;
-    const serviceProvider = await ServiceProvider.findById(id);
+    const serviceProvider = await ServiceProvider.findById(id).select("-password");
+    
     if (!serviceProvider) {
       return res
         .status(404)
         .json({ success: false, message: "Service provider not found" });
     }
     // Check the structure of serviceProvider and make sure it includes the required properties
-    const { name, email, phoneNumber, location, rating, reviews, services } = serviceProvider;
 
-    res.status(200).json({
-      success: true,
-      data: {
-        name,
-        email,
-        phoneNumber,
-        location,
-        rating,
-        reviews,
-        services
-      }
-    });
+    res.status(200).json(serviceProvider);
 
   } catch (error) {
     console.error(error);

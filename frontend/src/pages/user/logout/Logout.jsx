@@ -4,26 +4,20 @@ import toast from 'react-hot-toast';
 import useUserLogout from '../../../hooks/user/useUserLogout';
 
 const Logout = () => {
-  const { data, error, loading } = useUserLogout();
+  const { loading, logout } = useUserLogout();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!loading) {
-      if (error) {
-        console.error('Error during logout:', error);
-        toast.error('Logout failed. Please try again.');
-      } else {
-        //console.log('Logout successful:', data);
-        toast.success('Sucessfully logged out!');
-        navigate('/');
-      }
+      logout()
+      toast.success("Logout sucessfully");
+      navigate("/")
     }
-  }, [data, error, loading, navigate]);
+  }, [loading, logout, navigate]);
 
   return (
     <div>
       {loading ? 'Logging out...' : 'Logout'}
-      {error && <div>Error: {error.message}</div>}
     </div>
   );
 };

@@ -1,25 +1,35 @@
-// import React from 'react';
+import { useEffect } from 'react';
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import queryString from "query-string"; // Importing query-string library to parse query parameters
+import queryString from "query-string"; 
 import useUserNearby from "../../../hooks/user/useUserNearby";
+import useConversation from "../../../zustand/useConversation";
 
 const BuyService = () => {
   const location = useLocation();
-  const { id, subcatId } = useParams(); // Extracting other parameters from the URL path
-  const navigate = useNavigate(); // Hook to programmatically navigate
-
-  // Parsing query parameters to get lng and lat
+  const { id, subcatId } = useParams(); 
+  const navigate = useNavigate(); 
+  const { setSelectedConversation } = useConversation();
   const { lng, lat } = queryString.parse(location.search);
-
   const { isLoading, error, nearbyServiceProviders } = useUserNearby(id, subcatId, lng, lat);
 
   const handleViewProfile = (providerId) => {
     navigate(`/service/${id}/buy/${subcatId}/profile/${providerId}`);
   };
 
-  const handleChat = (providerId) => {
-    navigate(`/service/${id}/buy/${subcatId}/chat/${providerId}`);
+  const handleChat = async (providerId) => {
+    try {
+      navigate(`/service/${id}/buy/${subcatId}/chat/${providerId}`);
+    } catch (error) {
+      console.error("Error fetching provider:", error);
+    }
   };
+
+  useEffect(() => {
+    // Ensure any cleanup is done here
+    return () => {
+      // Cleanup if necessary
+    };
+  }, []); // Ensure this effect runs only once
 
   return (
     <div className="container mx-auto px-4">
@@ -43,7 +53,10 @@ const BuyService = () => {
                     View Profile
                   </button>
                   <button
-                    onClick={() => handleChat(provider._id)}
+                    onClick={() => {
+                      handleChat(provider._id);
+                      setSelectedConversation(provider);
+                    }}
                     className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-4"
                   >
                     Chat

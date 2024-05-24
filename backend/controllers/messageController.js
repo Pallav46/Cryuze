@@ -1,50 +1,77 @@
 const Message = require("../models/messageModel");
 const Conversation = require("../models/conversationModel");
 const catchAsyncError = require("../middleware/catchAsyncError");
-// const { getReceiverSocketId, io } = require("../socket/socket");
+const ServiceProvider = require("../models/serviceProviderModel");
+const User = require("../models/userModel");
+const ErrorHandler = require("../utils/errorhandler");
+const { getReceiverSocketId, io } = require("../socket/socket");
+const mongoose = require('mongoose');
 
 exports.sendMessage = catchAsyncError(async (req, res, next) => {
-  const { receiverId, message } = req.body;
-  if(req.user.id) {
-    senderId = req.user.id
-    userType = "User"
-  } else {
-    senderId = req.serviceProvider.id;
-    userType = "ServiceProvider"
+  // Extract data from the request body and parameters
+  const { message } = req.body;
+  const receiverId = req.params.receiverId;
+  const senderId = req.user ? req.user.id : req.serviceProvider.id;
+
+  // Check if sender and receiver exist
+  const sender = await getUserOrServiceProvider(senderId);
+  const receiver = await getUserOrServiceProvider(receiverId);
+
+  if (!sender || !receiver) {
+    return next(new ErrorHandler(404, "Sender or receiver not found"));
   }
 
-  // Find or create the conversation between sender and receiver
-  let conversation = await Conversation.findOneAndUpdate(
-    { participants: { $all: [senderId, receiverId] } },
-    {
-      $setOnInsert: { participants: [senderId, receiverId], onModel: userType },
-    },
-    { upsert: true, new: true }
-  );
-
   // Create a new message
-  const newMessage = new Message({
+  const newMessage = await Message.create({
     senderId,
     receiverId,
-    onModel: userType,
+    senderModel: sender.constructor.modelName,
+    receiverModel: receiver.constructor.modelName,
     message,
   });
 
-  // Add the message to the conversation and save
+  // Find or create conversation
+  let conversation = await Conversation.findOne({
+    participants: { $all: [senderId, receiverId] },
+  });
+
+  if (!conversation) {
+    conversation = await Conversation.create({
+      participants: [senderId, receiverId],
+      onModel: 'User',
+    });
+  }
+
+  // Add the message to the conversation
   conversation.messages.push(newMessage);
   await conversation.save();
 
-  // Save the message to the database
-  await newMessage.save();
+  // Emit a socket event to the receiver
+  const receiverSocketId = await getReceiverSocketId(receiverId);
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("newMessage", newMessage);
+  }
 
-  // Emit the new message to the receiver using Socket.IO
-//   const receiverSocketId = getReceiverSocketId(receiverId);
-//   if (receiverSocketId) {
-//     io.to(receiverSocketId).emit("newMessage", newMessage);
-//   }
-
-  res.status(201).json({ status: "success", data: { message: newMessage, conversation } });
+  res.status(200).json({
+    success: true,
+    message: "Message sent successfully",
+    data: newMessage,
+  });
 });
+
+// Function to get user or service provider based on the ID
+async function getUserOrServiceProvider(id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return null;
+  }
+  const user = await User.findById(id);
+  if (user) {
+    return user;
+  }
+  const serviceProvider = await ServiceProvider.findById(id);
+  return serviceProvider;
+}
+
 
 exports.getMessages = catchAsyncError(async (req, res, next) => {
   const receiverId = req.params.id;
@@ -56,10 +83,7 @@ exports.getMessages = catchAsyncError(async (req, res, next) => {
   }).populate("messages");
 
   if (!conversation) {
-    return res.status(404).json({
-      status: "error",
-      message: "Conversation not found",
-    });
+    return res.status(200).json([]);
   }
 
   // Extract conversationId from the found conversation
@@ -68,25 +92,20 @@ exports.getMessages = catchAsyncError(async (req, res, next) => {
   // Extract messages from the conversation
   const messages = conversation.messages;
 
-  res.status(200).json({
-    status: "success",
-    data: {
-      conversationId: conversationId,
-      messages: messages,
-    },
-  });
+  res.status(200).json(messages);
 });
 
-exports.getAllCustomersOfServiceProvider = catchAsyncError(
+
+exports.getAllCustomersChatOfServiceProvider = catchAsyncError(
   async (req, res, next) => {
     const providerId = req.serviceProvider.id;
 
     // Find all conversations involving the service provider
     const conversations = await Conversation.find({
       participants: providerId,
-      onModel: "ServiceProvider",
+      onModel: "User",
     });
-
+    // console.log(conversations);
     // Extract participant IDs from conversations
     const participantIds = conversations.reduce((ids, convo) => {
       return ids.concat(
@@ -97,15 +116,40 @@ exports.getAllCustomersOfServiceProvider = catchAsyncError(
     }, []);
 
     // Query the User model to retrieve names of participants
-    const customers = await User.find({ _id: { $in: participantIds } }).select(
-      "name"
-    );
+    const customers = await User.find({ _id: { $in: participantIds } }).select("-password");
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        customers: customers.map((customer) => customer.name),
-      },
-    });
+    res.status(200).json(customers);
   }
 );
+
+
+exports.getAllServiceProviderChatOfCustomer = catchAsyncError(async (req, res, next) => {
+  try {
+    const customerId = req.user.id;
+
+    // Find all conversations involving the customer where the customer is a participant
+    const conversations = await Conversation.find({
+      participants: customerId,
+      onModel: "User",
+    });
+
+    // Extract participant IDs from conversations
+    const participantIds = conversations.reduce((ids, convo) => {
+      return ids.concat(
+        convo.participants.filter(
+          (id) => id.toString() !== customerId.toString()
+        )
+      );
+    }, []);
+    // Query the ServiceProvider model to retrieve details of service providers
+    const serviceProvider = await ServiceProvider.find({ _id: { $in: participantIds } }).select("-password");
+
+    res.status(200).json(serviceProvider);
+  } catch (error) {
+    console.error("Error fetching service providers for customer:", error);
+    res.status(500).json({
+      status: "error",
+      message: "An error occurred while fetching service providers.",
+    });
+  }
+});
