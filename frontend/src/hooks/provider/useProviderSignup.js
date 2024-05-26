@@ -1,10 +1,13 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuth} from "../../context/ProviderAuthContext";
+
 
 const useProviderSignup = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setAuthToken } = useAuth();
 
   const signup = async ({
     name,
@@ -47,12 +50,14 @@ const useProviderSignup = () => {
         }),
       });
       const data = await response.json();
-      if (response.ok) {
-        toast.success("Signup successful!");
-        navigate("/providers/dashboard");
-      } else {
-        toast.error(data.error.message);
-      }
+			if (data.error) {
+				throw new Error(data.error);
+			}
+
+			localStorage.setItem("x-provider", JSON.stringify(data));
+			setAuthToken(data);
+      toast.success("Signup Successful");
+      navigate("/providers/dashboard")
     } catch (error) {
       console.error("Signup error:", error);
       toast.error("Signup failed. Please try again.");

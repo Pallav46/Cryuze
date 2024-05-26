@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { useAuthContext }  from "../../context/AuthContext"// Assuming you have an AuthContext to get the current user
+import { useAuth }  from "../../context/ProviderAuthContext"// Assuming you have an AuthContext to get the current user
 
-const useChatSocket = (providerId) => {
-  const { authUser } = useAuthContext();
+const useProviderChatSocket = (customerId) => {
+  const { authToken } = useAuth();
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
-    const { _id } = authUser.user;
+    const { _id } = authToken.user;
   useEffect(() => {
-    if (authUser) {
+    if (authToken) {
       // Establish socket connection with userId as query parameter
       const socket = io("http://localhost:3030", { // Replace with your backend URL
         query: { userId: _id },
@@ -17,21 +17,20 @@ const useChatSocket = (providerId) => {
 
       // Listen for new messages
       socket.on("newMessage", (message) => {
-        alert(message)
         setMessages((prevMessages) => [...prevMessages, message]);
       });
 
       // Join the chat room for the current conversation
-      socket.emit("joinRoom", { providerId });
+      socket.emit("joinRoom", { customerId });
 
       // Clean up the socket connection when the component unmounts
       return () => {
         socket.disconnect();
       };
     }
-  }, [providerId]);
+  }, [customerId]);
 
   return { messages, socket };
 };
 
-export default useChatSocket;
+export default useProviderChatSocket;

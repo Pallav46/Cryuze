@@ -4,14 +4,69 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 const ServiceProvider = require("../models/serviceProviderModel");
 const User = require("../models/userModel");
 const ErrorHandler = require("../utils/errorhandler");
-const { getReceiverSocketId, io } = require("../socket/socket");
+const { getReceiverSocketId, initializeSocket } = require("../socket/socket");
 const mongoose = require('mongoose');
-
+const io = initializeSocket()
 exports.sendMessage = catchAsyncError(async (req, res, next) => {
   // Extract data from the request body and parameters
   const { message } = req.body;
   const receiverId = req.params.receiverId;
-  const senderId = req.user ? req.user.id : req.serviceProvider.id;
+  const senderId = req.user.id;
+
+  // Check if sender and receiver exist
+  const sender = await getUserOrServiceProvider(senderId);
+  const receiver = await getUserOrServiceProvider(receiverId);
+
+  if (!sender || !receiver) {
+    return next(new ErrorHandler(404, "Sender or receiver not found"));
+  }
+
+  // Create a new message
+  const newMessage = await Message.create({
+    senderId,
+    receiverId,
+    senderModel: sender.constructor.modelName,
+    receiverModel: receiver.constructor.modelName,
+    message,
+  });
+
+  // Find or create conversation
+  let conversation = await Conversation.findOne({
+    participants: { $all: [senderId, receiverId] },
+  });
+
+  if (!conversation) {
+    conversation = await Conversation.create({
+      participants: [senderId, receiverId],
+      onModel: 'User',
+    });
+  }
+
+  // Add the message to the conversation
+  conversation.messages.push(newMessage);
+  await conversation.save();
+  try {
+    const receiverSocketId = await getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+      console.log("emited");
+    }
+  } catch (e) {
+    console.log(e);
+  }
+  console.log("Reciever socket Id -> " + receiverSocketId);
+  res.status(200).json({
+    success: true,
+    message: "Message sent successfully",
+    data: newMessage,
+  });
+});
+
+exports.sendProviderMessage = catchAsyncError(async (req, res, next) => {
+  // Extract data from the request body and parameters
+  const { message } = req.body;
+  const receiverId = req.params.receiverId;
+  const senderId = req.serviceProvider.id;
 
   // Check if sender and receiver exist
   const sender = await getUserOrServiceProvider(senderId);
@@ -47,10 +102,16 @@ exports.sendMessage = catchAsyncError(async (req, res, next) => {
   await conversation.save();
 
   // Emit a socket event to the receiver
-  const receiverSocketId = await getReceiverSocketId(receiverId);
-  if (receiverSocketId) {
-    io.to(receiverSocketId).emit("newMessage", newMessage);
+  try {
+    const receiverSocketId = await getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+      console.log("Send to -> " + receiverSocketId);
+    }
+  } catch (e) {
+    console.log(e);
   }
+ 
 
   res.status(200).json({
     success: true,
@@ -94,6 +155,30 @@ exports.getMessages = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json(messages);
 });
+
+exports.getProviderMessages = catchAsyncError(async (req, res, next) => {
+  const receiverId = req.params.id;
+  const senderId = req.serviceProvider.id;
+  // console.log(receiverId, senderId);
+  // Find the conversation where both senderId and receiverId are participants
+  const conversation = await Conversation.findOne({
+    participants: { $all: [senderId, receiverId] },
+  }).populate("messages");
+
+  if (!conversation) {
+    return res.status(200).json([]);
+  }
+
+  // Extract conversationId from the found conversation
+  const conversationId = conversation._id;
+
+  // Extract messages from the conversation
+  const messages = conversation.messages;
+
+  res.status(200).json(messages);
+});
+
+
 
 
 exports.getAllCustomersChatOfServiceProvider = catchAsyncError(

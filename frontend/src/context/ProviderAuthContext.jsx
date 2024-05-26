@@ -1,18 +1,22 @@
-import { createContext, useContext, useState } from "react";
-import PropTypes from 'prop-types';
+import { createContext, useState, useContext } from 'react';
 
-export const ProviderAuthContext = createContext(); // Update context name
+// Create a Context for the auth
+const AuthContext = createContext();
 
-export const useProviderAuthContext = () => { // Update hook name
-  return useContext(ProviderAuthContext);
+// Custom hook to consume the AuthContext
+export const useAuth = () => {
+    return useContext(AuthContext);
 };
 
-export const ProviderAuthContextProvider = ({ children }) => { // Update provider name
-  const [authProvider, setAuthProvider] = useState(JSON.parse(localStorage.getItem("x-provider")) || null);
+// Create a provider component
+export const AuthProvider = ({ children }) => {
+    const [authToken, setAuthToken] = useState(JSON.parse(localStorage.getItem("x-provider")) || null);
 
-  return <ProviderAuthContext.Provider value={{ authProvider, setAuthProvider }}>{children}</ProviderAuthContext.Provider>;
+    return (
+        <AuthContext.Provider value={{ authToken, setAuthToken }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
-ProviderAuthContextProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+

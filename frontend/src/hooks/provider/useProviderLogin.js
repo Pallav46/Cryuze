@@ -1,7 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-// import { useAuthProvider } from "../../context/ProviderAuthContex";
+import { useAuth} from "../../context/ProviderAuthContext";
 
 function handleInputErrors({ email, password }) {
   if (!email || !password) {
@@ -18,7 +18,7 @@ function handleInputErrors({ email, password }) {
 const useProviderLogin = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // Access the navigate function
-  // const { setAuthProvider } = useAuthProvider(); // Fix typo in import and function name
+  const { setAuthToken } = useAuth();
 
   const login = async ({ email, password }) => {
     const success = handleInputErrors({ email, password });
@@ -38,12 +38,12 @@ const useProviderLogin = () => {
         throw new Error(data.error);
       }
 
-      // localStorage.setItem("x-provider", JSON.stringify(data));
-      // setAuthProvider(data);
+      localStorage.setItem("x-provider", JSON.stringify(data));
+			setAuthToken(data);
       toast.success("Login Successful");
-      navigate("/providers/dashboard");
+      navigate("/providers/dashboard")
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Login error:", error.message);
       toast.error("Login failed. Please try again.");
     } finally {
       setLoading(false);
