@@ -6,13 +6,14 @@ const useSendMessage = (providerId) => {
 
   const sendMessage = async ({ message }) => {
     setLoading(true);
-    
-      // Validate input
-      if (!handleInputErrors({ message })) {
-        setLoading(false);
-        return;
-      }
 
+    // Validate input
+    if (!handleInputErrors({ message })) {
+      setLoading(false);
+      return;
+    }
+
+    try {
       const response = await fetch(`/api/v1/send/${providerId}`, {
         method: "POST",
         headers: {
@@ -20,12 +21,20 @@ const useSendMessage = (providerId) => {
         },
         body: JSON.stringify({ message }),
       });
+      // console.log(response);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to send message");
+      }
 
       const data = await response.json();
-      
-        toast.success("Message sent successfully");
-     
-    
+      toast.success("Message sent successfully");
+      return data; // Return the response data if needed
+    } catch (error) {
+      toast.error(error.message || "An error occurred while sending the message");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return { sendMessage, loading };

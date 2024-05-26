@@ -1,19 +1,19 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-const useProviderSendMessage = (providerId) => {
+const useProviderSendMessage = (customerId) => {
   const [loading, setLoading] = useState(false);
 
   const sendMessage = async ({ message }) => {
     setLoading(true);
-    // try {
-      // Validate input
-      if (!handleInputErrors({ message })) {
-        setLoading(false);
-        return;
-      }
 
-      const response = await fetch(`/api/v1/providers/send/${providerId}`, {
+    if (!handleInputErrors({ message })) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/v1/providers/send/${customerId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,19 +22,18 @@ const useProviderSendMessage = (providerId) => {
       });
 
       const data = await response.json();
-      // if (response.ok) {
-        // Handle success
+
+      if (response.ok) {
         toast.success("Message sent successfully");
-      // } else {
-      //   // Handle error response
-      //   throw new Error(data.error || "Failed to send message");
-      // }
-    // } catch (error) {
-    //   console.error("Send message error:", error);
-    //   toast.error("Failed to send message. Please try again.");
-    // } finally {
+      } else {
+        throw new Error(data.error || "Failed to send message");
+      }
+    } catch (error) {
+      console.error("Send message error:", error);
+      toast.error("Failed to send message. Please try again.");
+    } finally {
       setLoading(false);
-    // }
+    }
   };
 
   return { sendMessage, loading };

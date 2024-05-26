@@ -49,8 +49,20 @@ const getReceiverSocketId = (receiverId) => {
   return userSocketMap[receiverId];
 };
 
+// Function to send message to a specific user
+const sendMessageToUser = (userId, event, data) => {
+  const socketId = getReceiverSocketId(userId);
+  if (socketId) {
+    io.to(userId).emit(event, data);
+    console.log(`Message sent to user ${userId}`);
+  } else {
+    console.log(`User ${userId} not found or offline`);
+  }
+};
+
 module.exports = {
   initializeSocket,
   getReceiverSocketId,
+  sendMessageToUser,
   io
 };

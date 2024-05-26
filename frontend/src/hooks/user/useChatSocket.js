@@ -6,7 +6,8 @@ const useChatSocket = (providerId) => {
   const { authUser } = useAuthContext();
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
-    const { _id } = authUser.user;
+  const { _id } = authUser.user;
+  
   useEffect(() => {
     if (authUser) {
       // Establish socket connection with userId as query parameter
@@ -17,7 +18,7 @@ const useChatSocket = (providerId) => {
 
       // Listen for new messages
       socket.on("newMessage", (message) => {
-        alert(message)
+        // alert(message)
         setMessages((prevMessages) => [...prevMessages, message]);
       });
 

@@ -4,9 +4,15 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 const ServiceProvider = require("../models/serviceProviderModel");
 const User = require("../models/userModel");
 const ErrorHandler = require("../utils/errorhandler");
-const { getReceiverSocketId, initializeSocket } = require("../socket/socket");
-const mongoose = require('mongoose');
-const io = initializeSocket()
+const {
+  getReceiverSocketId,
+  initializeSocket,
+  sendMessageToUser,
+} = require("../socket/socket");
+const mongoose = require("mongoose");
+
+// const io = initializeSocket()
+
 exports.sendMessage = catchAsyncError(async (req, res, next) => {
   // Extract data from the request body and parameters
   const { message } = req.body;
@@ -38,23 +44,16 @@ exports.sendMessage = catchAsyncError(async (req, res, next) => {
   if (!conversation) {
     conversation = await Conversation.create({
       participants: [senderId, receiverId],
-      onModel: 'User',
+      onModel: "User",
     });
   }
 
   // Add the message to the conversation
   conversation.messages.push(newMessage);
   await conversation.save();
-  try {
-    const receiverSocketId = await getReceiverSocketId(receiverId);
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit("newMessage", newMessage);
-      console.log("emited");
-    }
-  } catch (e) {
-    console.log(e);
-  }
-  console.log("Reciever socket Id -> " + receiverSocketId);
+
+  sendMessageToUser(receiverId, "newMessage", newMessage);
+
   res.status(200).json({
     success: true,
     message: "Message sent successfully",
@@ -93,7 +92,7 @@ exports.sendProviderMessage = catchAsyncError(async (req, res, next) => {
   if (!conversation) {
     conversation = await Conversation.create({
       participants: [senderId, receiverId],
-      onModel: 'User',
+      onModel: "User",
     });
   }
 
@@ -102,16 +101,7 @@ exports.sendProviderMessage = catchAsyncError(async (req, res, next) => {
   await conversation.save();
 
   // Emit a socket event to the receiver
-  try {
-    const receiverSocketId = await getReceiverSocketId(receiverId);
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit("newMessage", newMessage);
-      console.log("Send to -> " + receiverSocketId);
-    }
-  } catch (e) {
-    console.log(e);
-  }
- 
+  sendMessageToUser(receiverId, "newMessage", newMessage);
 
   res.status(200).json({
     success: true,
@@ -132,7 +122,6 @@ async function getUserOrServiceProvider(id) {
   const serviceProvider = await ServiceProvider.findById(id);
   return serviceProvider;
 }
-
 
 exports.getMessages = catchAsyncError(async (req, res, next) => {
   const receiverId = req.params.id;
@@ -178,9 +167,6 @@ exports.getProviderMessages = catchAsyncError(async (req, res, next) => {
   res.status(200).json(messages);
 });
 
-
-
-
 exports.getAllCustomersChatOfServiceProvider = catchAsyncError(
   async (req, res, next) => {
     const providerId = req.serviceProvider.id;
@@ -201,40 +187,45 @@ exports.getAllCustomersChatOfServiceProvider = catchAsyncError(
     }, []);
 
     // Query the User model to retrieve names of participants
-    const customers = await User.find({ _id: { $in: participantIds } }).select("-password");
+    const customers = await User.find({ _id: { $in: participantIds } }).select(
+      "-password"
+    );
 
     res.status(200).json(customers);
   }
 );
 
+exports.getAllServiceProviderChatOfCustomer = catchAsyncError(
+  async (req, res, next) => {
+    try {
+      const customerId = req.user.id;
 
-exports.getAllServiceProviderChatOfCustomer = catchAsyncError(async (req, res, next) => {
-  try {
-    const customerId = req.user.id;
+      // Find all conversations involving the customer where the customer is a participant
+      const conversations = await Conversation.find({
+        participants: customerId,
+        onModel: "User",
+      });
 
-    // Find all conversations involving the customer where the customer is a participant
-    const conversations = await Conversation.find({
-      participants: customerId,
-      onModel: "User",
-    });
+      // Extract participant IDs from conversations
+      const participantIds = conversations.reduce((ids, convo) => {
+        return ids.concat(
+          convo.participants.filter(
+            (id) => id.toString() !== customerId.toString()
+          )
+        );
+      }, []);
+      // Query the ServiceProvider model to retrieve details of service providers
+      const serviceProvider = await ServiceProvider.find({
+        _id: { $in: participantIds },
+      }).select("-password");
 
-    // Extract participant IDs from conversations
-    const participantIds = conversations.reduce((ids, convo) => {
-      return ids.concat(
-        convo.participants.filter(
-          (id) => id.toString() !== customerId.toString()
-        )
-      );
-    }, []);
-    // Query the ServiceProvider model to retrieve details of service providers
-    const serviceProvider = await ServiceProvider.find({ _id: { $in: participantIds } }).select("-password");
-
-    res.status(200).json(serviceProvider);
-  } catch (error) {
-    console.error("Error fetching service providers for customer:", error);
-    res.status(500).json({
-      status: "error",
-      message: "An error occurred while fetching service providers.",
-    });
+      res.status(200).json(serviceProvider);
+    } catch (error) {
+      console.error("Error fetching service providers for customer:", error);
+      res.status(500).json({
+        status: "error",
+        message: "An error occurred while fetching service providers.",
+      });
+    }
   }
-});
+);

@@ -7,7 +7,7 @@ import { AuthContextProvider } from "./context/AuthContext.jsx";
 import { AuthProvider } from "./context/ProviderAuthContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <BrowserRouter>
       <AuthContextProvider>
         <AuthProvider>
@@ -15,5 +15,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </AuthProvider>
       </AuthContextProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
