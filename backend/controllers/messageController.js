@@ -5,8 +5,6 @@ const ServiceProvider = require("../models/serviceProviderModel");
 const User = require("../models/userModel");
 const ErrorHandler = require("../utils/errorhandler");
 const {
-  getReceiverSocketId,
-  initializeSocket,
   sendMessageToUser,
 } = require("../socket/socket");
 const mongoose = require("mongoose");

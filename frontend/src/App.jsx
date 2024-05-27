@@ -19,6 +19,8 @@ import BuyService from './pages/user/service/BuyService';
 import ChattService from './pages/user/service/ChattService';
 import Profile from './pages/user/service/Profile';
 import Messages from './components/provider/Messages';
+import ChatSkleton from './pages/user/chat/ChatSkleton';
+import Chatting from './pages/user/chat/Chatting';
 
 
 function App() {
@@ -31,11 +33,13 @@ function App() {
     <>
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/chat' element={authUser ? <ChatSkleton /> : <Navigate to={'/login'} />} />
+        <Route path='/chat/:providerId' element={authUser ? <Chatting /> : <Navigate to={'/login'} />} />
         <Route path='/service/:id' element={<Service />} />
         <Route path='/service/:id/buy/:subcatId' element={authUser ? <BuyService /> : <Navigate to={'/login'} />} />
-        <Route path='/service/:id/buy/:subcatId/chat/:providerId' element={<ChattService />} />
-        <Route path='/service/:id/buy/:subcatId/profile/:providerId' element={<Profile />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/service/:id/buy/:subcatId/chat/:providerId'  element={authUser ? <ChattService /> : <Navigate to={'/login'} />} />
+        <Route path='/service/:id/buy/:subcatId/profile/:providerId'  element={authUser ? <Profile /> : <Navigate to={'/login'} />} />
         {/* <Route path='/logout' element={<Logout />} /> */}
         <Route path='/register' element={<Signup />} />
         <Route path='/providers/login' element={<ProviderLogin />} />

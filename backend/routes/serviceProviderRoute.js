@@ -16,6 +16,7 @@ const {
 
 const { isAuthenticatedServiceProvider, isAuthenticatedUser, authorizeRoles } = require("../middleware/authentication");
 const { getAllCustomersChatOfServiceProvider } = require("../controllers/messageController");
+const { getAllNotification } = require("../controllers/notificationController");
 
 const router = express.Router();
 
@@ -31,7 +32,9 @@ router.route('/me/update').put(isAuthenticatedServiceProvider, updateServiceProv
 router.route('/me/updateService').put(isAuthenticatedServiceProvider, updateServiceProviderService)
 router.route('/me/services').get(isAuthenticatedServiceProvider, getServiceProviderService)
 router.route('/chats').get(isAuthenticatedServiceProvider, getAllCustomersChatOfServiceProvider)
+router.route('/notification').get(isAuthenticatedServiceProvider, getAllNotification)
 router.route("/:id").get(getServiceProviderById);
+
 // router.route("/:id").put(updateServiceProviderById);
 // router.route("/:id").delete(deleteServiceProviderById); // -- Admin
 
