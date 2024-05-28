@@ -1,6 +1,6 @@
-import React from 'react';
+// import React from 'react';
 import Conversations from './Conversations';
-import Messages from './Messages';
+// import Messages from './Messages';
 
 const ChatSkleton = () => {
   return (
