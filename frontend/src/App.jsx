@@ -21,6 +21,8 @@ import Profile from './pages/user/service/Profile';
 import Messages from './components/provider/Messages';
 import ChatSkleton from './pages/user/chat/ChatSkleton';
 import Chatting from './pages/user/chat/Chatting';
+import Admindash from './pages/admin/Admindash';
+import AddProduct from './pages/admin/Adminaddservice';
 
 
 function App() {
@@ -48,6 +50,11 @@ function App() {
         <Route path='/providers/services' element={<ProviderEditservice />} />
         <Route path='/providers/chat' element={<ProviderChatt />} />
         <Route path='/providers/chat/:customerId' element={<Messages />} />
+
+        {/* Admin routes */}
+        <Route path='/admin' element={<Admindash />} />
+        <Route path='/add-product' element={<AddProduct />} />
+
       </Routes>
       <Toaster />
     </>

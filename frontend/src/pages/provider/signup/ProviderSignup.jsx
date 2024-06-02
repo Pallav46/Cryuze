@@ -848,34 +848,62 @@ const ServiceProviderSignup = () => {
     await signup(formData);
   };
 
-  const getLocation = async () => {
-    try {
-      const response = await axios.get(
-        "https://ipinfo.io/json?token=9f89fb7679b590"
-      );
-      const { loc, city, region } = response.data;
-      const [latitude, longitude] = loc.split(",");
+  // const getLocation = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       "https://ipinfo.io/json?token=9f89fb7679b590"
+  //     );
+  //     const { loc, city, region } = response.data;
+  //     const [latitude, longitude] = loc.split(",");
 
-      setPosition([parseFloat(latitude), parseFloat(longitude)]);
+  //     setPosition([parseFloat(latitude), parseFloat(longitude)]);
 
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        location: {
-          ...prevFormData.location,
-          coordinates: {
-            type: "Point",
-            coordinates: [parseFloat(longitude), parseFloat(latitude)],
-          },
-          city: city || "",
-          state: region || "",
-        },
-      }));
+  //     setFormData((prevFormData) => ({
+  //       ...prevFormData,
+  //       location: {
+  //         ...prevFormData.location,
+  //         coordinates: {
+  //           type: "Point",
+  //           coordinates: [parseFloat(longitude), parseFloat(latitude)],
+  //         },
+  //         city: city || "",
+  //         state: region || "",
+  //       },
+  //     }));
 
-      fetchAddress(latitude, longitude);
-    } catch (error) {
-      console.error("Error fetching location based on IP:", error);
-    }
-  };
+  //     fetchAddress(latitude, longitude);
+  //   } catch (error) {
+  //     console.error("Error fetching location based on IP:", error);
+  //   }
+  // };
+
+  const getLocation = () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords;
+              setFormData((prevFormData) => ({
+                ...prevFormData,
+                location: {
+                  ...prevFormData.location,
+                  coordinates: {
+                    type: "Point",
+                    coordinates: [longitude, latitude],
+                  },
+                },
+              }));
+              fetchAddress(latitude, longitude);
+            },
+            (error) => {
+              console.error("Error getting location:", error);
+            },
+            { enableHighAccuracy: true }
+          );
+        } else {
+          console.error("Geolocation is not supported by this browser.");
+        }
+      };
+    
 
   const fetchAddress = async (latitude, longitude) => {
     try {
@@ -885,11 +913,15 @@ const ServiceProviderSignup = () => {
       const { results } = response.data;
       if (results.length > 0) {
         const { road } = results[0].components;
+        const { city } = results[0].components;
+        const { state } = results[0].components;
         setFormData((prevFormData) => ({
           ...prevFormData,
           location: {
             ...prevFormData.location,
             address: road || "",
+            city: city || "",
+            state: state || ""
           },
         }));
       }

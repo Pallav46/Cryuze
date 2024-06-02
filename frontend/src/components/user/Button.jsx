@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import useLogout from "../../hooks/user/useUserLogout";
 import { useAuthContext } from "../../context/AuthContext";
+import Profile from "./Profile";
 
 function Button() {
   const { logout } = useLogout();
@@ -21,7 +22,8 @@ function Button() {
             className="relative px-5 py-2 transition-all ease-in duration-75 bg-white dark:bg-white rounded-md group-hover:bg-opacity-0"
             onClick={handleLogout}
           >
-            Logout
+            {/* Logout */}
+            <Profile/>
           </span>
         </button>
       ) : (
