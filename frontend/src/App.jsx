@@ -1,4 +1,3 @@
-// import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import LocomotiveScroll from 'locomotive-scroll'
@@ -6,7 +5,6 @@ import LocomotiveScroll from 'locomotive-scroll'
 import { useAuthContext } from './context/AuthContext';
 
 import Login from './pages/user/login/Login';
-import Service from './pages/user/service/Service'; // Import the Service component
 import Home from './pages/user/home/Home';
 import ProviderLogin from './pages/provider/login/ProviderLogin';
 import ProviderSignup from './pages/provider/signup/ProviderSignup';
@@ -23,22 +21,30 @@ import ChatSkleton from './pages/user/chat/ChatSkleton';
 import Chatting from './pages/user/chat/Chatting';
 import Admindash from './pages/admin/Admindash';
 import AddProduct from './pages/admin/Adminaddservice';
+import Logout from './components/user/auth/Logout';
+import Subcategories from './pages/user/Subcategories/Subcategories';
+import MyOrders from './pages/user/order/MyOrders';
+import AllOrders from './pages/user/order/AllOrders';
+import MyWork from './pages/provider/work/MyWork';
 
 
 function App() {
   new LocomotiveScroll();
 
 	const { authUser } = useAuthContext();
-  // console.log(authUser.user._id);
 
   return (
     <>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/logout' element={<Logout />} />
+        <Route path='/myOrders' element={<MyOrders />} />
+        <Route path='/allOrders' element={<AllOrders />} />
         <Route path='/chat' element={authUser ? <ChatSkleton /> : <Navigate to={'/login'} />} />
         <Route path='/chat/:providerId' element={authUser ? <Chatting /> : <Navigate to={'/login'} />} />
-        <Route path='/service/:id' element={<Service />} />
+        {/* <Route path='/service/:id' element={<Service />} /> */}
+        <Route path='/service/:id' element={<Subcategories />} />
         <Route path='/service/:id/buy/:subcatId' element={authUser ? <BuyService /> : <Navigate to={'/login'} />} />
         <Route path='/service/:id/buy/:subcatId/chat/:providerId'  element={authUser ? <ChattService /> : <Navigate to={'/login'} />} />
         <Route path='/service/:id/buy/:subcatId/profile/:providerId'  element={authUser ? <Profile /> : <Navigate to={'/login'} />} />
@@ -49,6 +55,7 @@ function App() {
         <Route path='/providers/dashboard' element={<ProviderHome />} />
         <Route path='/providers/services' element={<ProviderEditservice />} />
         <Route path='/providers/chat' element={<ProviderChatt />} />
+        <Route path='/providers/myWork' element={<MyWork />} />
         <Route path='/providers/chat/:customerId' element={<Messages />} />
 
         {/* Admin routes */}

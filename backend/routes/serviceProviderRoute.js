@@ -17,6 +17,8 @@ const {
 const { isAuthenticatedServiceProvider, isAuthenticatedUser, authorizeRoles } = require("../middleware/authentication");
 const { getAllCustomersChatOfServiceProvider } = require("../controllers/messageController");
 const { getAllNotification } = require("../controllers/notificationController");
+const { askForConfirmation } = require("../controllers/confirmationController");
+const { getProviderWorks } = require("../controllers/serviceRequestController");
 
 const router = express.Router();
 
@@ -33,6 +35,8 @@ router.route('/me/updateService').put(isAuthenticatedServiceProvider, updateServ
 router.route('/me/services').get(isAuthenticatedServiceProvider, getServiceProviderService)
 router.route('/chats').get(isAuthenticatedServiceProvider, getAllCustomersChatOfServiceProvider)
 router.route('/notification').get(isAuthenticatedServiceProvider, getAllNotification)
+router.route('/confirmation').post(isAuthenticatedServiceProvider, askForConfirmation)
+router.route('/myWork').get(isAuthenticatedServiceProvider, getProviderWorks)
 router.route("/:id").get(getServiceProviderById);
 
 // router.route("/:id").put(updateServiceProviderById);

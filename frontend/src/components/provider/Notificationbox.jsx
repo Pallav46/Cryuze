@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useProviderGetNotification from '../../hooks/provider/useProviderGetNotification';
+import useProviderConfirmation from '../../hooks/provider/useProviderConfirmation';
 import io from "socket.io-client";
 import { useAuth } from "../../context/ProviderAuthContext";
 
@@ -10,7 +11,8 @@ const Notificationbox = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [newNotification, setNewNotification] = useState(false);
-  const { data, error, loading } = useProviderGetNotification();
+  const { data, error, loading} = useProviderGetNotification();
+  const { askForConfirmation } = useProviderConfirmation();
   const navigate = useNavigate();
 
   const socket = useMemo(() => {
@@ -49,6 +51,10 @@ const Notificationbox = () => {
   const handleChatClick = (customerId) => {
     navigate(`/providers/chat/${customerId}`);
   };
+
+  const handleConfirmationClick = async (customerId, subcatId) => {
+    askForConfirmation({customerId, subcatId})
+  }
 
   return (
     <div className="fixed top-4 right-4 z-50">
@@ -102,6 +108,12 @@ const Notificationbox = () => {
                       onClick={() => handleChatClick(notification.sender._id)}
                     >
                       Chat
+                    </button>
+                    <button
+                      className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
+                      onClick={() => handleConfirmationClick(notification.sender._id, notification.subcategory._id)}
+                    >
+                      Ask for Confirmation
                     </button>
                   </div>
                 ))}
