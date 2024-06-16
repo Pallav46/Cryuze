@@ -18,7 +18,7 @@ const { isAuthenticatedServiceProvider, isAuthenticatedUser, authorizeRoles } = 
 const { getAllCustomersChatOfServiceProvider } = require("../controllers/messageController");
 const { getAllNotification } = require("../controllers/notificationController");
 const { askForConfirmation } = require("../controllers/confirmationController");
-const { getProviderWorks } = require("../controllers/serviceRequestController");
+const { getProviderAllWork, getProviderWork, sendBill } = require("../controllers/serviceRequestController");
 
 const router = express.Router();
 
@@ -36,7 +36,9 @@ router.route('/me/services').get(isAuthenticatedServiceProvider, getServiceProvi
 router.route('/chats').get(isAuthenticatedServiceProvider, getAllCustomersChatOfServiceProvider)
 router.route('/notification').get(isAuthenticatedServiceProvider, getAllNotification)
 router.route('/confirmation').post(isAuthenticatedServiceProvider, askForConfirmation)
-router.route('/myWork').get(isAuthenticatedServiceProvider, getProviderWorks)
+router.route('/myWork').get(isAuthenticatedServiceProvider, getProviderAllWork)
+router.route('/sendBill').post(isAuthenticatedServiceProvider, sendBill)
+router.route('/work/:workId').get(isAuthenticatedServiceProvider, getProviderWork)
 router.route("/:id").get(getServiceProviderById);
 
 // router.route("/:id").put(updateServiceProviderById);

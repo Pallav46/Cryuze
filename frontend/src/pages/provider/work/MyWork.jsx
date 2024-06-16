@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import useProviderGetWork from '../../../hooks/provider/useProviderGetWork';
+import useProviderGetAllWork from '../../../hooks/provider/useProviderGetAllWork';
 
 const MyWork = () => {
-    const { data, error, loading } = useProviderGetWork();
+    const { data, error, loading } = useProviderGetAllWork();
 
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;

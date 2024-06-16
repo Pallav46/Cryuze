@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useProviderGetWork = (workId) => {
+const useGetOrder = (orderId) => {
     const [data, setData] = useState(null); // Adjusted initial state to null
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -8,9 +8,8 @@ const useProviderGetWork = (workId) => {
     useEffect(() => {
         const fetchWork = async () => {
             try {
-                const response = await fetch(`/api/v1/providers/work/${workId}`);
+                const response = await fetch(`/api/v1/order/${orderId}`);
                 if (!response.ok) {
-                    console.log(response);
                     throw new Error('Network response was not ok');
                 }
                 const result = await response.json();
@@ -23,9 +22,9 @@ const useProviderGetWork = (workId) => {
         };
 
         fetchWork();
-    }, [workId]); // Adjusted dependency to workId
+    }, [orderId]); // Adjusted dependency to orderId
     console.log(data, error, loading);
     return { data, error, loading };
 };
 
-export default useProviderGetWork;
+export default useGetOrder;

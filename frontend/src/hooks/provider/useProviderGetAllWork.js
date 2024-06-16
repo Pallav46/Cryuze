@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 
-const useProviderGetWork = (workId) => {
-    const [data, setData] = useState(null); // Adjusted initial state to null
+const useProviderGetAllWork = () => {
+    const [data, setData] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchWork = async () => {
+        const fetchAllWork = async () => {
             try {
-                const response = await fetch(`/api/v1/providers/work/${workId}`);
+                const response = await fetch('/api/v1/providers/myWork');
                 if (!response.ok) {
-                    console.log(response);
                     throw new Error('Network response was not ok');
                 }
                 const result = await response.json();
-                setData(result); // Setting the entire result as data
+                setData(result.data); // Assuming the API returns data as an array
             } catch (error) {
                 setError(error);
             } finally {
@@ -22,10 +21,12 @@ const useProviderGetWork = (workId) => {
             }
         };
 
-        fetchWork();
-    }, [workId]); // Adjusted dependency to workId
-    console.log(data, error, loading);
+        fetchAllWork();
+    }, []);
+
+    console.log(data, error, loading); // Optional: Log state for debugging
+
     return { data, error, loading };
 };
 
-export default useProviderGetWork;
+export default useProviderGetAllWork;

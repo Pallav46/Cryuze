@@ -19,7 +19,7 @@ const useProviderConfirmation = () => {
       if (data.error) {
         throw new Error(data.error);
       }
-
+      toast.success(data.message)
     } catch (error) {
       console.error("AskForConfirmation error:", error.message);
       toast.error("AskForConfirmation failed. Please try again.");

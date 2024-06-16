@@ -26,6 +26,10 @@ import Subcategories from './pages/user/Subcategories/Subcategories';
 import MyOrders from './pages/user/order/MyOrders';
 import AllOrders from './pages/user/order/AllOrders';
 import MyWork from './pages/provider/work/MyWork';
+import Work from './pages/provider/work/Work';
+import Order from './pages/user/order/Order';
+import PaymentSuccess from './pages/user/payment/PaymentSuccess';
+import History from './pages/user/order/History';
 
 
 function App() {
@@ -41,6 +45,8 @@ function App() {
         <Route path='/logout' element={<Logout />} />
         <Route path='/myOrders' element={<MyOrders />} />
         <Route path='/allOrders' element={<AllOrders />} />
+        <Route path='/order/:orderId' element={<Order />} />
+        <Route path='/history' element={<History />} />
         <Route path='/chat' element={authUser ? <ChatSkleton /> : <Navigate to={'/login'} />} />
         <Route path='/chat/:providerId' element={authUser ? <Chatting /> : <Navigate to={'/login'} />} />
         {/* <Route path='/service/:id' element={<Service />} /> */}
@@ -56,11 +62,15 @@ function App() {
         <Route path='/providers/services' element={<ProviderEditservice />} />
         <Route path='/providers/chat' element={<ProviderChatt />} />
         <Route path='/providers/myWork' element={<MyWork />} />
+        <Route path='/providers/work/:workId' element={<Work />} />
         <Route path='/providers/chat/:customerId' element={<Messages />} />
 
         {/* Admin routes */}
         <Route path='/admin' element={<Admindash />} />
         <Route path='/add-product' element={<AddProduct />} />
+
+        {/* Payment */}
+        <Route path="/paymentsuccess" element={<PaymentSuccess />} />
 
       </Routes>
       <Toaster />
