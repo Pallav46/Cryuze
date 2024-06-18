@@ -57,6 +57,7 @@ function App() {
         {/* <Route path='/logout' element={<Logout />} /> */}
         <Route path='/register' element={<Signup />} />
         <Route path='/providers/login' element={<ProviderLogin />} />
+        {/* <Route path='/providers/logout' element={<ProviderLogin />} /> */}
         <Route path='/providers/register' element={<ProviderSignup />} />
         <Route path='/providers/dashboard' element={<ProviderHome />} />
         <Route path='/providers/services' element={<ProviderEditservice />} />
