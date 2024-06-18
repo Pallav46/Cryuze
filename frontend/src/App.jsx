@@ -11,6 +11,7 @@ import ProviderSignup from './pages/provider/signup/ProviderSignup';
 import ProviderHome from './pages/provider/home/ProviderHome';
 import ProviderEditservice from './pages/provider/home/ProviderEditservice';
 import ProviderChatt from './pages/provider/home/ProviderChatt';
+import Providernoti from './pages/provider/home/Providernoti';
 import Signup  from './pages/user/signup/Signup';
 // import Logout from './pages/user/logout/Logout';
 import BuyService from './pages/user/service/BuyService';
@@ -47,6 +48,7 @@ function App() {
         <Route path='/allOrders' element={<AllOrders />} />
         <Route path='/order/:orderId' element={<Order />} />
         <Route path='/history' element={<History />} />
+  
         <Route path='/chat' element={authUser ? <ChatSkleton /> : <Navigate to={'/login'} />} />
         <Route path='/chat/:providerId' element={authUser ? <Chatting /> : <Navigate to={'/login'} />} />
         {/* <Route path='/service/:id' element={<Service />} /> */}
@@ -64,7 +66,7 @@ function App() {
         <Route path='/providers/myWork' element={<MyWork />} />
         <Route path='/providers/work/:workId' element={<Work />} />
         <Route path='/providers/chat/:customerId' element={<Messages />} />
-
+        <Route path='/providers/notifi' element={< Providernoti/>} />
         {/* Admin routes */}
         <Route path='/admin' element={<Admindash />} />
         <Route path='/add-product' element={<AddProduct />} />
