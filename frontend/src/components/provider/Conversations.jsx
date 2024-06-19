@@ -1,14 +1,21 @@
-// import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import useProviderChatt from '../../hooks/provider/useProviderChatt';
 import { useNavigate } from 'react-router-dom';
 
-const Conversations = () => {
+const Conversationspro = () => {
   const { data: conversations, isLoading, error } = useProviderChatt();
-    // console.log(conversations);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const chatEndRef = useRef(null);
+
   const handleChatClick = (conversationId) => {
-    navigate(`/providers/chat/${conversationId}`)
+    navigate(`/providers/chat/${conversationId}`);
   };
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [conversations]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -19,26 +26,27 @@ const Conversations = () => {
   }
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4">
-      <h2 className="text-xl font-semibold mb-4">Conversations</h2>
-      <ul className="space-y-2">
-        {conversations.map((conversation) => (
-          <li
-            key={conversation.id}
-            className="bg-gray-100 p-4 rounded-lg hover:bg-gray-200 cursor-pointer flex justify-between items-center"
-          >
-            <span>{conversation.name}</span>
-            <button
-              onClick={() => handleChatClick(conversation._id)}
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+      <div className="overflow-y-auto h-full max-h-[60vh] ">
+        <ul className="space-y-2">
+          {conversations.map((conversation) => (
+            <li
+              key={conversation.id}
+              className="bg-gray-100 p-4 rounded-lg hover:bg-gray-200 cursor-pointer flex justify-between items-center"
             >
-              Chat
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+              <span>{conversation.name}</span>
+              <button
+                onClick={() => handleChatClick(conversation._id)}
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              >
+                Chat
+              </button>
+            </li>
+          ))}
+          <div ref={chatEndRef} />
+        </ul>
+      </div>
+
   );
 };
 
-export default Conversations;
+export default Conversationspro;

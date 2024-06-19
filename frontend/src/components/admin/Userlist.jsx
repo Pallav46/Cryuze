@@ -27,7 +27,7 @@ const UserList = () => {
     return (
         <div className="p-8">
             <h1 className="text-2xl font-bold mb-4">Users</h1>
-            <div className="flex flex-wrap space-x-4 space-y-4">
+            <div className="flex flex-wrap space-x-4 ">
                 {visibleUsers.map(user => (
                     <div key={user.id} className="flex flex-col items-center w-50">
                         <img

@@ -21,6 +21,7 @@ import Messages from './components/provider/Messages';
 import ChatSkleton from './pages/user/chat/ChatSkleton';
 import Chatting from './pages/user/chat/Chatting';
 import Admindash from './pages/admin/Admindash';
+import Allservices from './pages/admin/Allservices';
 import AddProduct from './pages/admin/Adminaddservice';
 import Logout from './components/user/auth/Logout';
 import Subcategories from './pages/user/Subcategories/Subcategories';
@@ -31,6 +32,7 @@ import Work from './pages/provider/work/Work';
 import Order from './pages/user/order/Order';
 import PaymentSuccess from './pages/user/payment/PaymentSuccess';
 import History from './pages/user/order/History';
+import AdminEditService from './pages/admin/Admineditservice';
 
 
 function App() {
@@ -70,6 +72,8 @@ function App() {
         <Route path='/providers/notifi' element={< Providernoti/>} />
         {/* Admin routes */}
         <Route path='/admin' element={<Admindash />} />
+        <Route path='/admin/allservices' element={<Allservices />} />
+        <Route path='/admin/editservices' element={<AdminEditService />} />
         <Route path='/add-product' element={<AddProduct />} />
 
         {/* Payment */}

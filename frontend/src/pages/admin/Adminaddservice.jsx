@@ -1,45 +1,138 @@
 import React, { useState } from 'react';
 
 const AddProduct = () => {
-    const [productName, setProductName] = useState('');
-    const [productPrice, setProductPrice] = useState('');
+  const [serviceName, setServiceName] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [priceRange, setPriceRange] = useState('');
+  const [subcategories, setSubcategories] = useState([{ name: '', price: '', description: '' }]);
+  const [image, setImage] = useState(null);
 
-    const handleAddProduct = () => {
-        // Add product logic here
-        console.log('Product Added:', { productName, productPrice });
-    };
+  const handleAddSubcategory = () => {
+    setSubcategories([...subcategories, { name: '', price: '', description: '' }]);
+  };
 
-    return (
-        <div className="p-4 flex-1">
-            <h1 className="text-2xl font-bold mb-4">Add New Service</h1>
-            <div className="p-4 bg-white shadow rounded-lg">
-                <div className="mb-4">
-                    <label className="block text-gray-700">Service Name</label>
-                    <input
-                        type="text"
-                        value={productName}
-                        onChange={(e) => setProductName(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700">Product Price</label>
-                    <input
-                        type="text"
-                        value={productPrice}
-                        onChange={(e) => setProductPrice(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded"
-                    />
-                </div>
-                <button
-                    onClick={handleAddProduct}
-                    className="p-2 bg-blue-500 text-white rounded"
-                >
-                    Add Product
-                </button>
-            </div>
+  const handleSubcategoryChange = (index, field, value) => {
+    const newSubcategories = [...subcategories];
+    newSubcategories[index][field] = value;
+    setSubcategories(newSubcategories);
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission
+    console.log({
+      serviceName,
+      description,
+      category,
+      priceRange,
+      subcategories,
+      image,
+    });
+  };
+
+  return (
+    <div className="mt-10 max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+      <h2 className="text-2xl font-semibold mb-4">Add Service</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Service Name</label>
+          <input
+            type="text"
+            value={serviceName}
+            onChange={(e) => setServiceName(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          />
         </div>
-    );
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Description</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            rows="3"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Category</label>
+          <input
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Price Range</label>
+          <input
+            type="text"
+            value={priceRange}
+            onChange={(e) => setPriceRange(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Subcategories</label>
+          {subcategories.map((subcategory, index) => (
+            <div key={index} className="mb-2">
+              <div className="flex items-center mb-2">
+                <input
+                  type="text"
+                  value={subcategory.name}
+                  onChange={(e) => handleSubcategoryChange(index, 'name', e.target.value)}
+                  className="mt-1 block w-1/3 p-2 border border-gray-300 rounded-md mr-2"
+                  placeholder="Subcategory Name"
+                  required
+                />
+                <input
+                  type="text"
+                  value={subcategory.price}
+                  onChange={(e) => handleSubcategoryChange(index, 'price', e.target.value)}
+                  className="mt-1 block w-1/3 p-2 border border-gray-300 rounded-md mr-2"
+                  placeholder="Subcategory Price"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={handleAddSubcategory}
+                  className="ml-2 text-white bg-blue-500 hover:bg-blue-600 p-2 rounded-md"
+                >
+                  +
+                </button>
+              </div>
+              <textarea
+                value={subcategory.description}
+                onChange={(e) => handleSubcategoryChange(index, 'description', e.target.value)}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Subcategory Description"
+                rows="2"
+                required
+              />
+            </div>
+          ))}
+        </div>
+        
+        <div>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
+          >
+            Add Service
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 };
 
 export default AddProduct;

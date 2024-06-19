@@ -6,38 +6,32 @@ import { useState } from "react";
 const Work = () => {
   const { workId } = useParams();
   const { data: responseData, error, loading } = useProviderGetWork(workId);
-  const { sendBill } = useSendBill(); // Import useSendBill hook
+  const { sendBill } = useSendBill();
 
   const [showBillForm, setShowBillForm] = useState(false);
-  // const [billAmount, setBillAmount] = useState("");
   const [additionalCharges, setAdditionalCharges] = useState([]);
+  const [subcategoryCharge, setSubcategoryCharge] = useState(0);
 
-  // Function to add additional charges
   const handleAddAdditionalCharge = () => {
     setAdditionalCharges([...additionalCharges, { name: "", price: "" }]);
   };
 
-  // Function to handle changes in additional charges
   const handleAdditionalChargeChange = (index, field, value) => {
     const updatedCharges = [...additionalCharges];
     updatedCharges[index][field] = value;
     setAdditionalCharges(updatedCharges);
   };
 
-  // Function to submit the bill
-   const handleSubmitBill = async (e) => {
+  const handleSubmitBill = async (e) => {
     e.preventDefault();
 
-    const subcategoryCharge = responseData?.data?.subCategory?.price || 0;
     const serviceCharge = 50;
 
-    // Map additional charges to send only names and prices
-    const additionalChargesToSend = additionalCharges.map(charge => ({
+    const additionalChargesToSend = additionalCharges.map((charge) => ({
       name: charge.name,
       price: parseFloat(charge.price || 0),
     }));
 
-    // Call sendBill function from useSendBill hook
     await sendBill({
       serviceRequestId: responseData.data._id,
       subcategoryCharge,
@@ -48,7 +42,6 @@ const Work = () => {
     setShowBillForm(false);
     setAdditionalCharges([]);
   };
-
 
   if (loading) {
     return (
@@ -90,45 +83,46 @@ const Work = () => {
   } = customer || {};
 
   const handleMakeBill = () => {
+    setSubcategoryCharge(subCategoryPrice || 0);
     setShowBillForm(true);
   };
 
   return (
     <div className="max-w-4xl mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6">Work Details</h1>
-      {subCategory && (
-        <div className="bg-white shadow-md rounded-md p-6 mb-6">
-          <h2 className="text-xl font-bold mb-4">SubCategory</h2>
-          <p className="mb-2">Name: {subCategoryName}</p>
-          <p className="mb-2">Description: {subCategoryDescription}</p>
-          <p>Price: ${subCategoryPrice}</p>
-        </div>
-      )}
-      {customer && (
-        <div className="bg-white shadow-md rounded-md p-6 mb-6">
-          <h2 className="text-xl font-bold mb-4">Customer</h2>
-          {avatar && (
-            <img
-              src={avatar.url}
-              alt="Customer Avatar"
-              className="w-16 h-16 rounded-full mb-4"
-            />
-          )}
-          <p className="mb-2">Name: {customerName}</p>
-          <p className="mb-2">Email: {customerEmail}</p>
-          <p>Phone Number: {customerPhoneNumber}</p>
-        </div>
-      )}
+      <div className="bg-white shadow-md rounded-md p-6 mb-6 flex justify-between items-start">
+        {customer && (
+          <div className="w-1/2 pr-4">
+            <h2 className="text-xl font-bold mb-4">Customer</h2>
+            {avatar && (
+              <img
+                src={avatar.url}
+                alt="Customer Avatar"
+                className="w-16 h-16 rounded-full mb-4"
+              />
+            )}
+            <p className="mb-2"><strong>Name:</strong> {customerName}</p>
+            <p className="mb-2"><strong>Email:</strong> {customerEmail}</p>
+            <p><strong>Phone Number:</strong> {customerPhoneNumber}</p>
+          </div>
+        )}
+        {subCategory && (
+          <div className="w-1/2 pl-4">
+            <h2 className="text-xl font-bold mb-4">SubCategory</h2>
+            <p className="mb-2"><strong>Name:</strong> {subCategoryName}</p>
+            <p className="mb-2"><strong>Description:</strong> {subCategoryDescription}</p>
+            <p><strong>Price:</strong> ${subCategoryPrice}</p>
+          </div>
+        )}
+      </div>
       <div className="bg-white shadow-md rounded-md p-6 mb-6">
         <h2 className="text-xl font-bold mb-4">Work Status</h2>
-        <p>Status: {status}</p>
+        <p><strong>Status:</strong> {status}</p>
       </div>
       <div className="bg-white shadow-md rounded-md p-6 mb-6">
         <h2 className="text-xl font-bold mb-4">Dates</h2>
-        <p className="mb-2">
-          Created At: {new Date(createdAt).toLocaleString()}
-        </p>
-        <p>Updated At: {new Date(updatedAt).toLocaleString()}</p>
+        <p className="mb-2"><strong>Created At:</strong> {new Date(createdAt).toLocaleString()}</p>
+        <p><strong>Updated At:</strong> {new Date(updatedAt).toLocaleString()}</p>
       </div>
       <div className="flex justify-end space-x-4">
         <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
@@ -169,7 +163,12 @@ const Work = () => {
                           <label className="block text-sm font-medium text-gray-700">
                             SubCategory Price
                           </label>
-                          <p className="text-gray-600">${subCategoryPrice}</p>
+                          <input
+                            type="number"
+                            value={subcategoryCharge}
+                            onChange={(e) => setSubcategoryCharge(parseFloat(e.target.value) || 0)}
+                            className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                          />
                         </div>
                         <div className="mb-4">
                           <label className="block text-sm font-medium text-gray-700">
@@ -228,12 +227,12 @@ const Work = () => {
                     type="submit"
                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
                   >
-                    Submit
+                    Submit Bill
                   </button>
                   <button
                     type="button"
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={() => setShowBillForm(false)}
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
                   >
                     Cancel
                   </button>
