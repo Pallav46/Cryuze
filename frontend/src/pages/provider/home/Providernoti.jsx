@@ -1,6 +1,37 @@
 import React from 'react'
 import Sidebar from '../../../components/provider/Sidebar';
+import useProviderGetNotification from '../../../hooks/provider/useProviderGetNotification'
+import useProviderConfirmation from '../../../hooks/provider/useProviderConfirmation';
+import io from "socket.io-client";
+import { useAuth } from "../../../context/ProviderAuthContext";
 const Providernoti = () => {
+
+  // const socket = useMemo(() => {
+  //   const socketInstance = io("http://localhost:3030", {
+  //     query: { userId: _id }
+  //   });
+  //   return socketInstance;
+  // }, [_id]);
+
+  // useEffect(() => {
+  //   if (data && data.notifications) {
+  //     setNotifications(data.notifications);
+  //   }
+  // }, [data]);
+
+  // useEffect(() => {
+  //   socket.on("notification", (msg) => {
+  //     console.log("Received notification:", msg);
+  //     setNotifications((prevNotifications) => [msg, ...prevNotifications]);
+  //     setNewNotification(true);
+  //   });
+
+  //   return () => {
+  //     // Cleanup on component unmount
+  //     socket.disconnect();
+  //   };
+  // }, [socket]);
+  
   return (
     <>
     <div className="flex min-h-screen bg-gray-100">

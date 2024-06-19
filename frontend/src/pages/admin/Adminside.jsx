@@ -14,6 +14,9 @@ const Adminside = () => {
                         <Link to="/" className="block p-2 rounded hover:bg-gray-700">Dashboard</Link>
                     </li>
                     <li className="mb-2">
+                        <Link to="/admin/allservices" className="block p-2 rounded hover:bg-gray-700">All Services</Link>
+                    </li>
+                    <li className="mb-2">
                         <Link to="/add-product" className="block p-2 rounded hover:bg-gray-700">Add New Services</Link>
                     </li>
                 </ul>
