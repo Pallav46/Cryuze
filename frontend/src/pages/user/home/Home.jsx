@@ -1,4 +1,4 @@
-import Hero from "../../../components/user/home/Hero";
+// import Hero from "../../../components/user/home/Hero";
 import Navbar from "../../../components/user/navbar/Navbar";
 import Service from "./service/Service";
 import Facilities from "../../../components/user/home/Facilities";
@@ -6,7 +6,7 @@ import Footer from "../../../components/user/footer/Footer";
 
 const Home = () => {
   return (
-    <div className="w-full min-h-screen text-white">
+    <div className="w-full min-h-screen text-white dark:bg-gray-700">
       <Navbar />
       {/* <Hero /> */}
       <Service/>
