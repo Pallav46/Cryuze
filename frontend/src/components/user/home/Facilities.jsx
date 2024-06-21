@@ -30,7 +30,7 @@ const FacilitiesData=[
 function Facilities() {
   return (
     <div>
-        <div className='container my-14 md:my-20'>
+        <div className='container my-14 md:my-20 text-black dark:text-white'>
             <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 gap-y-8'>
                 {
                     FacilitiesData.map((data)=>(

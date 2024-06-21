@@ -10,7 +10,7 @@ function Services2({ serviceGroup = [] }) {
   };
 
   return (
-    <div className="py-8">
+    <div className="py-8 dark:bg-gray-800">
       <div className="container">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {serviceGroup.map((service, index) => (

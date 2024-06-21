@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import LocomotiveScroll from 'locomotive-scroll'
 
 import { useAuthContext } from './context/AuthContext';
 
@@ -36,7 +35,6 @@ import AdminEditService from './pages/admin/Admineditservice';
 
 
 function App() {
-  new LocomotiveScroll();
 
 	const { authUser } = useAuthContext();
 
