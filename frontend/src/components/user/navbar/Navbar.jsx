@@ -92,7 +92,7 @@ function Navbar() {
                   <span>
                     <FaCaretDown className="group-hover:rotate-180 duration-300" />
                   </span>
-                  <div className="absolute z-[6969] hidden group-hover:block w-[200px] rounded-md bg-white shadow-md dark:bg-gray-900 p-2 dark:text-white">
+                  <div className="absolute top-10 z-[6969] hidden group-hover:block w-[200px] rounded-md bg-white shadow-md dark:bg-gray-900 p-2 dark:text-white">
                     <ul className="space-y-2">
                       {DropdownLinks.map((data, index) => (
                         <li key={index}>
