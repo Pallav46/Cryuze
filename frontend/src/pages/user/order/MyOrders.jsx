@@ -1,18 +1,18 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
+import { Link, useNavigate } from 'react-router-dom'; // Import Link and useNavigate
 import useMyOrders from '../../../hooks/user/useMyOrders';
 import useConfirmProvider from '../../../hooks/user/useConfirmProvider';
 import Navbar from '../../../components/user/navbar/Navbar';
-import Footer from '../../../components/user/footer/Footer'
+import Footer from '../../../components/user/footer/Footer';
 
 const MyOrders = () => {
     const { data, error, loading } = useMyOrders();
     const { confirmProvider, loading: confirmLoading } = useConfirmProvider();
-    const navigate = useNavigate(); // useNavigate hook from react-router-dom
+    const navigate = useNavigate();
 
     const handleConfirm = async (confirmationId, providerId) => {
         await confirmProvider({ confirmationId, providerId });
-        navigate("/allOrders"); // Navigate to '/allOrders' after confirmation
+        navigate("/allOrders");
     };
 
     if (loading) {
@@ -44,6 +44,9 @@ const MyOrders = () => {
                                         <div className="mt-2 flex justify-between">
                                             <Link to={`/chat/${recipient.providerId._id}`} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
                                                 Chat
+                                            </Link>
+                                            <Link to={`/provider/${recipient.providerId._id}`} className="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600">
+                                                View Profile
                                             </Link>
                                             <button
                                                 onClick={() => handleConfirm(order._id, recipient.providerId._id)}

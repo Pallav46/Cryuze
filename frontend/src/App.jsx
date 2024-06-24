@@ -49,6 +49,7 @@ function App() {
           <Route path='/allOrders' element={<AllOrders />} />
           <Route path='/order/:orderId' element={<Order />} />
           <Route path='/history' element={<History />} />
+          <Route path='/provider/:providerId' element={<Profile />} />
 
           <Route path='/chat' element={authUser ? <ChatSkleton /> : <Navigate to='/login' />} />
           <Route path='/chat/:providerId' element={authUser ? <Chatting /> : <Navigate to='/login' />} />
