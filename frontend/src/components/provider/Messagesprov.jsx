@@ -33,8 +33,15 @@ const Messagesprov = () => {
     }
   }, [messageError, navigate]);
 
+  // const socket = useMemo(() => {
+  //   const socketInstance = io("http://localhost:3030", {
+  //     query: { userId: _id }
+  //   });
+  //   return socketInstance;
+  // }, [_id]);
+
   const socket = useMemo(() => {
-    const socketInstance = io("http://localhost:3030", {
+    const socketInstance = io("https://x-website.onrender.com", {
       query: { userId: _id }
     });
     return socketInstance;
