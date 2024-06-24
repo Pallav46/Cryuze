@@ -1,5 +1,6 @@
 // import React from 'react';
-import Conversationspro from '../../../components/provider/Conversationspro';
+// import Conversationspro from '../../../components/provider/Conversationspro';
+import Conversations from './Conversations';
 // import Messages from './Messages';
 
 const ChatSkleton = () => {
@@ -7,7 +8,7 @@ const ChatSkleton = () => {
     <div className="flex h-screen">
       {/* Conversations Sidebar */}
       <div className="bg-gray-100 w-1/4 border-r border-gray-300 overflow-y-auto">
-        <Conversationspro />
+        <Conversations />
       </div>
 
       {/* Chat Messages */}

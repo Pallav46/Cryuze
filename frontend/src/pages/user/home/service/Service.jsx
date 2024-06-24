@@ -1,4 +1,3 @@
-import React from 'react';
 import Services from "../../../../components/user/home/Services";
 import Services2 from "../../../../components/user/home/Services2";
 import useGetServices from "../../../../hooks/useGetServices";
