@@ -21,7 +21,7 @@ function ProductCard({ data, serviceProviderIds}) {
   // Example function for sending notifications
 
   return (
-    <div className="relative flex flex-col lg:flex-row bg-white dark:bg-gray-700 shadow-md rounded-lg p-6 mb-4">
+    <div className="relative flex flex-col lg:flex-row bg-white dark:bg-gray-600 shadow-md rounded-lg p-6 mb-4">
       <div className="flex-1 flex-col">
         <h1 id={`product-${data.id}`} className="text-2xl font-bold mb-4">{data.name}</h1>
         <p className='text-md font-semibold text-gray-500 dark:text-gray-300'>{data.description}</p>

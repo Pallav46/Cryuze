@@ -15,7 +15,7 @@ const BannerData = {
 
 function Subcategories() {
     return (
-        <div>
+        <div className=' dark:bg-gray-700 dark:text-gray-200'>
             <Navbar />
             <div className='mt-[2rem]'>
                 <Banner data={BannerData} />

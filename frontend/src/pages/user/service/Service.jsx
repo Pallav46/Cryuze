@@ -84,7 +84,7 @@ const Service = () => {
 
   return (
     <div className="max-w-5xl mx-auto my-10 p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-4xl font-extrabold mb-6 text-gray-800">{name}</h2>
+      <h2 className="text-4xl font-extrabold mb-6 text-gray-800 ">{name}</h2>
       <p className="text-lg mb-4">
         <span className="font-semibold text-gray-600">Description:</span>{" "}
         {description}

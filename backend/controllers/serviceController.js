@@ -7,7 +7,23 @@ const ApiFeatures = require("../utils/apifeatures");
 
 // CREATE SERVICE -- Admin
 exports.createService = catchAsyncError(async (req, res, next) => {
-  const service = await Service.create(req.body);
+  // Extract subcategories from the request body if they exist
+  const { subCategories, ...serviceData } = req.body;
+
+  let createdSubCategories = [];
+  if (subCategories && subCategories.length > 0) {
+    // Create subcategories
+    createdSubCategories = await Subcategory.insertMany(subCategories);
+  }
+
+  // Add the created subcategories to the service data
+  if (createdSubCategories.length > 0) {
+    serviceData.subCategories = createdSubCategories.map(subCategory => subCategory._id);
+  }
+
+  // Create the service
+  const service = await Service.create(serviceData);
+
   res.status(201).json({ success: true, data: service });
 });
 
