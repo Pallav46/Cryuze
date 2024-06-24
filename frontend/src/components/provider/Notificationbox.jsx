@@ -16,7 +16,7 @@ const Notificationbox = () => {
   const navigate = useNavigate();
 
   const socket = useMemo(() => {
-    const socketInstance = io("https://x-website.onrender.com", {
+    const socketInstance = io("http://localhost:3030", {
       query: { userId: _id }
     });
     return socketInstance;

@@ -1,20 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
-import useGetMessages from "../../../hooks/user/useGetMessages";
-import useSendMessage from "../../../hooks/user/useSendMessage";
-import { useAuthContext } from "../../../context/AuthContext";
+import { useEffect, useMemo, useState, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import useProviderGetMessages from "../../hooks/provider/useProviderGetMessages";
+import useProviderSendMessage from "../../hooks/provider/useProviderSendMessage";
 import io from "socket.io-client";
+import { useAuth } from "../../context/ProviderAuthContext";
 
-const Messages = () => {
-  const { authUser } = useAuthContext();
-  const { _id } = authUser?.user || {};
-  const { providerId } = useParams();
-
+const Messagesprov = () => {
+  const { customerId } = useParams();
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const { authToken } = useAuth();
+  const { _id } = authToken.user;
+  const messagesEndRef = useRef(null);
 
-  const { data: initialMessages } = useGetMessages(providerId);
-  const { sendMessage } = useSendMessage(providerId);
+  const {
+    data: initialMessages,
+    loading: messageLoading,
+    error: messageError,
+  } = useProviderGetMessages(customerId);
+  const { sendMessage, loading: sendLoading } = useProviderSendMessage(customerId);
 
   useEffect(() => {
     if (initialMessages) {
@@ -22,39 +27,53 @@ const Messages = () => {
     }
   }, [initialMessages]);
 
-  const socket = useMemo(
-    () =>
-      io("http://localhost:3030", {
-        query: { userId: _id }
-      }),
-    [_id]
-  );
+  useEffect(() => {
+    if (messageError) {
+      navigate("/providers/login");
+    }
+  }, [messageError, navigate]);
+
+  const socket = useMemo(() => {
+    const socketInstance = io("http://localhost:3030", {
+      query: { userId: _id }
+    });
+    return socketInstance;
+  }, [_id]);
 
   useEffect(() => {
-    if (!socket) return;
+    socket.emit("join", { customerId });
 
-    socket.on("newMessage", (data) => {
-      console.log("Received new message: ", data);
-      setMessages((prevMessages) => [...prevMessages, data]);
+    socket.on("newMessage", (msg) => {
+      setMessages((prevMessages) => [...prevMessages, msg]);
     });
 
     return () => {
       socket.off("newMessage");
+      socket.disconnect();
     };
-  }, [socket]);
+  }, [socket, customerId]);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const handleSubmit = async () => {
     if (!input.trim()) return;
-
-    const messageData = {
-      message: input,
-      senderId: _id,
-      timestamp: new Date().toISOString()
-    };
-
-    await sendMessage(messageData);
-    setMessages((prevMessages) => [...prevMessages, messageData]);
-    setInput("");
+    try {
+      const messagePayload = {
+        message: input,
+        senderId: _id,
+        receiverId: customerId,
+        timestamp: new Date().toISOString(),
+      };
+      await sendMessage({ message: input });
+      setMessages((prevMessages) => [...prevMessages, messagePayload]);
+      setInput(""); // Clear input after sending message
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
   };
 
   const handleKeyPress = (event) => {
@@ -62,7 +81,6 @@ const Messages = () => {
       handleSubmit();
     }
   };
-
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 p-4 overflow-y-auto">
@@ -87,6 +105,7 @@ const Messages = () => {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
       <div className="bg-white border-t border-gray-300 py-3 px-4 flex items-center">
         <input
@@ -108,4 +127,4 @@ const Messages = () => {
   );
 };
 
-export default Messages;
+export default Messagesprov;

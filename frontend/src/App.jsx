@@ -32,6 +32,8 @@ import Order from './pages/user/order/Order';
 import PaymentSuccess from './pages/user/payment/PaymentSuccess';
 import History from './pages/user/order/History';
 import AdminEditService from './pages/admin/Admineditservice';
+import ChatSkletonProvider from './components/provider/ChatSkletonProvider';
+import Chattingprovider from './components/provider/Chattingprovider.jsx';
 
 function App() {
   const { authUser } = useAuthContext();
@@ -60,10 +62,10 @@ function App() {
         
         <Route path='/providers/dashboard' element={authToken ? <ProviderHome /> : <Navigate to='/providers/login' />} />
         <Route path='/providers/services' element={authToken ? <ProviderEditservice /> : <Navigate to='/providers/login' />} />
-        <Route path='/providers/chat' element={authToken ? <ProviderChatt /> : <Navigate to='/providers/login' />} />
+        <Route path='/providers/chat' element={authToken ? <ChatSkletonProvider /> : <Navigate to='/providers/login' />} />
         <Route path='/providers/myWork' element={authToken ? <MyWork /> : <Navigate to='/providers/login' />} />
         <Route path='/providers/work/:workId' element={authToken ? <Work /> : <Navigate to='/providers/login' />} />
-        <Route path='/providers/chat/:customerId' element={authToken ? <Messages /> : <Navigate to='/providers/login' />} />
+        <Route path='/providers/chat/:customerId' element={authToken ? <Chattingprovider /> : <Navigate to='/providers/login' />} />
         <Route path='/providers/notifi' element={authToken ? <Providernoti /> : <Navigate to='/providers/login' />} />
         
         {/* Admin routes */}
