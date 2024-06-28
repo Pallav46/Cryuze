@@ -34,8 +34,8 @@ const Messages = lazy(() => import('./components/provider/Messages'));
 const MyWork = lazy(() => import('./pages/provider/work/MyWork'));
 const Work = lazy(() => import('./pages/provider/work/Work'));
 
-// const ProfilePage = lazy(() => import('./pages/user/profile/Profile'))
-// const About = lazy(() => import('./pages/user/about/About'));
+const UserProfile = lazy(() => import('./pages/user/profile/UserProfile'))
+const About = lazy(() => import('./pages/user/about/About'));
 
 
 function App() {
@@ -55,8 +55,8 @@ function App() {
           <Route path='/history' element={<History />} />
           <Route path='/provider/:providerId' element={<Profile />} />
 
-          {/* <Route path='/profile' element={<ProfilePage/>}/> */}
-          {/* <Route path='/about' element={<About/>} /> */}
+          <Route path='/profile' element={<UserProfile/>}/>
+          <Route path='/about' element={<About/>} />
 
           <Route path='/chat' element={authUser ? <ChatSkleton /> : <Navigate to='/login' />} />
           <Route path='/chat/:providerId' element={authUser ? <Chatting /> : <Navigate to='/login' />} />

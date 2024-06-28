@@ -35,17 +35,17 @@ exports.askForConfirmation = catchAsyncError(async (req, res, next) => {
         }
     } else {
         // Create a new confirmation request
-        confirmation = new Confirmation({
-            subcategoryId: subcatId,
-            customerId,
-            recipients: [{ providerId }],
-        });
-        await confirmation.save(); // Save the new confirmation
+        // confirmation = new Confirmation({
+        //     subcategoryId: subcatId,
+        //     customerId,
+        //     recipients: [{ providerId }],
+        // });
+        // await confirmation.save(); // Save the new confirmation
         
-        res.status(201).json({
-            success: true,
-            message: "Confirmation request successfully created.",
-            confirmation,
+        res.status(404).json({
+            success: false,
+            message: "Order has been deleted"
+            // confirmation,
         });
     }
 });
