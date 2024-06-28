@@ -54,15 +54,18 @@ const Providernoti = () => {
           <h2 className="text-3xl font-semibold mb-6 text-gray-800">Your Notifications</h2>
           {notifications.length > 0 ? (
             <ul className="list-none grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {notifications.map((notification) => (
+              {notifications.reverse().map((notification) => (
                 <li key={notification._id} className="group transform transition duration-500 hover:scale-105">
                   <div className="p-6 bg-white rounded-lg shadow-lg group-hover:shadow-2xl transition duration-500">
                     <div className="text-xl font-semibold text-gray-800 mb-2 group-hover:text-indigo-600 transition duration-500">
                       {notification.sender.name || 'Unknown Sender'}
                     </div>
-                    <div className="text-gray-600 group-hover:text-gray-800 transition duration-500">
-                      {notification.message || 'No message'}
-                    </div>
+                      {(<div className="text-gray-600 group-hover:text-gray-800 transition duration-500">
+                    Original Price:₹ {notification.message}
+                    </div>)}
+                    {(<div className="text-gray-600 group-hover:text-gray-800 transition duration-500">
+                    Asked price:₹ {notification.message ||  'N/A'}
+                    </div>)}
                     <div className="text-sm text-gray-500 mt-2">
                       Subcategory: {notification.subcategory.name || 'N/A'}
                     </div>
