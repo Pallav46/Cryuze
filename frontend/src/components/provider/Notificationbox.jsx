@@ -102,7 +102,7 @@ const Notificationbox = () => {
               <div className="text-gray-600 text-sm">No new notifications</div>
             ) : (
               <div>
-                {notifications.slice(0, 3).map((notification, index) => (
+                {notifications.reverse().slice(0, 3).map((notification, index) => (
                   <div key={index} className="p-2 border-b border-gray-200 hover:bg-gray-100 last:border-b-0 transition duration-300">
                     <div className="text-sm font-medium text-gray-800">{notification.sender.name}</div>
                     <div className="text-xs text-gray-600">{notification.sender.email}</div>
@@ -111,8 +111,10 @@ const Notificationbox = () => {
                       {notification.subcategory.name}
                     </div>
                     <div className="text-sm text-gray-700">
-                      <span className="font-medium">Message:</span>{' '}
-                      {notification.message}
+                      {(<span className="font-medium">Original price:₹{notification.subcategory.price }</span>)}
+                    </div>
+                    <div className="text-sm text-gray-700">
+                      {(<span className="font-medium">Asked price:₹{notification.message ||  'N/A'}</span>)}
                     </div>
                     <button
                       className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"

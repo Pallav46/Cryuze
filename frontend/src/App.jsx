@@ -33,7 +33,10 @@ const PaymentSuccess = lazy(() => import('./pages/user/payment/PaymentSuccess'))
 const Messages = lazy(() => import('./components/provider/Messages'));
 const MyWork = lazy(() => import('./pages/provider/work/MyWork'));
 const Work = lazy(() => import('./pages/provider/work/Work'));
-const ProfilePage = lazy(() => import('./pages/user/profile/Profile'))
+
+// const ProfilePage = lazy(() => import('./pages/user/profile/Profile'))
+// const About = lazy(() => import('./pages/user/about/About'));
+
 
 function App() {
   const { authUser } = useAuthContext();
@@ -51,7 +54,9 @@ function App() {
           <Route path='/order/:orderId' element={<Order />} />
           <Route path='/history' element={<History />} />
           <Route path='/provider/:providerId' element={<Profile />} />
-          <Route path='/profile' element={<ProfilePage/>}/>
+
+          {/* <Route path='/profile' element={<ProfilePage/>}/> */}
+          {/* <Route path='/about' element={<About/>} /> */}
 
           <Route path='/chat' element={authUser ? <ChatSkleton /> : <Navigate to='/login' />} />
           <Route path='/chat/:providerId' element={authUser ? <Chatting /> : <Navigate to='/login' />} />
