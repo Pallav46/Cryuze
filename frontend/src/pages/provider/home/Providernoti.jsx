@@ -15,7 +15,7 @@ const Providernoti = () => {
   const { askForConfirmation } = useProviderConfirmation();
 
   const socket = useMemo(() => {
-    return io("https://x-website.onrender.com", {
+    return io("http:localhost:3030", {
       query: { userId: _id }
     });
   }, [_id]);

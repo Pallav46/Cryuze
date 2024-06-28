@@ -1,4 +1,4 @@
-// import React from 'react';
+import React from 'react';
 import { useParams } from "react-router-dom";
 import useGetProvider from "../../../hooks/user/useGetProvider";
 
@@ -10,7 +10,8 @@ const Profile = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  const { name, email, phoneNumber, reviews } = data;
+  // Destructure data only if it exists
+  const { name, email, phoneNumber, reviews } = data || {};
 
   // Calculate average rating
   const calculateAverageRating = () => {
@@ -30,7 +31,7 @@ const Profile = () => {
     <div className="container mx-auto px-4 py-6">
       <div className="bg-white shadow-lg rounded-lg p-6">
         <div className="flex items-center">
-          <img src={""} alt="Avatar" className="w-24 h-24 rounded-full mr-4" />
+          <img src='https://via.placeholder.com/150' alt="Avatar" className="w-24 h-24 rounded-full mr-4" />
           <div>
             <h2 className="text-2xl font-bold text-gray-800">{name}</h2>
             <p className="text-gray-600">{email}</p>

@@ -43,7 +43,7 @@ function Products() {
     (provider) => provider._id
   );
 
-  const [isCardOpen, setIsCardOpen] = useState(true);
+  const [isCardOpen, setIsCardOpen] = useState(false); // Initially closed
   const [setShowPopover] = useState(false);
   const [setSelectedProductId] = useState(null);
   const [setSelectedProductData] = useState(null);
@@ -67,8 +67,6 @@ function Products() {
     setSelectedProductData(productData);
     setShowPopover(true);
   };
-
-  // const {name} = serviceData.data
 
   return (
     <div className="flex">

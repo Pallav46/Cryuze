@@ -27,7 +27,7 @@ const DropdownLinks = [
   {
     id: 1,
     name: "Profile",
-    link: "/me",
+    link: "/profile",
   },
   {
     id: 2,
@@ -79,9 +79,9 @@ function Navbar() {
               />
               <CiLocationOn className="text-xl text-gray-600 group-hover:text-black dark:text-gray-400 absolute top-1/2 -translate-y-1/2 right-3 transition-all duration-200" />
             </div> */}
-            <button className="relative p3">
+            <Link to="/myOrders" className="relative p3">
               <FaCartShopping className="text-xl text-gray-600 dark:text-gray-400" />
-            </button>
+            </Link>
             <div>
               <DarkMode />
             </div>
