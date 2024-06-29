@@ -33,9 +33,9 @@ const ProviderHome = () => {
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
-      <Summarycomponent services={services} earnings={earnings} orders={orders} />
+      <div className="flex-grow p-6">
+      <Summarycomponent />
       <NotificationIcon messages={messages} />
-      
       <div className="flex-grow p-6">
         <div className="bg-white p-8 rounded-lg shadow-md">
           <h1 className="text-4xl font-bold mb-6 text-gray-800">Service Provider Dashboard</h1>
@@ -61,7 +61,9 @@ const ProviderHome = () => {
           )}
         </div>
       </div>
+      </div>
     </div>
+    
   );
 };
 

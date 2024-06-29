@@ -1,28 +1,60 @@
-// import React from 'react';
+import React from 'react';
+import { FaDollarSign, FaChartLine, FaUserPlus } from 'react-icons/fa';
 
-const Summarycomponent = ({ services, earnings, orders }) => {
-  return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md p-4 flex justify-around items-center">
-      <div className="flex items-center">
-        <svg className="w-6 h-6 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6 2H6a1 1 0 01-1-1V6a1 1 0 011-1h12a1 1 0 011 1v8a1 1 0 01-1 1z" />
-        </svg>
-        <span className="text-gray-700">Services: {services}</span>
-      </div>
-      <div className="flex items-center">
-        <svg className="w-6 h-6 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1.05-2.1A1 1 0 014 7h16a1 1 0 01.95 1.4L19 10M4 10l-1.05 2.1A1 1 0 004 14h16a1 1 0 00.95-1.4L20 10M9 21l3-6 3 6H9z" />
-        </svg>
-        <span className="text-gray-700">Earnings: ${earnings}</span>
-      </div>
-      <div className="flex items-center">
-        <svg className="w-6 h-6 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-        </svg>
-        <span className="text-gray-700">Orders: {orders}</span>
-      </div>
+const stats = [
+    {
+        id: 1,
+        title: 'Total Money Earned',
+        value: '$12,345',
+        icon: <FaDollarSign className="text-white" />,
+        color: 'bg-green-500',
+    },
+    {
+        id: 2,
+        title: 'Today\'s Sales',
+        value: '123',
+        icon: <FaChartLine className="text-white" />,
+        color: 'bg-blue-500',
+    },
+    {
+        id: 3,
+        title: 'New Clients',
+        value: '45',
+        icon: <FaUserPlus className="text-white" />,
+        color: 'bg-yellow-500',
+    },
+];
+
+const StatCard = ({ title, value, icon, color }) => (
+    <div className={`font-urbanist flex items-center p-4 rounded-lg shadow-lg ${color} text-white`}>
+        <div className="p-3 rounded-full bg-white bg-opacity-25">
+            {icon}
+        </div>
+        <div className="ml-4">
+            <p className="text-lg font-semibold">{title}</p>
+            <p className="text-2xl">{value}</p>
+        </div>
     </div>
-  );
+);
+
+const Summarycomponent = () => {
+    return (
+        <div className="p-8">
+            <h1 className="text-3xl font-bold mb-8">Provider Dashboard</h1>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {stats.map(stat => (
+                    <StatCard
+                        key={stat.id}
+                        title={stat.title}
+                        value={stat.value}
+                        icon={stat.icon}
+                        color={stat.color}
+                    />
+                ))}
+            </div>
+        </div>
+    );
 };
 
 export default Summarycomponent;
+
