@@ -1,5 +1,5 @@
 const Service = require("../models/serviceModel");
-const Subcategory = require("../models/subCategoryModel")
+const SubCategory = require("../models/subCategoryModel")
 const ServiceProvider = require("../models/serviceProviderModel")
 const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncError = require("../middleware/catchAsyncError");
@@ -7,19 +7,22 @@ const ApiFeatures = require("../utils/apifeatures");
 
 // CREATE SERVICE -- Admin
 exports.createService = catchAsyncError(async (req, res, next) => {
-  // Extract subcategories from the request body if they exist
-  const { subCategories, ...serviceData } = req.body;
-
+  // Extract subCategories from the request body if they exist
+  const { name, description, category, priceRange, subCategories } = req.body;
   let createdSubCategories = [];
   if (subCategories && subCategories.length > 0) {
     // Create subcategories
-    createdSubCategories = await Subcategory.insertMany(subCategories);
+    createdSubCategories = await SubCategory.insertMany(subCategories);
   }
 
   // Add the created subcategories to the service data
-  if (createdSubCategories.length > 0) {
-    serviceData.subCategories = createdSubCategories.map(subCategory => subCategory._id);
-  }
+  const serviceData = {
+    name,
+    description,
+    category,
+    priceRange,
+    subCategories: createdSubCategories.map(subCategory => subCategory._id),
+  };
 
   // Create the service
   const service = await Service.create(serviceData);
