@@ -54,7 +54,7 @@ exports.paymentVerification = async (req, res) => {
 
     const serviceRequest = await ServiceRequest.findByIdAndUpdate(
       serviceRequestId,
-      { status: "accepted" },
+      { status: "completed" },
       { new: true } // Return the updated document
     );
 

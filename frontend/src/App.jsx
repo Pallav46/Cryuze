@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { useAuthContext } from './context/AuthContext';
 import { useAuth } from './context/ProviderAuthContext';
+import ProviderHistory from './pages/provider/history/ProviderHistory';
 
 const Home = lazy(() => import('./pages/user/home/Home'));
 const Login = lazy(() => import('./pages/user/login/Login'));
@@ -72,6 +73,7 @@ function App() {
           <Route path='/providers/services' element={authToken ? <ProviderEditservice /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/chat' element={authToken ? <ChatSkletonProvider /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/myWork' element={authToken ? <MyWork /> : <Navigate to='/providers/login' />} />
+          <Route path='/providers/history' element={authToken ? <ProviderHistory /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/work/:workId' element={authToken ? <Work /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/chat/:customerId' element={authToken ? <Chattingprovider /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/notifi' element={authToken ? <Providernoti /> : <Navigate to='/providers/login' />} />

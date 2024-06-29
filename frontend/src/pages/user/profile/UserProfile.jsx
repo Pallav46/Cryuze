@@ -31,7 +31,10 @@ const UserProfile = () => {
     const { name, value } = e.target;
     setProfileData({
       ...profileData,
-      [name]: value,
+      data: {
+        ...profileData.data,
+        [name]: value,
+      },
     });
   };
 
@@ -47,10 +50,10 @@ const UserProfile = () => {
     try {
       const token = localStorage.getItem('x-user');
       const formData = new FormData();
-      formData.append('name', profileData.name);
-      formData.append('email', profileData.email);
-      formData.append('phoneNumber', profileData.phoneNumber);
-      formData.append('bio', profileData.bio);
+      formData.append('name', profileData.data.name);
+      formData.append('email', profileData.data.email);
+      formData.append('phoneNumber', profileData.data.phoneNumber);
+      formData.append('bio', profileData.data.bio);
       if (selectedFile) {
         formData.append('profilePicture', selectedFile);
       }
@@ -64,7 +67,7 @@ const UserProfile = () => {
 
       setEditMode(false);
       setSelectedFile(null);
-      window.location.reload();
+      window.location.reload(); // Refresh the page after saving changes
     } catch (error) {
       setError(error.response?.data?.message || error.message);
     }
@@ -123,7 +126,7 @@ const UserProfile = () => {
                   name="name"
                   value={profileData.data.name}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded mb-4 dark:bg-gray-600 dark:border-gray-500"
+                  className="w-full p-2 border border-gray-300 rounded mb-4 dark:bg-gray-600 dark:border-gray-500 text-gray-900 dark:text-white"
                 />
               )}
               {!editMode && (
@@ -142,7 +145,7 @@ const UserProfile = () => {
                 name="bio"
                 value={profileData.data.bio || ''}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded mb-4 dark:bg-gray-600 dark:border-gray-500"
+                className="w-full p-2 border border-gray-300 rounded mb-4 dark:bg-gray-600 dark:border-gray-500 text-gray-700 dark:text-white"
               ></textarea>
             )}
           </div>
@@ -155,7 +158,7 @@ const UserProfile = () => {
                     name="email"
                     value={profileData.data.email}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded mb-4 dark:bg-gray-600 dark:border-gray-500"
+                    className="w-full p-2 border border-gray-300 rounded mb-4 dark:bg-gray-600 dark:border-gray-500 text-gray-700 dark:text-white"
                   />
                 )}
               </li>
@@ -166,7 +169,7 @@ const UserProfile = () => {
                     name="phoneNumber"
                     value={profileData.data.phoneNumber}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded mb-4 dark:bg-gray-600 dark:border-gray-500"
+                    className="w-full p-2 border border-gray-300 rounded mb-4 dark:bg-gray-600 dark:border-gray-500 text-gray-700 dark:text-white"
                   />
                 )}
               </li>

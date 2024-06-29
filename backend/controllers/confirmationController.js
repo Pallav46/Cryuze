@@ -1,5 +1,6 @@
 const catchAsyncError = require("../middleware/catchAsyncError");
 const Confirmation = require("../models/confirmationModel");
+const Notification = require("../models/notificationModel");
 
 exports.askForConfirmation = catchAsyncError(async (req, res, next) => {
     const providerId = req.serviceProvider.id; // Assuming serviceProvider is available in req
@@ -34,13 +35,7 @@ exports.askForConfirmation = catchAsyncError(async (req, res, next) => {
             });
         }
     } else {
-        // Create a new confirmation request
-        // confirmation = new Confirmation({
-        //     subcategoryId: subcatId,
-        //     customerId,
-        //     recipients: [{ providerId }],
-        // });
-        // await confirmation.save(); // Save the new confirmation
+        
         
         res.status(404).json({
             success: false,
@@ -81,9 +76,15 @@ exports.deleteOrder = catchAsyncError(async (req, res, next) => {
             message: "Order not found",
         });
     }
+    const subcategoryId = order.subcategoryId;
 
     await Confirmation.deleteOne({ _id: orderId });
 
+    const noti = await Notification.findOneAndDelete({
+        subcategory: subcategoryId,
+        sender: req.user.id,
+    });
+    // console.log(noti);
     res.status(200).json({
         success: true,
         message: "Order deleted successfully",

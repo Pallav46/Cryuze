@@ -39,7 +39,7 @@ const Sidebar = () => (
         </Link>
       </li>
       <li className="px-6 py-2 hover:bg-blue-700">
-        <Link to="/providers/myWork" className="flex items-center">
+        <Link to="/providers/history" className="flex items-center">
           <FontAwesomeIcon icon={faHistory} className="mr-3" />
           History
         </Link>
