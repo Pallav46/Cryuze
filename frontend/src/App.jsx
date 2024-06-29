@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { useAuthContext } from './context/AuthContext';
 import { useAuth } from './context/ProviderAuthContext';
 import ProviderHistory from './pages/provider/history/ProviderHistory';
+import ProviderLogout from './pages/provider/login/ProviderLogout';
 
 const Home = lazy(() => import('./pages/user/home/Home'));
 const Login = lazy(() => import('./pages/user/login/Login'));
@@ -67,6 +68,7 @@ function App() {
           <Route path='/service/:id/buy/:subcatId/profile/:providerId'  element={authUser ? <Profile /> : <Navigate to='/login' />} />
           <Route path='/register' element={<Signup />} />
           <Route path='/providers/login' element={<ProviderLogin />} />
+          <Route path='/providers/logout' element={<ProviderLogout />} />
           <Route path='/providers/register' element={<ProviderSignup />} />
 
           <Route path='/providers/dashboard' element={authToken ? <ProviderHome /> : <Navigate to='/providers/login' />} />
