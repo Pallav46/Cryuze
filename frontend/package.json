@@ -10,16 +10,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.1",
+<<<<<<< HEAD
 
+=======
+>>>>>>> bdc15ad2852c05c1256a7d53886c338db1800c6b
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.9.0",
+    "force": "^0.0.3",
     "framer-motion": "^11.2.4",
-    "gsap": "^3.12.5",
     "leaflet": "^1.9.4",
     "locomotive-scroll": "^5.0.0-beta.12",
     "next": "^14.2.3",
@@ -31,6 +37,7 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.23.1",
     "react-slick": "^0.30.2",
+    "temp": "file:..",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

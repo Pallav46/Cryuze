@@ -2,6 +2,7 @@ const ServiceRequest = require("../models/serviceRequestModel");
 const Notification = require("../models/notificationModel");
 const Confirmation = require("../models/confirmationModel");
 const catchAsyncError = require("../middleware/catchAsyncError");
+const Bill = require("../models/billModel");
 
 // Create a new service request
 exports.createServiceRequest = async (req, res) => {
@@ -62,7 +63,7 @@ exports.createServiceRequest = async (req, res) => {
 };
 
 // Get user's pending orders
-exports.getUserOrder = catchAsyncError(async (req, res, next) => {
+exports.getUserAllOrder = catchAsyncError(async (req, res, next) => {
   const customer = req.user.id;
   const serviceRequests = await ServiceRequest.find({
     customer,
@@ -73,7 +74,8 @@ exports.getUserOrder = catchAsyncError(async (req, res, next) => {
     })
     .populate({
       path: "serviceProvider", // Specify fields to select from ServiceProvider model
-    });
+    })
+    
   res.status(200).json({
     success: true,
     count: serviceRequests.length,
@@ -81,14 +83,48 @@ exports.getUserOrder = catchAsyncError(async (req, res, next) => {
   });
 });
 
+// Get a specific work by ID for the service provider
+exports.getUserOrder = catchAsyncError(async (req, res, next) => {
+  const orderId = req.params.orderId;
+
+  try {
+    const work = await ServiceRequest.findById(orderId)
+      .populate({
+        path: "subCategory",
+      })
+      .populate({
+        path: "serviceProvider",
+      })
+      .populate({
+        path: "bill"
+      });
+    if (!work) {
+      return res.status(404).json({
+        success: false,
+        message: "Work not found.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: work,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Get user's accepted orders (history)
 exports.getUserHistory = catchAsyncError(async (req, res, next) => {
-  const provider = req.user.id;
+  const customer = req.user.id;
   const serviceRequests = await ServiceRequest.find({
-    provider,
-    status: "accepted",
-  });
-
+    customer,
+    status: "completed",
+  })
+  .populate("serviceProvider")
+  .populate("bill")
+  .populate("subCategory");
+  
   res.status(200).json({
     success: true,
     count: serviceRequests.length,
@@ -96,31 +132,123 @@ exports.getUserHistory = catchAsyncError(async (req, res, next) => {
   });
 });
 
-exports.getProviderWorks = catchAsyncError(async (req, res, next) => {
-    const serviceProvider = req.serviceProvider.id;
-  
-    try {
-      const serviceRequests = await ServiceRequest.find({
-        serviceProvider,
-        status: "pending",
-      })
+exports.getProviderAllWork = catchAsyncError(async (req, res, next) => {
+  const serviceProvider = req.serviceProvider.id;
+
+  try {
+    const serviceRequests = await ServiceRequest.find({
+      serviceProvider,
+      status: "pending",
+    })
       .populate({
         path: "subCategory",
       })
       .populate({
         path: "customer", // Assuming 'user' in the model is 'customer'
       });
+
+    res.status(200).json({
+      success: true,
+      count: serviceRequests.length,
+      data: serviceRequests,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch provider's pending orders",
+      error: err.message,
+    });
+  }
+});
+
+// Get a specific work by ID for the service provider
+exports.getProviderWork = catchAsyncError(async (req, res, next) => {
+  const workId = req.params.workId;
   
-      res.status(200).json({
-        success: true,
-        count: serviceRequests.length,
-        data: serviceRequests,
+  try {
+    const work = await ServiceRequest.findById(workId)
+      .populate({
+        path: "subCategory",
+      })
+      .populate({
+        path: "customer", // Assuming 'user' in the model is 'customer'
       });
-    } catch (err) {
-      res.status(500).json({
+    if (!work) {
+      return res.status(404).json({
         success: false,
-        message: "Failed to fetch provider's pending orders",
-        error: err.message,
+        message: "Work not found.",
       });
     }
+    // console.log("hii");
+    res.status(200).json({
+      success: true,
+      data: work,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+// Get Provider's accepted orders (history)
+exports.getProviderHistory = catchAsyncError(async (req, res, next) => {
+  const serviceProvider = req.serviceProvider.id;
+  // console.log(serviceProvider);
+  const serviceRequests = await ServiceRequest.find({
+    serviceProvider,
+    status: "completed",
+  })
+  .populate("customer")
+  .populate("bill")
+  .populate("subCategory");
+  
+  res.status(200).json({
+    success: true,
+    count: serviceRequests.length,
+    serviceRequests,
   });
+});
+
+exports.sendBill = catchAsyncError(async (req, res, next) => {
+  try {
+    const {
+      serviceRequestId,
+      subcategoryCharge,
+      serviceCharge,
+      additionalCharges,
+    } = req.body;
+    // console.log("hii");
+    // Check if the ServiceRequest already has a bill associated
+    const serviceRequest = await ServiceRequest.findById(serviceRequestId);
+    if (!serviceRequest) {
+      return res.status(404).json({ error: "ServiceRequest not found" });
+    }
+
+    if (serviceRequest.bill) {
+      return res
+        .status(400)
+        .json({ error: "ServiceRequest already has a bill associated" });
+    }
+
+    // Create a new Bill document
+    const bill = new Bill({
+      subcategoryCharge,
+      serviceCharge,
+      additionalCharges,
+    });
+
+    // Save the bill
+    await bill.save();
+
+    // Associate the bill with the serviceRequest
+    serviceRequest.bill = bill._id; // Assuming bill._id is the ObjectId of the newly created bill
+
+    // Save the updated serviceRequest
+    await serviceRequest.save();
+
+    // Send a response indicating success
+    res.status(200).json({ message: "Bill sent successfully", bill });
+  } catch (e) {
+    console.log(e);
+  }
+});

@@ -1,4 +1,3 @@
-import React from "react";
 import Button from "../../Button";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +9,7 @@ function Services2({ serviceGroup = [] }) {
   };
 
   return (
-    <div className="py-8">
+    <div className="py-8 dark:bg-gray-800">
       <div className="container">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {serviceGroup.map((service, index) => (
@@ -31,10 +30,10 @@ function Services2({ serviceGroup = [] }) {
                       index % 3 === 0 ? "text-gray-50" : "text-white"
                     }`}
                   >
-                    {service.name}
+                    {service.category}
                   </p>
                   <p className="text-2xl font-semibold mb-[2px]">
-                    {service.category}
+                    {service.name}
                   </p>
                   <Button
                     handler={() => handleButtonClick(service._id)}

@@ -24,13 +24,21 @@ const ChattService = () => {
     }
   }, [initialMessages]);
 
+  // const socket = useMemo(
+  //   () =>
+  //     io("http://localhost:3030", {
+  //       query: { userId: _id }
+  //     }),
+  //   [_id]
+  // );
+
   const socket = useMemo(
-    () =>
-      io("http://localhost:3030", {
-        query: { userId: _id }
-      }),
-    [_id]
-  );
+      () =>
+        io("http:localhost:3030", {
+          query: { userId: _id }
+        }),
+      [_id]
+    );
 
   useEffect(() => {
     if (!socket) return;

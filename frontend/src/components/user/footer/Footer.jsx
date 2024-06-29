@@ -1,29 +1,39 @@
-import React from 'react'
 import { FaMobileAlt } from 'react-icons/fa'
 import { FaFacebook, FaInstagram, FaLinkedin, FaLocationArrow } from 'react-icons/fa6'
 
 const FooterLinks = [
     {
-        title:"Home",
-        links:"/#",
+        title:"Providers Home",
+        links:"/providers/dashboard",
     },
     {
-        title:"About",
-        links:"/#",
+        title:"Providers Login",
+        links:"/providers/login",
     },
     {
-        title:"Contact",
-        links:"/#",
+        title:"Providers Signup",
+        links:"/providers/register",
+    },
+]
+const FooterLinks2 = [
+    {
+        title:"My Orders",
+        links:"/myOrders",
     },
     {
-        title:"Lorem",
-        links:"/#",
+        title:"All Orders",
+        links:"/allOrders",
+    },
+    {
+        title:"History",
+        links:"/history",
     },
 ]
 
+
 function Footer() {
   return (
-    <div className='dark:bg-gray-950 bg-gray-100'>
+    <div className='dark:bg-gray-900 bg-gray-100 text-black dark:text-white'>
       <div className="container">
         <div className="grid md:grid-cols-3 pb-20 pt-5">
             <div className="py-8 px-4 ">
@@ -35,7 +45,7 @@ function Footer() {
             </div>
             <div className='col-span-2 grid grid-cols-2 sm:grid-cols-3 md:pl-10'>
                 <div className='py-8 px-4'>
-                    <h1 className='text-xl font-bold sm:text-left mb-3'>Important Links</h1>
+                    <h1 className='text-xl font-bold sm:text-left mb-3'>Providers Site</h1>
                     <ul className='space-y-3'>
                         {
                             FooterLinks.map(
@@ -54,7 +64,7 @@ function Footer() {
                     <h1 className='text-xl font-bold sm:text-left mb-3'>Quick Links</h1>
                     <ul className='space-y-3'>
                         {
-                            FooterLinks.map(
+                            FooterLinks2.map(
                                 (data, index)=>(
                                     <li key={index}>
                                         <a href={data.links} className='text-gray-600 hover:text-black duration-300 hover:dark:text-white dark:text-gray-400'>

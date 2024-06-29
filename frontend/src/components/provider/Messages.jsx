@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import useProviderGetMessages from "../../hooks/provider/useProviderGetMessages";
@@ -13,6 +13,7 @@ const Messages = () => {
   const [newMessage, setNewMessage] = useState("");
   const { authToken } = useAuth();
   const { _id } = authToken.user;
+  const messagesEndRef = useRef(null);
 
   const {
     data: initialMessages,
@@ -48,11 +49,15 @@ const Messages = () => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
 
-    // return () => {
-    //   socket.off("newMessage");
-    //   socket.disconnect();
-    // };
+    return () => {
+      socket.off("newMessage");
+      socket.disconnect();
+    };
   }, [socket, customerId]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
@@ -64,7 +69,6 @@ const Messages = () => {
         timestamp: new Date().toISOString(),
       };
       await sendMessage({ message: newMessage });
-      // socket.emit("newMessage", messagePayload);
       setMessages((prevMessages) => [...prevMessages, messagePayload]);
       setNewMessage(""); // Clear input after sending message
     } catch (error) {
@@ -91,40 +95,43 @@ const Messages = () => {
       <Sidebar />
       <div className="flex-grow p-6 flex flex-col">
         <h1 className="text-4xl font-bold mb-6 text-gray-800">Provider Chat</h1>
-        <div className="flex-grow bg-white p-4 rounded-lg shadow-md overflow-y-auto mb-4">
-          {messages.length > 0 ? (
-            messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`mb-4 ${
-                  msg.senderId === customerId ? "text-left" : "text-right"
-                }`}
-              >
-                <div className="font-semibold">{msg.senderId === customerId ? "Customer" : "You"}</div>
-                <div>{msg.message}</div>
-                <div className="text-sm text-gray-500">{new Date(msg.timestamp).toLocaleTimeString()}</div>
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-600">No messages yet.</p>
-          )}
-        </div>
-        <div className="flex">
-          <input
-            type="text"
-            className="flex-grow p-2 border border-gray-300 rounded-l-lg focus:outline-none"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Type your message..."
-          />
-          <button
-            onClick={handleSendMessage}
-            className="bg-indigo-600 text-white p-2 rounded-r-lg"
-            disabled={sendLoading}
-          >
-            Send
-          </button>
+        <div className="flex-grow flex flex-col bg-white p-4 rounded-lg shadow-md mb-4">
+          <div className="flex-grow overflow-y-auto bg-red-100">
+            {messages.length > 0 ? (
+              messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`mb-4 ${
+                    msg.senderId === customerId ? "text-left" : "text-right"
+                  }`}
+                >
+                  <div className="font-semibold">{msg.senderId === customerId ? "Customer" : "You"}</div>
+                  <div>{msg.message}</div>
+                  <div className="text-sm text-gray-500">{new Date(msg.timestamp).toLocaleTimeString()}</div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-600">No messages yet.</p>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+          <div className="flex mt-4">
+            <input
+              type="text"
+              className="flex-grow p-2 border border-gray-300 rounded-l-lg focus:outline-none"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Type your message..."
+            />
+            <button
+              onClick={handleSendMessage}
+              className="bg-indigo-600 text-white p-2 rounded-r-lg"
+              disabled={sendLoading}
+            >
+              Send
+            </button>
+          </div>
         </div>
       </div>
     </div>

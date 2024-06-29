@@ -2,7 +2,7 @@ import React from 'react';
 
 const FixedCard = ({ isOpen, data, onSubCardClick }) => (
   <div
-    className={`fixed left-0 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-700 shadow-md rounded-lg p-6 w-64 transition-transform duration-300 ${
+    className={`fixed left-0 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-600 shadow-md rounded-lg p-6 w-64 transition-transform duration-300 ${
       isOpen ? 'translate-x-0' : '-translate-x-full'
     }`}
   >
