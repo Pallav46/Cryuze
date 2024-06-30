@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { useAuthContext } from './context/AuthContext';
@@ -32,7 +32,7 @@ const Allservices = lazy(() => import('./pages/admin/Allservices'));
 const AddProduct = lazy(() => import('./pages/admin/Adminaddservice'));
 const AdminEditService = lazy(() => import('./pages/admin/Admineditservice'));
 const PaymentSuccess = lazy(() => import('./pages/user/payment/PaymentSuccess'));
-const Messages = lazy(() => import('./components/provider/Messages'));
+// const Messages = lazy(() => import('./components/provider/Messages'));
 const MyWork = lazy(() => import('./pages/provider/work/MyWork'));
 const Work = lazy(() => import('./pages/provider/work/Work'));
 
@@ -46,8 +46,12 @@ function App() {
 
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={
+        <div className="flex items-center justify-center h-screen">
+          <div className="w-16 h-16 border-4 border-t-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+        </div>}>
         <Routes>
+
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/logout' element={<Logout />} />
@@ -67,10 +71,11 @@ function App() {
           <Route path='/service/:id/buy/:subcatId/chat/:providerId'  element={authUser ? <ChattService /> : <Navigate to='/login' />} />
           <Route path='/service/:id/buy/:subcatId/profile/:providerId'  element={authUser ? <Profile /> : <Navigate to='/login' />} />
           <Route path='/register' element={<Signup />} />
+
+          {/* Provider routes */}
           <Route path='/providers/login' element={<ProviderLogin />} />
           <Route path='/providers/logout' element={<ProviderLogout />} />
           <Route path='/providers/register' element={<ProviderSignup />} />
-
           <Route path='/providers/dashboard' element={authToken ? <ProviderHome /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/services' element={authToken ? <ProviderEditservice /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/chat' element={authToken ? <ChatSkletonProvider /> : <Navigate to='/providers/login' />} />

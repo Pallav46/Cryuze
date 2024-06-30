@@ -23,7 +23,7 @@ const Notificationbox = () => {
   // }, [_id]);
 
   const socket = useMemo(() => {
-    const socketInstance = io("http:localhost:3030", {
+    const socketInstance = io("https://x-website.onrender.com", {
       query: { userId: _id }
     });
     return socketInstance;

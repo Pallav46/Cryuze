@@ -34,7 +34,7 @@ const ChattService = () => {
 
   const socket = useMemo(
       () =>
-        io("http:localhost:3030", {
+        io("https://x-website.onrender.com", {
           query: { userId: _id }
         }),
       [_id]
