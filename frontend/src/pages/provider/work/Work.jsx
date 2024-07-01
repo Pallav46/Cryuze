@@ -181,18 +181,18 @@ const Work = () => {
   </thead>
   <tbody className="bg-white divide-y divide-gray-300">
     <tr>
-      <td className="px-6 py-3 bg-blue-50 whitespace-nowrap border-x-0 border-t-0 border-blue-300 px-3 py-2 w-1/2">
+      <td className=" bg-blue-50 whitespace-nowrap border-x-0 border-t-0 border-blue-300 px-3 py-2 w-1/2">
         SubCategory Price
       </td>
-      <td className="px-6 py-3 bg-green-50 whitespace-nowrap border-x-0 border-t-0 border-green-300 px-3 py-2 w-1/2">
+      <td className=" bg-green-50 whitespace-nowrap border-x-0 border-t-0 border-green-300 px-3 py-2 w-1/2">
         ₹{subCategoryPrice}
       </td>
     </tr>
     <tr>
-      <td className="px-6 py-3 bg-blue-50 whitespace-nowrap border-x-0 border-t-0 border-blue-300 px-3 py-2 w-1/2">
+      <td className=" bg-blue-50 whitespace-nowrap border-x-0 border-t-0 border-blue-300 px-3 py-2 w-1/2">
         Platform Charge
       </td>
-      <td className="px-6 py-3 bg-green-50 whitespace-nowrap border-x-0 border-t-0 border-green-300 px-3 py-2 w-1/2">
+      <td className=" bg-green-50 whitespace-nowrap border-x-0 border-t-0 border-green-300 px-3 py-2 w-1/2">
         ₹50
       </td>
     </tr>

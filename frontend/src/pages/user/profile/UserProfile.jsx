@@ -87,9 +87,9 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-800">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-800">
       <Navbar />
-      <div className="container mx-auto mt-6 mb-6 px-4">
+      <div className="container mx-auto mt-6 mb-28 px-4">
         <div className="bg-white shadow-lg rounded-lg overflow-hidden dark:bg-gray-700 dark:text-white">
           <div className="px-6 py-4">
             <div className="flex justify-between items-center mb-4">

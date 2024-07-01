@@ -40,37 +40,47 @@ const History = () => {
   return (
     <div className='dark:bg-slate-800 dark:text-white'>
       <Navbar/>
-      <h1 className="text-3xl font-bold mb-6 text-center mt-5 dark:text-white">History</h1>
-      {history.length > 0 ? (
-        <ul className="space-y-4 container dark:bg-slate-700 mb-32 bg-slate-200 p-5 rounded-md shadow-md">
-          {history.map((request) => (
-            <li key={request._id} className="bg-white shadow-md rounded-md p-6 dark:bg-gray-800">
-              <h2 className="text-xl font-bold mb-2 dark:text-white">Service Request</h2>
-              <p className='dark:text-gray-400'><strong className='dark:text-gray-200'>Service:</strong> {request.subCategory.name || request.subCategory}</p>
-              <p className='dark:text-gray-400'><strong className='dark:text-gray-200'>Provider:</strong> {request.serviceProvider.name}</p>
-              <p className='dark:text-gray-400'><strong className='dark:text-gray-200'>Status:</strong> {request.status}</p>
-              <p className='dark:text-gray-400'><strong className='dark:text-gray-200'>Date:</strong> {new Date(request.createdAt).toLocaleString()}</p>
-              {request.bill && (
-                <div className="mt-4">
-                  <h3 className="text-lg font-bold mb-2 dark:text-white">Bill Details</h3>
-                  <p><strong className='dark:text-gray-200'>Subcategory Charge:</strong> ${request.bill.subcategoryCharge}</p>
-                  <p><strong className='dark:text-gray-200'>Service Charge:</strong> ${request.bill.serviceCharge}</p>
-                  <p><strong className='dark:text-gray-200'>Additional Charges:</strong></p>
-                  <ul className="list-disc list-inside dark:text-white">
-                    {request.bill.additionalCharges.map((charge, index) => (
-                      <li key={index}>{charge.name}: ${charge.price}</li>
-                    ))}
-                  </ul>
-                  <p className="mt-4 dark:text-white"><strong>Total Amount Paid:</strong> ${calculateTotalAmountPaid(request.bill)}</p>
-                  <p className="text-green-500 font-bold">Payment Successful</p>
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-6 text-center mt-5 dark:text-white">History</h1>
+        {history.length > 0 ? (
+          <ul className="space-y-4 bg-gray-100 dark:bg-gray-600 p-5 rounded-md shadow-md mb-56">
+            {history.map((request) => (
+              <li key={request._id} className="bg-white shadow-md rounded-md p-6 dark:bg-gray-800 dark:text-white">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-bold">Service Request</h2>
+                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                    request.status === 'Completed' ? 'bg-green-100 text-green-700' : 'bg-green-300 text-green-700'
+                  }`}>
+                    {request.status}
+                  </span>
                 </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-center">No history available</p>
-      )}
+                <p className='dark:text-gray-400'><strong className='dark:text-gray-200'>Service:</strong> {request.subCategory.name || request.subCategory}</p>
+                <p className='dark:text-gray-400'><strong className='dark:text-gray-200'>Provider:</strong> {request.serviceProvider.name}</p>
+                <p className='dark:text-gray-400'><strong className='dark:text-gray-200'>Date:</strong> {new Date(request.createdAt).toLocaleString()}</p>
+                {request.bill && (
+                  <div className="mt-4">
+                    <h3 className="text-lg font-bold mb-2 dark:text-white">Bill Details</h3>
+                    <div className="bg-gray-50 p-4 rounded-md dark:bg-gray-700">
+                      <p><strong className='dark:text-gray-200'>Subcategory Charge:</strong> ${request.bill.subcategoryCharge}</p>
+                      <p><strong className='dark:text-gray-200'>Service Charge:</strong> ${request.bill.serviceCharge}</p>
+                      <p><strong className='dark:text-gray-200'>Additional Charges:</strong></p>
+                      <ul className="list-disc list-inside dark:text-white ml-4">
+                        {request.bill.additionalCharges.map((charge, index) => (
+                          <li key={index}>{charge.name}: ${charge.price}</li>
+                        ))}
+                      </ul>
+                      <p className="mt-4 dark:text-white"><strong>Total Amount Paid:</strong> ${calculateTotalAmountPaid(request.bill)}</p>
+                      <p className="text-green-500 font-bold">Payment Successful</p>
+                    </div>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-center mb-[10vh]">No history available</p>
+        )}
+      </div>
       <Footer/>
     </div>
   );
