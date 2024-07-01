@@ -19,7 +19,7 @@ const MenuLinks = [
   {
     id: 3,
     name: "About",
-    link: "/#",
+    link: "/about",
   },
 ];
 
@@ -27,7 +27,7 @@ const DropdownLinks = [
   {
     id: 1,
     name: "Profile",
-    link: "/me",
+    link: "/profile",
   },
   {
     id: 2,
@@ -79,9 +79,9 @@ function Navbar() {
               />
               <CiLocationOn className="text-xl text-gray-600 group-hover:text-black dark:text-gray-400 absolute top-1/2 -translate-y-1/2 right-3 transition-all duration-200" />
             </div> */}
-            <button className="relative p3">
+            <Link to="/myOrders" className="relative p3">
               <FaCartShopping className="text-xl text-gray-600 dark:text-gray-400" />
-            </button>
+            </Link>
             <div>
               <DarkMode />
             </div>
@@ -109,7 +109,7 @@ function Navbar() {
                 </div>
               ) : (
                 <Link to="/login">
-                  <button className="inline-flex items-center justify-center mb-0 me-0 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-black to-black group-hover:from-black-600 group-hover:to-black-500 hover:text-white dark:text-black focus:ring-2 focus:outline-none dark:focus:ring-zinc-800">
+                  <button className="inline-flex items-center justify-center mb-0 me-0 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-black to-black group-hover:from-black-600 group-hover:to-black-500 hover:text-white dark:text-black focus:ring-2 focus:outline-none dark:hover:text-white dark:focus:ring-zinc-800">
                     <span className="relative px-5 py-2 transition-all ease-in duration-75 bg-white dark:bg-white rounded-md group-hover:bg-opacity-0">
                       Login
                     </span>

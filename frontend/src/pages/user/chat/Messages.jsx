@@ -22,6 +22,14 @@ const Messages = () => {
     }
   }, [initialMessages]);
 
+  // const socket = useMemo(
+  //   () =>
+  //     io("http://localhost:3030", {
+  //       query: { userId: _id }
+  //     }),
+  //   [_id]
+  // );
+
   const socket = useMemo(
     () =>
       io("https://x-website.onrender.com", {

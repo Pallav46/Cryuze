@@ -119,7 +119,7 @@ exports.getUserHistory = catchAsyncError(async (req, res, next) => {
   const customer = req.user.id;
   const serviceRequests = await ServiceRequest.find({
     customer,
-    status: "accepted",
+    status: "completed",
   })
   .populate("serviceProvider")
   .populate("bill")
@@ -188,6 +188,25 @@ exports.getProviderWork = catchAsyncError(async (req, res, next) => {
     console.log(err);
     next(err);
   }
+});
+
+// Get Provider's accepted orders (history)
+exports.getProviderHistory = catchAsyncError(async (req, res, next) => {
+  const serviceProvider = req.serviceProvider.id;
+  // console.log(serviceProvider);
+  const serviceRequests = await ServiceRequest.find({
+    serviceProvider,
+    status: "completed",
+  })
+  .populate("customer")
+  .populate("bill")
+  .populate("subCategory");
+  
+  res.status(200).json({
+    success: true,
+    count: serviceRequests.length,
+    serviceRequests,
+  });
 });
 
 exports.sendBill = catchAsyncError(async (req, res, next) => {

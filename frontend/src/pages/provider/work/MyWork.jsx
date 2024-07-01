@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import useProviderGetAllWork from '../../../hooks/provider/useProviderGetAllWork';
+import Sidebar from '../../../components/provider/Sidebar';
 
 const MyWork = () => {
     const { data, error, loading } = useProviderGetAllWork();
@@ -13,6 +14,10 @@ const MyWork = () => {
     }
 
     return (
+        <>
+      <div  className='flex '>
+
+        <Sidebar/>
         <div className="container mx-auto py-8">
             <h2 className="text-2xl font-bold mb-4">My Work List</h2>
             <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -32,6 +37,8 @@ const MyWork = () => {
                 ))}
             </ul>
         </div>
+      </div>
+        </>
     );
 };
 

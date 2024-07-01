@@ -18,14 +18,14 @@ const { isAuthenticatedServiceProvider, isAuthenticatedUser, authorizeRoles } = 
 const { getAllCustomersChatOfServiceProvider } = require("../controllers/messageController");
 const { getAllNotification } = require("../controllers/notificationController");
 const { askForConfirmation } = require("../controllers/confirmationController");
-const { getProviderAllWork, getProviderWork, sendBill } = require("../controllers/serviceRequestController");
+const { getProviderAllWork, getProviderWork, sendBill, getProviderHistory } = require("../controllers/serviceRequestController");
 
 const router = express.Router();
 
 // router.route("/").get(getAllServiceProvider);
 router.route("/register").post(createServiceProvider);
 router.route("/login").post(loginServiceProvider);
-router.route('/logout').get(logoutServiceProvider);
+router.route('/logout').post(logoutServiceProvider);
 router.route('/password/forgot').post(forgotPasswordServiceProvider)
 router.route('/auth/resetpassword/:token').put(resetPasswordServiceProvider)
 router.route('/password/update').put(isAuthenticatedServiceProvider, updateServiceProviderPassword)
@@ -37,6 +37,7 @@ router.route('/chats').get(isAuthenticatedServiceProvider, getAllCustomersChatOf
 router.route('/notification').get(isAuthenticatedServiceProvider, getAllNotification)
 router.route('/confirmation').post(isAuthenticatedServiceProvider, askForConfirmation)
 router.route('/myWork').get(isAuthenticatedServiceProvider, getProviderAllWork)
+router.route('/history').get(isAuthenticatedServiceProvider, getProviderHistory)
 router.route('/sendBill').post(isAuthenticatedServiceProvider, sendBill)
 router.route('/work/:workId').get(isAuthenticatedServiceProvider, getProviderWork)
 router.route("/:id").get(getServiceProviderById);

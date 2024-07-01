@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import useProviderGetWork from "../../../hooks/provider/useProviderGetWork";
 import useSendBill from "../../../hooks/provider/useSendBill";
 import { useState } from "react";
+import Sidebar from "../../../components/provider/Sidebar";
 
 const Work = () => {
   const { workId } = useParams();
@@ -13,15 +14,19 @@ const Work = () => {
   const [subcategoryCharge, setSubcategoryCharge] = useState(0);
 
   const handleAddAdditionalCharge = () => {
-    setAdditionalCharges([...additionalCharges, { name: "", price: "" }]);
+    setAdditionalCharges([...additionalCharges, { name: "", price: 0 }]);
   };
 
   const handleAdditionalChargeChange = (index, field, value) => {
-    const updatedCharges = [...additionalCharges];
-    updatedCharges[index][field] = value;
+    const updatedCharges = additionalCharges.map((charge, i) =>
+      i === index ? { ...charge, [field]: value } : charge
+    );
     setAdditionalCharges(updatedCharges);
   };
-
+  const calculateSubtotal = () => {
+    const subtotal = additionalCharges.reduce((total, charge) => total + parseFloat(charge.price || 0), 0);
+    return subtotal + subcategoryCharge + 50; // assuming Platform Charge is $50
+  };
   const handleSubmitBill = async (e) => {
     e.preventDefault();
 
@@ -88,6 +93,10 @@ const Work = () => {
   };
 
   return (
+    <>
+    <div className="flex">
+
+    <Sidebar/>
     <div className="max-w-4xl mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6">Work Details</h1>
       <div className="bg-white shadow-md rounded-md p-6 mb-6 flex justify-between items-start">
@@ -138,111 +147,123 @@ const Work = () => {
 
       {showBillForm && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
-              &#8203;
-            </span>
-            <div
-              className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="modal-headline"
-            >
-              <form onSubmit={handleSubmitBill}>
-                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
-                        Make Bill
-                      </h3>
-                      <div className="mt-2">
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            SubCategory Price
-                          </label>
-                          <input
-                            type="number"
-                            value={subcategoryCharge}
-                            onChange={(e) => setSubcategoryCharge(parseFloat(e.target.value) || 0)}
-                            className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Platform Charge
-                          </label>
-                          <p className="text-gray-600">$50</p>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700">
-                            Additional Charges
-                          </label>
-                          {additionalCharges.map((charge, index) => (
-                            <div key={index} className="flex items-center mb-2">
-                              <input
-                                type="text"
-                                placeholder="Charge Name"
-                                value={charge.name}
-                                onChange={(e) =>
-                                  handleAdditionalChargeChange(
-                                    index,
-                                    "name",
-                                    e.target.value
-                                  )
-                                }
-                                className="border border-gray-300 rounded-md px-3 py-2 mr-2 flex-grow"
-                              />
-                              <input
-                                type="number"
-                                placeholder="Price"
-                                value={charge.price}
-                                onChange={(e) =>
-                                  handleAdditionalChargeChange(
-                                    index,
-                                    "price",
-                                    e.target.value
-                                  )
-                                }
-                                className="border border-gray-300 rounded-md px-3 py-2 w-24"
-                              />
-                            </div>
-                          ))}
-                          <button
-                            type="button"
-                            onClick={handleAddAdditionalCharge}
-                            className="mt-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                          >
-                            Add Charge
-                          </button>
-                        </div>
+        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+          </div>
+          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
+            &#8203;
+          </span>
+          <div
+            className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-headline"
+          >
+            <form onSubmit={handleSubmitBill}>
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-start">
+                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
+                      Create Bill
+                    </h3>
+                    <div className="mt-4">
+                    <table className="w-full divide-y divide-gray-200">
+  <thead>
+    <tr>
+      <th className="px-6 py-3 bg-blue-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/2">
+        Item
+      </th>
+      <th className="px-6 py-3 bg-green-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/2">
+        Price
+      </th>
+    </tr>
+  </thead>
+  <tbody className="bg-white divide-y divide-gray-300">
+    <tr>
+      <td className=" bg-blue-50 whitespace-nowrap border-x-0 border-t-0 border-blue-300 px-3 py-2 w-1/2">
+        SubCategory Price
+      </td>
+      <td className=" bg-green-50 whitespace-nowrap border-x-0 border-t-0 border-green-300 px-3 py-2 w-1/2">
+        ₹{subCategoryPrice}
+      </td>
+    </tr>
+    <tr>
+      <td className=" bg-blue-50 whitespace-nowrap border-x-0 border-t-0 border-blue-300 px-3 py-2 w-1/2">
+        Platform Charge
+      </td>
+      <td className=" bg-green-50 whitespace-nowrap border-x-0 border-t-0 border-green-300 px-3 py-2 w-1/2">
+        ₹50
+      </td>
+    </tr>
+    {additionalCharges.map((charge, index) => (
+      <tr key={index}>
+        <td className="px-6 py-3 bg-blue-50 whitespace-nowrap w-1/2">
+          <input
+            type="text"
+            placeholder="Item Name"
+            value={charge.name}
+            onChange={(e) =>
+              handleAdditionalChargeChange(index, "name", e.target.value)
+            }
+            className="border-x-0 border-t-0 border-blue-300 px-3 py-2 w-full mt-1"
+          />
+        </td>
+        <td className="px-6 py-3 bg-green-50 whitespace-nowrap w-1/2">
+          <input
+            type="number"
+            placeholder="Price"
+            value={charge.price}
+            onChange={(e) =>
+              handleAdditionalChargeChange(index, "price", e.target.value)
+            }
+            className="border-x-0 border-t-0 border-green-300 px-3 py-2 w-full mt-1"
+          />
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+                      <button
+                        type="button"
+                        onClick={handleAddAdditionalCharge}
+                        className="mt-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      >
+                        Add Additional Item
+                      </button>
+                      <div className="mt-4">
+                        <h4 className="text-lg leading-6 font-medium text-gray-900">Subtotal: ${calculateSubtotal()}</h4>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                  <button
-                    type="submit"
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  >
-                    Submit Bill
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowBillForm(false)}
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
+              </div>
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  type="submit"
+                  className="w-full inline-flex justify-center border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
+                >
+                  Submit Bill
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowBillForm(false)}
+                  className="mt-3 w-full inline-flex justify-center border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
+      </div>
+      
+      
       )}
     </div>
+    </div>
+    </>
   );
 };
 

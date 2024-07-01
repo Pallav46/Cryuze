@@ -14,7 +14,7 @@ const {
 } = require('../controllers/userController');
 const { isAuthenticatedUser, authorizeRoles } = require('../middleware/authentication');
 const { getAllServiceProviderChatOfCustomer } = require('../controllers/messageController');
-const { myOrders } = require('../controllers/confirmationController');
+const { myOrders, deleteOrder } = require('../controllers/confirmationController');
 const { createServiceRequest, getUserOrder, getUserAllOrder, getUserHistory } = require('../controllers/serviceRequestController');
 
 router.route('/register').post(createUser);
@@ -29,6 +29,7 @@ router.route('/me/update').put(isAuthenticatedUser, updateUserProfile)
 router.route('/chats').get(isAuthenticatedUser, getAllServiceProviderChatOfCustomer)
 router.route('/confirm').post(isAuthenticatedUser, createServiceRequest)
 router.route('/myOrders').get(isAuthenticatedUser, myOrders)
+router.route('/order/:id').delete(isAuthenticatedUser, deleteOrder)
 router.route('/allOrders').get(isAuthenticatedUser, getUserAllOrder)
 router.route('/order/:orderId').get(isAuthenticatedUser, getUserOrder)
 router.route('/history').get(isAuthenticatedUser, getUserHistory)
