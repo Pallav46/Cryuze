@@ -14,17 +14,17 @@ const Providernoti = () => {
   const navigate = useNavigate();
   const { askForConfirmation } = useProviderConfirmation();
 
-  // const socket = useMemo(() => {
-  //   return io("http:localhost:3030", {
-  //     query: { userId: _id }
-  //   });
-  // }, [_id]);
-
   const socket = useMemo(() => {
-    return io("https://x-website.onrender.com", {
+    return io("http:localhost:3030", {
       query: { userId: _id }
     });
   }, [_id]);
+
+  // const socket = useMemo(() => {
+  //   return io("https://x-website.onrender.com", {
+  //     query: { userId: _id }
+  //   });
+  // }, [_id]);
 
   useEffect(() => {
     if (data && data.notifications) {

@@ -3,11 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import useGetOrder from "../../../hooks/user/useGetOrder";
 import Logo from "../../../../src/assets/website/logo.jpg";
 import axios from "axios";
+import RatingPopover from "./Rating"; // Adjust the import path as necessary
 
 const Order = () => {
   const { orderId } = useParams();
   const { data, error, loading } = useGetOrder(orderId);
+  const [showRatingPopover, setShowRatingPopover] = useState(false);
   const [showBillPopover, setShowBillPopover] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState('');
   const navigate = useNavigate();
 
   if (loading) {
@@ -29,6 +33,13 @@ const Order = () => {
   const { createdAt, serviceProvider, status, subCategory, updatedAt, bill } = data.data;
 
   const handleViewBill = () => {
+    setShowRatingPopover(true);
+  };
+
+  const handleRatingSubmit = ({ rating, review }) => {
+    setRating(rating);
+    setReview(review);
+    setShowRatingPopover(false);
     setShowBillPopover(true);
   };
 
@@ -152,6 +163,13 @@ const Order = () => {
           </button>
         )}
       </div>
+
+      {showRatingPopover && (
+        <RatingPopover
+          onClose={() => setShowRatingPopover(false)}
+          onSubmit={handleRatingSubmit}
+        />
+      )}
 
       {showBillPopover && bill && (
         <div className="fixed z-10 inset-0 overflow-y-auto">

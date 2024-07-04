@@ -6,6 +6,7 @@ import Conversations from './Conversations';
 const ChatSkleton = () => {
   return (
     <div className="flex h-screen">
+      
       {/* Conversations Sidebar */}
       <div className="bg-gray-100 w-1/4 border-r border-gray-300 overflow-y-auto">
         <Conversations />

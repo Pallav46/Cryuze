@@ -15,19 +15,19 @@ const Notificationbox = () => {
   const { askForConfirmation } = useProviderConfirmation();
   const navigate = useNavigate();
 
-  // const socket = useMemo(() => {
-  //   const socketInstance = io("http://localhost:3030", {
-  //     query: { userId: _id }
-  //   });
-  //   return socketInstance;
-  // }, [_id]);
-
   const socket = useMemo(() => {
-    const socketInstance = io("https://x-website.onrender.com", {
+    const socketInstance = io("http://localhost:3030", {
       query: { userId: _id }
     });
     return socketInstance;
   }, [_id]);
+
+  // const socket = useMemo(() => {
+  //   const socketInstance = io("https://x-website.onrender.com", {
+  //     query: { userId: _id }
+  //   });
+  //   return socketInstance;
+  // }, [_id]);
 
   useEffect(() => {
     if (data && data.notifications) {
