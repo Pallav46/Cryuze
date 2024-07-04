@@ -5,6 +5,8 @@ import { useAuthContext } from './context/AuthContext';
 import { useAuth } from './context/ProviderAuthContext';
 import ProviderHistory from './pages/provider/history/ProviderHistory';
 import ProviderLogout from './pages/provider/login/ProviderLogout';
+import Viewservice from './pages/admin/service/Viewservice'
+import Editservice from './pages/admin/service/Editservice';
 
 const Home = lazy(() => import('./pages/user/home/Home'));
 const Login = lazy(() => import('./pages/user/login/Login'));
@@ -28,9 +30,9 @@ const ChatSkletonProvider = lazy(() => import('./components/provider/ChatSkleton
 const Chattingprovider = lazy(() => import('./components/provider/Chattingprovider'));
 const Providernoti = lazy(() => import('./pages/provider/home/Providernoti'));
 const Admindash = lazy(() => import('./pages/admin/Admindash'));
-const Allservices = lazy(() => import('./pages/admin/Allservices'));
-const AddProduct = lazy(() => import('./pages/admin/Adminaddservice'));
-const AdminEditService = lazy(() => import('./pages/admin/Admineditservice'));
+const Allservices = lazy(() => import('./pages/admin/service/Allservices'));
+const AddProduct = lazy(() => import('./pages/admin/service/Adminaddservice'));
+const AdminEditService = lazy(() => import('./pages/admin/service/Admineditservice'));
 const PaymentSuccess = lazy(() => import('./pages/user/payment/PaymentSuccess'));
 // const Messages = lazy(() => import('./components/provider/Messages'));
 const MyWork = lazy(() => import('./pages/provider/work/MyWork'));
@@ -90,6 +92,9 @@ function App() {
           <Route path='/admin/allservices' element={<Allservices />} />
           <Route path='/admin/editservices' element={<AdminEditService />} />
           <Route path='/add-product' element={<AddProduct />} />
+          <Route path='/admin/service/:serviceId' element={<Viewservice />} />
+          <Route path='/admin/editservice/:serviceId' element={<Editservice />} />
+
 
           {/* Payment */}
           <Route path='/paymentsuccess' element={<PaymentSuccess />} />

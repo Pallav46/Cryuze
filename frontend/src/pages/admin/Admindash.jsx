@@ -1,5 +1,5 @@
 import React from 'react';
-import Sidebar from './Adminside.jsx';
+import Sidebar from './service/Adminside.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDollarSign, faUser, faChartLine, faUsers } from '@fortawesome/free-solid-svg-icons';
 import Table from './Table.jsx';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import useCreateProduct from '../../hooks/admin/useCreateProduct';
+import useCreateProduct from '../../../hooks/admin/useCreateProduct';
 
 const AddProduct = () => {
   const [serviceName, setServiceName] = useState('');
