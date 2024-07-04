@@ -16,10 +16,6 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.1",
-<<<<<<< HEAD
-
-=======
->>>>>>> bdc15ad2852c05c1256a7d53886c338db1800c6b
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "flowbite": "^2.3.0",
