@@ -3,6 +3,7 @@ const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const sendToken = require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail");
+const Review = require("../models/reviewModel");
 const crypto = require("crypto");
 
 // CREATE SERVICE PROVIDER
@@ -187,7 +188,7 @@ exports.getAllServiceProvider = async (req, res) => {
 exports.getServiceProviderById = async (req, res) => {
   try {
     const { id } = req.params;
-    const serviceProvider = await ServiceProvider.findById(id).select("-password");
+    const serviceProvider = await ServiceProvider.findById(id).select("-password").populate("reviews");
     
     if (!serviceProvider) {
       return res
@@ -340,3 +341,52 @@ exports.deleteServiceProviderById = async (req, res) => {
       .json({ success: false, message: "Failed to delete service provider" });
   }
 };
+
+exports.sendReview = catchAsyncError(async (req, res, next) => {
+  try {
+    const { providerId, rating, review } = req.body;
+    const userId = req.user.id; // Assuming user is available in req object (authenticated user)
+
+    // Find the service provider by ID
+    const serviceProvider = await ServiceProvider.findById(providerId);
+    if (!serviceProvider) {
+      return res.status(404).json({
+        success: false,
+        message: "Service provider not found",
+      });
+    }
+
+    // Create the review object
+    const reviewObject = {
+      customer: userId,
+      serviceProvider: providerId,
+      rating,
+      comment: review,
+    };
+
+    // Save the review in the Review model
+    const newReview = await Review.create(reviewObject);
+
+    // Add the review ID to the service provider's reviews array
+    serviceProvider.reviews.push(newReview._id);
+
+    // Populate the reviews array to calculate the average rating
+    await serviceProvider.populate({
+      path: 'reviews',
+      select: 'rating'
+    });
+
+    // Calculate the new average rating
+    const totalReviews = serviceProvider.reviews.length;
+    const ratings = serviceProvider.reviews.map(review => review.rating);
+    const totalRating = ratings.reduce((acc, item) => acc + item, 0);
+    const averageRating = totalRating / totalReviews;
+    serviceProvider.rating = averageRating
+    await serviceProvider.save();
+
+    res.status(200).json({ success: true, message: "Review submitted successfully" });
+  } catch (e) {
+    console.log(e);
+    return next(e);
+  }
+});

@@ -25,7 +25,7 @@ const useMyOrders = () => {
         fetchService();
     }, [fetchService]);
 
-    console.log(data, error, loading);
+    // console.log(data, error, loading);
     return { data, error, loading, refetch: fetchService };
 };
 

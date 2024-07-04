@@ -1,15 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import io from "socket.io-client";
 import useGetMessages from "../../../hooks/user/useGetMessages";
 import useSendMessage from "../../../hooks/user/useSendMessage";
 import { useAuthContext } from "../../../context/AuthContext";
-import io from "socket.io-client";
 
-const Messages = () => {
+const Messages = ({ providerId }) => {
   const { authUser } = useAuthContext();
   const { _id } = authUser?.user || {};
-  const { providerId } = useParams();
-
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
@@ -22,17 +19,9 @@ const Messages = () => {
     }
   }, [initialMessages]);
 
-  // const socket = useMemo(
-  //   () =>
-  //     io("http://localhost:3030", {
-  //       query: { userId: _id }
-  //     }),
-  //   [_id]
-  // );
-
   const socket = useMemo(
     () =>
-      io("https://x-website.onrender.com", {
+      io("http://localhost:3030", {
         query: { userId: _id }
       }),
     [_id]

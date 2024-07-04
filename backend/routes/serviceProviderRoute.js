@@ -11,7 +11,8 @@ const {
   updateServiceProviderProfile,
   updateServiceProviderService,
   getServiceProviderService,
-  getServiceProviderById
+  getServiceProviderById,
+  sendReview
 } = require("../controllers/serviceProviderController");
 
 const { isAuthenticatedServiceProvider, isAuthenticatedUser, authorizeRoles } = require("../middleware/authentication");
@@ -41,6 +42,7 @@ router.route('/history').get(isAuthenticatedServiceProvider, getProviderHistory)
 router.route('/sendBill').post(isAuthenticatedServiceProvider, sendBill)
 router.route('/work/:workId').get(isAuthenticatedServiceProvider, getProviderWork)
 router.route("/:id").get(getServiceProviderById);
+router.route("/review").post(isAuthenticatedUser ,sendReview);
 
 // router.route("/:id").put(updateServiceProviderById);
 // router.route("/:id").delete(deleteServiceProviderById); // -- Admin

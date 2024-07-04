@@ -8,31 +8,32 @@ import useConfirmProvider from '../../../hooks/user/useConfirmProvider';
 import Navbar from '../../../components/user/navbar/Navbar';
 import Footer from '../../../components/user/footer/Footer';
 import toast from 'react-hot-toast';
-import Chatting from '../chat/Chatting';
+import Messages from '../chat/Messages';
 
 const MyOrders = () => {
     const { data, error, loading, refetch } = useMyOrders();
     const { confirmProvider, loading: confirmLoading } = useConfirmProvider();
     const navigate = useNavigate();
     const [isChatPopupOpen, setChatPopupOpen] = useState(false);
+    const [selectedProviderId, setSelectedProviderId] = useState(null);
 
     const handleConfirm = async (confirmationId, providerId) => {
-        await confirmProvider({ confirmationId, providerId });
-        navigate("/allOrders");
+        try {
+            await confirmProvider({ confirmationId, providerId });
+            navigate("/allOrders");
+        } catch (error) {
+            toast.error('Failed to confirm provider.');
+        }
     };
 
-    const ChatPopup = ({ onClose }) => (
+    const ChatPopup = ({ onClose, providerId }) => (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 animate-fadeIn">
             <div className="relative bg-white dark:bg-gray-900 p-6 rounded-md shadow-lg w-[50%] transform transition-transform duration-300 ease-out scale-95">
                 <button className="absolute top-2 right-2" onClick={onClose}>
                     <IoMdClose className="text-2xl text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" />
                 </button>
                 <h2 className="text-xl mb-4">Chat</h2>
-                    <Chatting/>
-                <div className="overflow-y-auto max-h-96">
-                    {/* Add your chat component or content here */}
-                    {/* <p>Chat content goes here...</p> */}
-                </div>
+                <Messages providerId={providerId} />
             </div>
         </div>
     );
@@ -50,16 +51,18 @@ const MyOrders = () => {
             }
         } catch (error) {
             console.error('Error deleting order:', error);
+            toast.error('Failed to delete order.');
         }
     };
 
-    const handleChatClick = (e) => {
-        e.preventDefault();
+    const handleChatClick = (providerId) => {
+        setSelectedProviderId(providerId);
         setChatPopupOpen(true);
     };
 
     const handleClosePopup = () => {
         setChatPopupOpen(false);
+        setSelectedProviderId(null); // Reset providerId when closing the popup
     };
 
     if (loading) {
@@ -100,7 +103,7 @@ const MyOrders = () => {
                                         <p>Email: {recipient.providerId.email}</p>
                                         <div className="mt-2 flex justify-between">
                                             <button
-                                                onClick={handleChatClick}
+                                                onClick={() => handleChatClick(recipient.providerId._id)}
                                                 className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600'
                                             >
                                                 Chat
@@ -124,7 +127,7 @@ const MyOrders = () => {
                 </div>
             </div>
             <Footer />
-            {isChatPopupOpen && <ChatPopup onClose={handleClosePopup}/>}
+            {isChatPopupOpen && <ChatPopup onClose={handleClosePopup} providerId={selectedProviderId} />}
         </div>
     );
 };

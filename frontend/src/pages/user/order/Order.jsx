@@ -36,11 +36,28 @@ const Order = () => {
     setShowRatingPopover(true);
   };
 
-  const handleRatingSubmit = ({ rating, review }) => {
+  const handleRatingSubmit = async ({ rating, review }) => {
     setRating(rating);
     setReview(review);
+
+    // Submit the review to the backend
+    await submitReview(serviceProvider._id, rating, review);
+
     setShowRatingPopover(false);
     setShowBillPopover(true);
+  };
+
+  const submitReview = async (providerId, rating, review) => {
+    try {
+      const data = await axios.post('/api/v1/providers/review', {
+        providerId,
+        rating,
+        review,
+      });
+      console.log('Review submitted successfully' + data);
+    } catch (error) {
+      console.error('Error submitting review:', error);
+    }
   };
 
   const handleClosePopover = () => {
