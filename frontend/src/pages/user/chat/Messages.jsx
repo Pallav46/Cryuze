@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import io from "socket.io-client";
 import useGetMessages from "../../../hooks/user/useGetMessages";
 import useSendMessage from "../../../hooks/user/useSendMessage";
@@ -12,6 +12,8 @@ const Messages = ({ providerId }) => {
 
   const { data: initialMessages } = useGetMessages(providerId);
   const { sendMessage } = useSendMessage(providerId);
+
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     if (initialMessages) {
@@ -39,6 +41,10 @@ const Messages = ({ providerId }) => {
       socket.off("newMessage");
     };
   }, [socket]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSubmit = async () => {
     if (!input.trim()) return;
@@ -84,8 +90,9 @@ const Messages = ({ providerId }) => {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
-      <div className="bg-white border-t border-gray-300 py-3 px-4 flex items-center">
+      <div className="bg-white border-t border-gray-300 py-3 px-4 flex items-center sticky bottom-0">
         <input
           type="text"
           placeholder="Type your message..."

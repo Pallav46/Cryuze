@@ -27,16 +27,19 @@ const MyOrders = () => {
     };
 
     const ChatPopup = ({ onClose, providerId }) => (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 animate-fadeIn">
-            <div className="relative bg-white dark:bg-gray-900 p-6 rounded-md shadow-lg w-[50%] transform transition-transform duration-300 ease-out scale-95">
-                <button className="absolute top-2 right-2" onClick={onClose}>
-                    <IoMdClose className="text-2xl text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" />
-                </button>
-                <h2 className="text-xl mb-4">Chat</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 animate-fadeIn">
+        <div className="relative bg-white dark:bg-gray-900 p-6 rounded-md shadow-lg w-[50%] transform transition-transform duration-300 ease-out scale-95">
+            <button className="absolute top-2 right-2" onClick={onClose}>
+                <IoMdClose className="text-2xl text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" />
+            </button>
+            <h2 className="text-xl mb-4">Chat</h2>
+            <div className="max-h-[70vh] overflow-y-auto">
                 <Messages providerId={providerId} />
             </div>
         </div>
-    );
+    </div>
+);
+
 
     const handleDelete = async (orderId) => {
         try {
