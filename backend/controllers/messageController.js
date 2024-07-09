@@ -22,6 +22,10 @@ exports.sendMessage = catchAsyncError(async (req, res, next) => {
   const receiver = await getUserOrServiceProvider(receiverId);
 
   if (!sender || !receiver) {
+    res.status(404).json({
+      success: true,
+      message: "Sender or receiver not found",
+      });
     return next(new ErrorHandler(404, "Sender or receiver not found"));
   }
 

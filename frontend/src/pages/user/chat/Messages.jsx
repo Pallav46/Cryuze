@@ -1,20 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useMemo, useState, useRef } from "react";
+import io from "socket.io-client";
 import useGetMessages from "../../../hooks/user/useGetMessages";
 import useSendMessage from "../../../hooks/user/useSendMessage";
 import { useAuthContext } from "../../../context/AuthContext";
-import io from "socket.io-client";
 
-const Messages = () => {
+const Messages = ({ providerId }) => {
   const { authUser } = useAuthContext();
   const { _id } = authUser?.user || {};
-  const { providerId } = useParams();
-
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
   const { data: initialMessages } = useGetMessages(providerId);
   const { sendMessage } = useSendMessage(providerId);
+
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     if (initialMessages) {
@@ -22,17 +21,9 @@ const Messages = () => {
     }
   }, [initialMessages]);
 
-  // const socket = useMemo(
-  //   () =>
-  //     io("http://localhost:3030", {
-  //       query: { userId: _id }
-  //     }),
-  //   [_id]
-  // );
-
   const socket = useMemo(
     () =>
-      io("https://x-website.onrender.com", {
+      io("http://localhost:3030", {
         query: { userId: _id }
       }),
     [_id]
@@ -50,6 +41,10 @@ const Messages = () => {
       socket.off("newMessage");
     };
   }, [socket]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSubmit = async () => {
     if (!input.trim()) return;
@@ -95,8 +90,9 @@ const Messages = () => {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
-      <div className="bg-white border-t border-gray-300 py-3 px-4 flex items-center">
+      <div className="bg-white border-t border-gray-300 py-3 px-4 flex items-center sticky bottom-0">
         <input
           type="text"
           placeholder="Type your message..."

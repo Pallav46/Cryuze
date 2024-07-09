@@ -134,7 +134,7 @@ const About = () => {
         </div>
 
         <div className="mt-20">
-          <h2 className="text-3xl font-extrabold text-indigo-900 dark:text-indigo-500">Contact Us</h2>
+          <h2 className="text-3xl font-extrabold text-indigo-900 dark:text-indigo-500 text-center">Contact Us</h2>
           <div className="mt-5 grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
               <div className="flex items-center">
