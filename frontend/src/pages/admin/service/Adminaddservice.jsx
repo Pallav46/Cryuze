@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import useCreateProduct from '../../../hooks/admin/useCreateProduct';
 
 const AddProduct = () => {
   const [serviceName, setServiceName] = useState('');
@@ -7,6 +8,7 @@ const AddProduct = () => {
   const [priceRange, setPriceRange] = useState('');
   const [subcategories, setSubcategories] = useState([{ name: '', price: '', description: '' }]);
   const [image, setImage] = useState(null);
+  const { createProduct, loading } = useCreateProduct(); // Use the createProduct hook
 
   const handleAddSubcategory = () => {
     setSubcategories([...subcategories, { name: '', price: '', description: '' }]);
@@ -24,17 +26,29 @@ const AddProduct = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log({
-      serviceName,
-      description,
-      category,
-      priceRange,
-      subcategories,
-      image,
-    });
+
+    try {
+      await createProduct({
+        serviceName,
+        description,
+        category,
+        priceRange,
+        subCategories: subcategories,
+        image
+      });
+      // Clear the form fields after successful submission
+      setServiceName('');
+      setDescription('');
+      setCategory('');
+      setPriceRange('');
+      setSubcategories([{ name: '', price: '', description: '' }]);
+      setImage(null);
+    } catch (error) {
+      // Handle errors from createProduct hook
+      console.error("Failed to create product:", error);
+    }
   };
 
   return (
@@ -121,13 +135,21 @@ const AddProduct = () => {
             </div>
           ))}
         </div>
-        
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Image</label>
+          <input
+            type="file"
+            onChange={handleImageChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
         <div>
           <button
             type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
+            className={`w-full ${loading ? 'bg-gray-500' : 'bg-blue-500 hover:bg-blue-600'} text-white p-2 rounded-md`}
+            disabled={loading}
           >
-            Add Service
+            {loading ? 'Adding Service...' : 'Add Service'}
           </button>
         </div>
       </form>

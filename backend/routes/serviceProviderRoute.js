@@ -25,9 +25,9 @@ const router = express.Router();
 // router.route("/").get(getAllServiceProvider);
 router.route("/register").post(createServiceProvider);
 router.route("/login").post(loginServiceProvider);
-router.route('/logout').get(logoutServiceProvider);
-router.route('/password/forgot').post(forgotPasswordServiceProvider)
-router.route('/auth/resetpassword/:token').put(resetPasswordServiceProvider)
+router.route('/logout').post(isAuthenticatedServiceProvider, logoutServiceProvider);
+router.route('/password/forgot').post(isAuthenticatedServiceProvider, forgotPasswordServiceProvider)
+router.route('/auth/resetpassword/:token').put(isAuthenticatedServiceProvider, resetPasswordServiceProvider)
 router.route('/password/update').put(isAuthenticatedServiceProvider, updateServiceProviderPassword)
 router.route('/me').get(isAuthenticatedServiceProvider, getServiceProviderDetail)
 router.route('/me/update').put(isAuthenticatedServiceProvider, updateServiceProviderProfile)

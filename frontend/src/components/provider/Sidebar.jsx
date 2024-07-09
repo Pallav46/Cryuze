@@ -45,6 +45,12 @@ const Sidebar = () => (
         </Link>
       </li>
       <li className="px-6 py-2 hover:bg-blue-700">
+        <Link to="/providers/myprofile" className="flex items-center">
+          <FontAwesomeIcon icon={faComments} className="mr-3" />
+          My Profile
+        </Link>
+      </li>
+      <li className="px-6 py-2 hover:bg-blue-700">
         <Link to="/providers/edit" className="flex items-center">
           <FontAwesomeIcon icon={faEdit} className="mr-3" />
           Edit Profile

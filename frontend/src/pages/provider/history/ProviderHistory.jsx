@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Sidebar from '../../../components/provider/Sidebar';
 
 const ProviderHistory = () => {
   const [history, setHistory] = useState([]);
@@ -35,6 +36,9 @@ const ProviderHistory = () => {
   }
 
   return (
+    <div className="flex h-screen">
+    <Sidebar />
+     <div className="p-4 flex-1">
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-4">Service History</h2>
       {history.length === 0 ? (
@@ -53,6 +57,8 @@ const ProviderHistory = () => {
           ))}
         </div>
       )}
+    </div>
+    </div>
     </div>
   );
 };

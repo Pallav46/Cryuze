@@ -63,7 +63,7 @@ const Popover = ({ onClose, productData, serviceProviderIds }) => {
             placeholder="Optional"
             value={expectedAmount}
             onChange={e => setExpectedAmount(e.target.value)}
-            className="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            className="px-2 py-1 border text-black border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
         <hr className="my-2" />

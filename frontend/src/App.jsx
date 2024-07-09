@@ -1,9 +1,13 @@
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { useAuthContext } from './context/AuthContext';
 import { useAuth } from './context/ProviderAuthContext';
 import ProviderHistory from './pages/provider/history/ProviderHistory';
+import ProviderLogout from './pages/provider/login/ProviderLogout';
+import Viewservice from './pages/admin/service/Viewservice'
+import Editservice from './pages/admin/service/Editservice';
+
 
 const Home = lazy(() => import('./pages/user/home/Home'));
 const Login = lazy(() => import('./pages/user/login/Login'));
@@ -27,13 +31,14 @@ const ChatSkletonProvider = lazy(() => import('./components/provider/ChatSkleton
 const Chattingprovider = lazy(() => import('./components/provider/Chattingprovider'));
 const Providernoti = lazy(() => import('./pages/provider/home/Providernoti'));
 const Admindash = lazy(() => import('./pages/admin/Admindash'));
-const Allservices = lazy(() => import('./pages/admin/Allservices'));
-const AddProduct = lazy(() => import('./pages/admin/Adminaddservice'));
-const AdminEditService = lazy(() => import('./pages/admin/Admineditservice'));
+const Allservices = lazy(() => import('./pages/admin/service/Allservices'));
+const AddProduct = lazy(() => import('./pages/admin/service/Adminaddservice'));
+const AdminEditService = lazy(() => import('./pages/admin/service/Admineditservice'));
 const PaymentSuccess = lazy(() => import('./pages/user/payment/PaymentSuccess'));
-const Messages = lazy(() => import('./components/provider/Messages'));
+// const Messages = lazy(() => import('./components/provider/Messages'));
 const MyWork = lazy(() => import('./pages/provider/work/MyWork'));
 const Work = lazy(() => import('./pages/provider/work/Work'));
+const Proprofile = lazy(() => import('./pages/provider/home/Providerprofile'));
 
 const UserProfile = lazy(() => import('./pages/user/profile/UserProfile'))
 const About = lazy(() => import('./pages/user/about/About'));
@@ -45,8 +50,12 @@ function App() {
 
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={
+        <div className="flex items-center justify-center h-screen">
+          <div className="w-16 h-16 border-4 border-t-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+        </div>}>
         <Routes>
+
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/logout' element={<Logout />} />
@@ -66,14 +75,17 @@ function App() {
           <Route path='/service/:id/buy/:subcatId/chat/:providerId'  element={authUser ? <ChattService /> : <Navigate to='/login' />} />
           <Route path='/service/:id/buy/:subcatId/profile/:providerId'  element={authUser ? <Profile /> : <Navigate to='/login' />} />
           <Route path='/register' element={<Signup />} />
-          <Route path='/providers/login' element={<ProviderLogin />} />
-          <Route path='/providers/register' element={<ProviderSignup />} />
 
+          {/* Provider routes */}
+          <Route path='/providers/login' element={<ProviderLogin />} />
+          <Route path='/providers/logout' element={<ProviderLogout />} />
+          <Route path='/providers/register' element={<ProviderSignup />} />
           <Route path='/providers/dashboard' element={authToken ? <ProviderHome /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/services' element={authToken ? <ProviderEditservice /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/chat' element={authToken ? <ChatSkletonProvider /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/myWork' element={authToken ? <MyWork /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/history' element={authToken ? <ProviderHistory /> : <Navigate to='/providers/login' />} />
+          <Route path='/providers/myprofile' element={authToken ? <Proprofile/> : <Navigate to='/providers/login' />} />
           <Route path='/providers/work/:workId' element={authToken ? <Work /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/chat/:customerId' element={authToken ? <Chattingprovider /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/notifi' element={authToken ? <Providernoti /> : <Navigate to='/providers/login' />} />
@@ -83,6 +95,9 @@ function App() {
           <Route path='/admin/allservices' element={<Allservices />} />
           <Route path='/admin/editservices' element={<AdminEditService />} />
           <Route path='/add-product' element={<AddProduct />} />
+          <Route path='/admin/service/:serviceId' element={<Viewservice />} />
+          <Route path='/admin/editservice/:serviceId' element={<Editservice />} />
+
 
           {/* Payment */}
           <Route path='/paymentsuccess' element={<PaymentSuccess />} />

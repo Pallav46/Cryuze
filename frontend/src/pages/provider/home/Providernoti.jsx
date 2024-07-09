@@ -14,8 +14,14 @@ const Providernoti = () => {
   const navigate = useNavigate();
   const { askForConfirmation } = useProviderConfirmation();
 
+  // const socket = useMemo(() => {
+  //   return io("http:localhost:3030", {
+  //     query: { userId: _id }
+  //   });
+  // }, [_id]);
+
   const socket = useMemo(() => {
-    return io("http:localhost:3030", {
+    return io("https://x-website.onrender.com", {
       query: { userId: _id }
     });
   }, [_id]);
