@@ -33,13 +33,6 @@ const Messagesprov = () => {
     }
   }, [messageError, navigate]);
 
-  // const socket = useMemo(() => {
-  //   const socketInstance = io("http://localhost:3030", {
-  //     query: { userId: _id }
-  //   });
-  //   return socketInstance;
-  // }, [_id]);
-
   const socket = useMemo(() => {
     const socketInstance = io("https://x-website.onrender.com", {
       query: { userId: _id }
@@ -89,7 +82,7 @@ const Messagesprov = () => {
     }
   };
   return (
-    <div className="flex flex-col h-full ">
+    <div className="flex flex-col h-full dark:bg-gray-900">
       <div className="flex-1 p-4 overflow-y-auto">
         {messages.map((message, index) => (
           <div
@@ -102,11 +95,11 @@ const Messagesprov = () => {
               className={`max-w-2/3 py-2 px-4 rounded-lg ${
                 message.senderId === _id
                   ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 text-gray-800'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
               }`}
             >
               <p>{message.message}</p>
-              <div className="text-xs text-gray-400 mt-1">
+              <div className="text-xs text-gray-400 mt-1 dark:text-gray-500">
                 {new Date(message.timestamp).toLocaleString()}
               </div>
             </div>
@@ -114,11 +107,11 @@ const Messagesprov = () => {
         ))}
         <div ref={messagesEndRef} />
       </div>
-      <div className="bg-white border-t border-gray-300 py-3 px-4 flex items-center">
+      <div className="bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-600 py-3 px-4 flex items-center">
         <input
           type="text"
           placeholder="Type your message..."
-          className="flex-1 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="flex-1 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-gray-700 dark:text-gray-300"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}

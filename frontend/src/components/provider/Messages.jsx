@@ -91,19 +91,19 @@ const Messages = () => {
 
   if (messageLoading || sendLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-100">
-        <div className="text-lg font-semibold text-gray-700">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
+        <div className="text-lg font-semibold text-gray-700 dark:text-gray-300">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
       <Sidebar />
       <div className="flex-grow p-6 flex flex-col">
-        <h1 className="text-4xl font-bold mb-6 text-gray-800">Provider Chat</h1>
-        <div className="flex-grow flex flex-col bg-white p-4 rounded-lg shadow-md mb-4">
-          <div className="flex-grow overflow-y-auto bg-red-100">
+        <h1 className="text-4xl font-bold mb-6 text-gray-800 dark:text-gray-200">Provider Chat</h1>
+        <div className="flex-grow flex flex-col bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-4">
+          <div className="flex-grow overflow-y-auto bg-red-100 dark:bg-red-900">
             {messages.length > 0 ? (
               messages.map((msg, index) => (
                 <div
@@ -112,20 +112,20 @@ const Messages = () => {
                     msg.senderId === customerId ? "text-left" : "text-right"
                   } `}
                 >
-                  <div className="font-semibold">{msg.senderId === customerId ? "Customer" : "You"}</div>
-                  <div>{msg.message}</div>
-                  <div className="text-sm text-gray-500">{new Date(msg.timestamp).toLocaleTimeString()}</div>
+                  <div className="font-semibold dark:text-gray-400">{msg.senderId === customerId ? "Customer" : "You"}</div>
+                  <div className="dark:text-gray-300">{msg.message}</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-500">{new Date(msg.timestamp).toLocaleTimeString()}</div>
                 </div>
               ))
             ) : (
-              <p className="text-gray-600">No messages yet.</p>
+              <p className="text-gray-600 dark:text-gray-400">No messages yet.</p>
             )}
             <div ref={messagesEndRef} />
           </div>
           <div className="flex mt-4">
             <input
               type="text"
-              className="flex-grow p-2 border border-gray-300 rounded-l-lg focus:outline-none"
+              className="flex-grow p-2 border border-gray-300 dark:border-gray-600 rounded-l-lg focus:outline-none"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={handleKeyDown}
