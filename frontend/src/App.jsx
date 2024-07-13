@@ -8,7 +8,6 @@ import ProviderLogout from './pages/provider/login/ProviderLogout';
 import Viewservice from './pages/admin/service/Viewservice'
 import Editservice from './pages/admin/service/Editservice';
 
-
 const Home = lazy(() => import('./pages/user/home/Home'));
 const Login = lazy(() => import('./pages/user/login/Login'));
 const Logout = lazy(() => import('./components/user/auth/Logout'));
@@ -27,6 +26,7 @@ const ProviderLogin = lazy(() => import('./pages/provider/login/ProviderLogin'))
 const ProviderSignup = lazy(() => import('./pages/provider/signup/ProviderSignup'));
 const ProviderHome = lazy(() => import('./pages/provider/home/ProviderHome'));
 const ProviderEditservice = lazy(() => import('./pages/provider/home/ProviderEditservice'));
+const Providereditpro = lazy(() => import('./pages/provider/home/Providereditpro'));
 const ChatSkletonProvider = lazy(() => import('./components/provider/ChatSkletonProvider'));
 const Chattingprovider = lazy(() => import('./components/provider/Chattingprovider'));
 const Providernoti = lazy(() => import('./pages/provider/home/Providernoti'));
@@ -42,6 +42,7 @@ const Proprofile = lazy(() => import('./pages/provider/home/Providerprofile'));
 
 const UserProfile = lazy(() => import('./pages/user/profile/UserProfile'))
 const About = lazy(() => import('./pages/user/about/About'));
+
 
 
 function App() {
@@ -89,6 +90,7 @@ function App() {
           <Route path='/providers/work/:workId' element={authToken ? <Work /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/chat/:customerId' element={authToken ? <Chattingprovider /> : <Navigate to='/providers/login' />} />
           <Route path='/providers/notifi' element={authToken ? <Providernoti /> : <Navigate to='/providers/login' />} />
+          <Route path='/providers/edit' element={authToken ? <Providereditpro /> : <Navigate to='/providers/login' />} />
 
           {/* Admin routes */}
           <Route path='/admin' element={<Admindash />} />

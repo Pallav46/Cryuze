@@ -9,7 +9,7 @@ import ChatSkletonProvider from "../../../components/provider/ChatSkletonProvide
 const ProviderChatt = () => {
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 ">
       <Sidebar />
         <Conversationspro />
     </div>

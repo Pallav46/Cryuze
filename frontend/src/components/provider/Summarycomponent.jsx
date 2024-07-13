@@ -40,7 +40,7 @@ const StatCard = ({ title, value, icon, color }) => (
 const Summarycomponent = () => {
     return (
         <div className="p-8">
-            <h1 className="text-3xl font-bold mb-8">Provider Dashboard</h1>
+            <h1 className="text-3xl font-bold mb-8 dark:text-gray-200">Provider Dashboard</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {stats.map(stat => (
                     <StatCard

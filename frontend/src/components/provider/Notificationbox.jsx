@@ -15,13 +15,6 @@ const Notificationbox = () => {
   const { askForConfirmation } = useProviderConfirmation();
   const navigate = useNavigate();
 
-  // const socket = useMemo(() => {
-  //   const socketInstance = io("http://localhost:3030", {
-  //     query: { userId: _id }
-  //   });
-  //   return socketInstance;
-  // }, [_id]);
-
   const socket = useMemo(() => {
     const socketInstance = io("https://x-website.onrender.com", {
       query: { userId: _id }
@@ -43,7 +36,6 @@ const Notificationbox = () => {
     });
 
     return () => {
-      // Cleanup on component unmount
       socket.disconnect();
     };
   }, [socket]);
@@ -70,7 +62,7 @@ const Notificationbox = () => {
   return (
     <div className="fixed top-4 right-4 z-50">
       <button
-        className="relative focus:outline-none text-gray-600 hover:text-gray-800 transition duration-300"
+        className="relative focus:outline-none text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100 transition duration-300"
         onClick={toggleNotificationBox}
       >
         <svg
@@ -92,48 +84,51 @@ const Notificationbox = () => {
         )}
       </button>
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-md">
+        <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-lg shadow-md">
           <div className="p-4">
             {loading ? (
-              <div className="text-gray-600 text-sm">Loading...</div>
+              <div className="text-gray-600 dark:text-gray-300 text-sm">Loading...</div>
             ) : error ? (
               <div className="text-red-500 text-sm">Error: {error.message}</div>
             ) : notifications.length === 0 ? (
-              <div className="text-gray-600 text-sm">No new notifications</div>
+              <div className="text-gray-600 dark:text-gray-300 text-sm">No new notifications</div>
             ) : (
               <div>
                 {notifications.reverse().slice(0, 3).map((notification, index) => (
-                  <div key={index} className="p-2 border-b border-gray-200 hover:bg-gray-100 last:border-b-0 transition duration-300">
-                    <div className="text-sm font-medium text-gray-800">{notification.sender.name}</div>
-                    <div className="text-xs text-gray-600">{notification.sender.email}</div>
-                    <div className="text-sm text-gray-700">
+                  <div key={index} className="p-2 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 last:border-b-0 transition duration-300">
+                    <div className="text-sm font-medium text-gray-800 dark:text-gray-100">{notification.sender.name}</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">{notification.sender.email}</div>
+                    <div className="text-sm text-gray-700 dark:text-gray-300">
                       <span className="font-medium">Subcategory:</span>{' '}
                       {notification.subcategory.name}
                     </div>
-                    <div className="text-sm text-gray-700">
-                      {(<span className="font-medium">Original price:₹{notification.subcategory.price }</span>)}
+                    <div className="text-sm text-gray-700 dark:text-gray-300">
+                      <span className="font-medium">Original price: ₹{notification.subcategory.price}</span>
                     </div>
-                    <div className="text-sm text-gray-700">
-                      {(<span className="font-medium">Asked price:₹{notification.message ||  'N/A'}</span>)}
+                    <div className="text-sm text-gray-700 dark:text-gray-300">
+                      <span className="font-medium">Asked price: ₹{notification.message || 'N/A'}</span>
                     </div>
-                    <button
-                      className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
-                      onClick={() => handleChatClick(notification.sender._id)}
-                    >
-                      Chat
-                    </button>
-                    <button
-                      className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
-                      onClick={() => handleConfirmationClick(notification.sender._id, notification.subcategory._id)}
-                    >
-                      Ask for Confirmation
-                    </button>
+                    <div className="flex justify-between mt-2">
+                      <button
+                        className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800 transition duration-300"
+                        onClick={() => handleChatClick(notification.sender._id)}
+                      >
+                        Chat
+                      </button>
+                      <button
+                        className="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 transition duration-300"
+                        onClick={() => handleConfirmationClick(notification.sender._id, notification.subcategory._id)}
+                      >
+                        Ask Confirmation
+                      </button>
+                    </div>
                   </div>
                 ))}
                 {notifications.length > 3 && (
                   <div className="text-center mt-2">
                     <button
-                      className="mt-2 px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300"
+                      className="
+mt-2 px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300"
                       onClick={handleReadMoreClick}
                     >
                       Read More

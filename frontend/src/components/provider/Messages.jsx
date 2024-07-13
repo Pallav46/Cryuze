@@ -110,7 +110,7 @@ const Messages = () => {
                   key={index}
                   className={`mb-4 ${
                     msg.senderId === customerId ? "text-left" : "text-right"
-                  }`}
+                  } `}
                 >
                   <div className="font-semibold">{msg.senderId === customerId ? "Customer" : "You"}</div>
                   <div>{msg.message}</div>

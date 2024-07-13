@@ -89,7 +89,7 @@ const Messagesprov = () => {
     }
   };
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full ">
       <div className="flex-1 p-4 overflow-y-auto">
         {messages.map((message, index) => (
           <div

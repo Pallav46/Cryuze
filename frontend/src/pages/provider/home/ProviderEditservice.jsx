@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Sidebar from '../../../components/provider/Sidebar';
 import useGetServices from '../../../hooks/useGetServices';
 import toast from 'react-hot-toast';
+import DarkMode from '../../../components/provider/DarkMode.jsx';
 
-const ProviderEditservice = () => {
+const ProviderEditService = () => {
   const navigate = useNavigate();
   const { data: services, loading, error } = useGetServices();
   const [selectedServices, setSelectedServices] = useState([]);
@@ -41,26 +42,28 @@ const ProviderEditservice = () => {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex bg-gray-100 dark:bg-gray-800">
         <Sidebar />
-        <div className="flex flex-col items-center justify-center w-full min-h-screen bg-gradient-to-r from-blue-200 to-indigo-200">
-          <h2 className="text-3xl font-bold mb-4 text-white">Edit Services</h2>
-          <form onSubmit={handleSubmit} className="w-full max-w-screen-lg p-6 rounded-lg shadow-lg bg-white">
+        <div className="p-4 flex-1">
+        <DarkMode />
+        <div className="flex flex-col items-center justify-center w-full min-h-screen bg-gradient-to-r from-blue-200 to-indigo-200 dark:from-gray-700 dark:to-gray-900">    
+          <h2 className="text-3xl font-bold mb-4 text-grey-200 dark:text-white">Edit Services</h2>
+          <form onSubmit={handleSubmit} className="w-full max-w-screen-lg p-6 rounded-lg shadow-lg bg-white dark:bg-gray-900">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {services.map(service => (
                 <div
                   key={service._id}
-                  className={`rounded-lg overflow-hidden shadow-md cursor-pointer transition-all duration-300 ${selectedServices.includes(service._id) ? 'scale-105 shadow-2xl bg-green-100' : ''}`}
+                  className={`rounded-lg dark:bg-gray-800 bg-gray-100 hover:scale-105  overflow-hidden shadow-md cursor-pointer transition-all duration-300 ${selectedServices.includes(service._id) ? 'scale-105 shadow-2xl bg-green-100 dark:bg-green-800' : ''}`}
                   onClick={() => handleServiceClick(service._id)}
                 >
                   <div
                     className="bg-cover bg-center h-48"
                     style={{ backgroundImage: `url(${service.image})` }}
                   ></div>
-                  <div className={`p-4 ${selectedServices.includes(service._id) ? 'text-green-700' : ''}`}>
-                    <h3 className="text-lg font-semibold mb-2 text-indigo-600">{service.name}</h3>
-                    <p className="text-gray-600">{service.description}</p>
-                    <p className="text-gray-700 font-bold">{service.priceRange}</p>
+                  <div className={`p-4 ${selectedServices.includes(service._id) ? 'text-green-700 dark:text-green-300' : ''}`}>
+                    <h3 className="text-lg font-semibold mb-2 text-indigo-600 dark:text-indigo-400">{service.name}</h3>
+                    <p className="text-gray-600 dark:text-gray-400">{service.description}</p>
+                    <p className="text-gray-700 dark:text-gray-300 font-bold">{service.priceRange}</p>
                   </div>
                 </div>
               ))}
@@ -74,10 +77,11 @@ const ProviderEditservice = () => {
               </button>
             </div>
           </form>
-        </div>
+        </div>        
+      </div>
       </div>
     </>
   );
 };
 
-export default ProviderEditservice;
+export default ProviderEditService;

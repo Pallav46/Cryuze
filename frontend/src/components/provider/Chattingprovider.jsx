@@ -7,7 +7,7 @@ const Chatting = () => {
         <Sidebar    />
       <div className="flex-1 flex flex-col">
         <div className="bg-white border-b border-gray-300 py-3 px-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Selected conversation name</h3>
+          <h3 className="text-lg font-semibold">Customer</h3>
           <div className="flex items-center space-x-2">
           </div>
         </div>
