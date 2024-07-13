@@ -4,11 +4,11 @@ import DarkMode from '../../../components/provider/DarkMode';
 
 const ProviderEditPro = () => {
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-800">
       <Sidebar />
       <div className="p-4 flex-1">
         <DarkMode />
-        <div className="max-w-4xl mt-10 mx-auto bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+        <div className="max-w-4xl mt-10 mx-auto bg-white dark:bg-gray-900 shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Edit Profile</h2>
           <form className="space-y-4">
             <div>
