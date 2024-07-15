@@ -1,5 +1,6 @@
 import React from 'react'
 import Sidebar from '../../../components/provider/Sidebar';
+import DarkMode from '../../../components/provider/DarkMode';
 const Providereditprof = () => {
   return (
     <>

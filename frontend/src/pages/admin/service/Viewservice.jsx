@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import Sidebar from './Adminside.jsx';
 const Viewservice = () => {
   const { serviceId } = useParams();
   const navigate = useNavigate();
@@ -32,6 +32,9 @@ const Viewservice = () => {
   }
 
   return (
+    <div className="flex h-screen">
+    <Sidebar />
+     <div className="p-4 flex-1">
     <div className="max-w-4xl mt-10 mx-auto bg-white shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-semibold mb-4">{service.name}</h2>
       <p className="text-gray-700 mb-4">Price Range: {service.priceRange}</p>
@@ -42,6 +45,8 @@ const Viewservice = () => {
       >
         Back to All Services
       </button>
+    </div>
+    </div>
     </div>
   );
 };

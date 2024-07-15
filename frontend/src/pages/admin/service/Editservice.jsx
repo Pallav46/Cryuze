@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import Sidebar from './Adminside.jsx';
 const Editservice = () => {
   const { serviceId } = useParams();
   const navigate = useNavigate();
@@ -47,6 +47,9 @@ const Editservice = () => {
   }
 
   return (
+    <div className="flex h-screen">
+    <Sidebar />
+     <div className="p-4 flex-1">
     <div className="max-w-4xl mt-10 mx-auto bg-white shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-semibold mb-4">Edit Service</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -77,6 +80,8 @@ const Editservice = () => {
           Update Service
         </button>
       </form>
+    </div>
+    </div>
     </div>
   );
 };

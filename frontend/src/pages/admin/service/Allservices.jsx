@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import Sidebar from '../service/Adminside.jsx';
 
 const Allservices = () => {
   const [services, setServices] = useState([]);
@@ -37,6 +38,9 @@ const Allservices = () => {
   };
 
   return (
+    <div className="flex h-screen">
+    <Sidebar />
+    <div className="p-4 flex-1">
     <div className="max-w-4xl mt-10 mx-auto bg-white shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-semibold mb-4">All Services</h2>
       <ul className="space-y-4">
@@ -68,6 +72,8 @@ const Allservices = () => {
           </li>
         ))}
       </ul>
+    </div>
+    </div>
     </div>
   );
 };

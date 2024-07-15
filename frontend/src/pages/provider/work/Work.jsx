@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import useProviderGetWork from "../../../hooks/provider/useProviderGetWork";
 import useSendBill from "../../../hooks/provider/useSendBill";
 import { useState } from "react";
+import DarkMode from "../../../components/provider/DarkMode";
 import Sidebar from "../../../components/provider/Sidebar";
 
 const Work = () => {
@@ -94,12 +95,12 @@ const Work = () => {
 
   return (
     <>
-    <div className="flex">
-
+    <div className="flex dark:bg-gray-800 ">
     <Sidebar/>
     <div className="max-w-4xl mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6">Work Details</h1>
-      <div className="bg-white shadow-md rounded-md p-6 mb-6 flex justify-between items-start">
+      <DarkMode />
+      <h1 className="text-3xl font-bold mb-6 dark:text-white">Work Details</h1>
+      <div className="dark:bg-gray-700 bg-white shadow-md rounded-md p-6 mb-6 flex justify-between items-start dark:text-gray-300">
         {customer && (
           <div className="w-1/2 pr-4">
             <h2 className="text-xl font-bold mb-4">Customer</h2>
@@ -116,7 +117,7 @@ const Work = () => {
           </div>
         )}
         {subCategory && (
-          <div className="w-1/2 pl-4">
+          <div className="w-1/2 pl-4 dark:text-gray-300">
             <h2 className="text-xl font-bold mb-4">SubCategory</h2>
             <p className="mb-2"><strong>Name:</strong> {subCategoryName}</p>
             <p className="mb-2"><strong>Description:</strong> {subCategoryDescription}</p>
@@ -124,11 +125,11 @@ const Work = () => {
           </div>
         )}
       </div>
-      <div className="bg-white shadow-md rounded-md p-6 mb-6">
+      <div className="bg-white shadow-md rounded-md p-6 mb-6 dark:bg-gray-700 dark:text-gray-300"  >
         <h2 className="text-xl font-bold mb-4">Work Status</h2>
-        <p><strong>Status:</strong> {status}</p>
+        <p className="dark:text-green"><strong className="dark:text-green">Status:</strong> {status}</p>
       </div>
-      <div className="bg-white shadow-md rounded-md p-6 mb-6">
+      <div className="bg-white shadow-md rounded-md p-6 mb-6 dark:bg-gray-700 dark:text-gray-300">
         <h2 className="text-xl font-bold mb-4">Dates</h2>
         <p className="mb-2"><strong>Created At:</strong> {new Date(createdAt).toLocaleString()}</p>
         <p><strong>Updated At:</strong> {new Date(updatedAt).toLocaleString()}</p>
@@ -141,13 +142,13 @@ const Work = () => {
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={handleMakeBill}
         >
-          Make Bill
+          Make Invoice
         </button>
       </div>
 
       {showBillForm && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div className="fixed z-10 inset-0 overflow-y-auto ">
+        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0 ">
           <div className="fixed inset-0 transition-opacity" aria-hidden="true">
             <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
           </div>
@@ -165,7 +166,7 @@ const Work = () => {
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
-                      Create Bill
+                      Create Invoice
                     </h3>
                     <div className="mt-4">
                     <table className="w-full divide-y divide-gray-200">

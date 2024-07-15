@@ -40,7 +40,7 @@ const Conversationspro = () => {
     
     <div className='flex '>
     <div className="p-4 w-full mx-auto">
-      <h1 className="text-3xl font-bold mb-6 mx-auto">Chat With</h1>
+      <h1 className="text-3xl font-bold mb-6 mx-auto dark:text-white">Chat With</h1>
       {conversations && conversations.length > 0 ? (
         <ul className="">
           {conversations.map((conversation) => (
@@ -55,7 +55,7 @@ const Conversationspro = () => {
             >
               <div className="flex items-center">
                 <div className="ml-4">
-                  <h2 className="text-xl font-semibold text-gray-800">
+                  <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
                     {conversation.name}
                   </h2>
                 </div>
