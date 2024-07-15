@@ -1,7 +1,7 @@
 const ServiceProvider = require("../models/serviceProviderModel");
 const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncError = require("../middleware/catchAsyncError");
-const sendToken = require("../utils/jwtToken");
+const {sendTokenProvider} = require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail");
 const Review = require("../models/reviewModel");
 const crypto = require("crypto");
@@ -34,7 +34,7 @@ exports.createServiceProvider = catchAsyncError(async (req, res, next) => {
 
   console.log(serviceProvider);
 
-  sendToken(serviceProvider, 201, res);
+  sendTokenProvider(serviceProvider, 201, res);
 });
 
 // Login service provider
@@ -53,13 +53,13 @@ exports.loginServiceProvider = catchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler("Invalid email or password", 401));
   }
 
-  sendToken(serviceProvider, 201, res);
+  sendTokenProvider(serviceProvider, 201, res);
 });
 
 // Logout service provider
 exports.logoutServiceProvider = catchAsyncError(async (req, res, next) => {
   // Clear cookie with the token
-  res.cookie("token", "logout", {
+  res.cookie("providertoken", "logout", {
     expires: new Date(Date.now()),
     httpOnly: true,
   });

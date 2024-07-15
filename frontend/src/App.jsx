@@ -57,7 +57,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/logout' element={<Logout />} />
-          <Route path='/myOrders' element={<MyOrders />} />
+          <Route path='/myOrders' element={authUser ? <MyOrders /> : <Navigate to='/login' />}/>
           <Route path='/allOrders' element={<AllOrders />} />
           <Route path='/order/:orderId' element={<Order />} />
           <Route path='/history' element={<History />} />

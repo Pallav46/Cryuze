@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncError = require("../middleware/catchAsyncError");
-const sendToken = require("../utils/jwtToken");
+const { sendToken }= require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 
@@ -40,7 +40,7 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
 
 exports.logoutUser = catchAsyncError(async (req, res, next) => {
   // Clear cookie with the token
-  res.cookie("token", "logout", {
+  res.cookie("usertoken", "logout", {
     expires: new Date(Date.now()),
     httpOnly: true,
   });

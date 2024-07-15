@@ -7,7 +7,7 @@ import { useAuth } from "../../context/ProviderAuthContext";
 
 const Notificationbox = () => {
   const { authToken } = useAuth();
-  const { _id } = authToken.user;
+  const { _id } = authToken.provider;
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [newNotification, setNewNotification] = useState(false);
