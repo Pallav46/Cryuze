@@ -42,11 +42,9 @@ const Messagesprov = () => {
 
   useEffect(() => {
     socket.emit("join", { customerId });
-
     socket.on("newMessage", (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
-
     return () => {
       socket.off("newMessage");
       socket.disconnect();
@@ -62,15 +60,8 @@ const Messagesprov = () => {
   const handleSubmit = async () => {
     if (!input.trim()) return;
     try {
-      const messagePayload = {
-        message: input,
-        senderId: _id,
-        receiverId: customerId,
-        timestamp: new Date().toISOString(),
-      };
       await sendMessage({ message: input });
-      setMessages((prevMessages) => [...prevMessages, messagePayload]);
-      setInput(""); // Clear input after sending message
+      setInput(""); // Do not append locally; rely on socket event
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -98,9 +89,18 @@ const Messagesprov = () => {
                   : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
               }`}
             >
-              <p>{message.message}</p>
+              <p>
+                <span className="font-bold mr-2">
+                  {message.senderId === _id ? 'You' : 'Customer'}:
+                </span>
+                {message.message}
+              </p>
               <div className="text-xs text-gray-400 mt-1 dark:text-gray-500">
-                {new Date(message.timestamp).toLocaleString()}
+                {(() => {
+                  const dateStr = message.createdAt || message.timestamp;
+                  const date = new Date(dateStr);
+                  return isNaN(date) ? 'Invalid date' : date.toLocaleString();
+                })()}
               </div>
             </div>
           </div>

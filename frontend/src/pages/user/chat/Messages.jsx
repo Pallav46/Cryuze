@@ -33,7 +33,6 @@ const Messages = ({ providerId }) => {
     if (!socket) return;
 
     socket.on("newMessage", (data) => {
-      console.log("Received new message: ", data);
       setMessages((prevMessages) => [...prevMessages, data]);
     });
 
@@ -48,26 +47,13 @@ const Messages = ({ providerId }) => {
 
   const handleSubmit = async () => {
     if (!input.trim()) return;
-
-    const messageData = {
-      message: input,
-      senderId: _id,
-      timestamp: new Date().toISOString()
-    };
-
-    await sendMessage(messageData);
-    setMessages((prevMessages) => [...prevMessages, messageData]);
+    await sendMessage({ message: input });
     setInput("");
-  };
-
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleSubmit();
-    }
+    // Do not append locally; rely on socket event for real-time update
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full dark:bg-gray-900">
       <div className="flex-1 p-4 overflow-y-auto">
         {messages.map((message, index) => (
           <div
@@ -80,26 +66,30 @@ const Messages = ({ providerId }) => {
               className={`max-w-2/3 py-2 px-4 rounded-lg ${
                 message.senderId === _id
                   ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 text-gray-800'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
               }`}
             >
               <p>{message.message}</p>
-              <div className="text-xs text-gray-400 mt-1">
-                {new Date(message.timestamp).toLocaleString()}
+              <div className="text-xs text-gray-400 mt-1 dark:text-gray-500">
+                {(() => {
+                  const dateStr = message.createdAt || message.timestamp;
+                  const date = new Date(dateStr);
+                  return isNaN(date) ? 'Invalid date' : date.toLocaleString();
+                })()}
               </div>
             </div>
           </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
-      <div className="bg-white border-t border-gray-300 py-3 px-4 flex items-center sticky bottom-0">
+      <div className="bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-600 py-3 px-4 flex items-center">
         <input
           type="text"
           placeholder="Type your message..."
-          className="flex-1 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="flex-1 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-gray-700 dark:text-gray-300"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={handleKeyPress}
+          onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
         />
         <button
           onClick={handleSubmit}

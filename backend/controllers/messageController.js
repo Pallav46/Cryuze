@@ -54,7 +54,9 @@ exports.sendMessage = catchAsyncError(async (req, res, next) => {
   conversation.messages.push(newMessage);
   await conversation.save();
 
+  // Emit a socket event to the receiver and sender for real-time update
   sendMessageToUser(receiverId, "newMessage", newMessage);
+  sendMessageToUser(senderId, "newMessage", newMessage);
 
   res.status(200).json({
     success: true,
