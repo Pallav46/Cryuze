@@ -34,13 +34,14 @@ const Messagesprov = () => {
   }, [messageError, navigate]);
 
   const socket = useMemo(() => {
-    const socketInstance = io("https://x-website.onrender.com", {
+    if (!_id) return null;
+    return io("https://x-website.onrender.com", {
       query: { userId: _id }
     });
-    return socketInstance;
   }, [_id]);
 
   useEffect(() => {
+    if (!socket) return;
     socket.emit("join", { customerId });
     socket.on("newMessage", (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
@@ -60,7 +61,8 @@ const Messagesprov = () => {
   const handleSubmit = async () => {
     if (!input.trim()) return;
     try {
-      await sendMessage({ message: input });
+      // Await the response and get the new message from backend
+      const response = await sendMessage({ message: input });
       setInput(""); // Do not append locally; rely on socket event
     } catch (error) {
       console.error("Error sending message:", error);
