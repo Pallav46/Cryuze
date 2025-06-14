@@ -11,7 +11,7 @@ const useChatSocket = (providerId) => {
   useEffect(() => {
     if (authUser) {
       // Establish socket connection with userId as query parameter
-      const socket = io("http://localhost:3030", { // Replace with your backend URL
+      const socket = io("https://x-website.onrender.com", { // Replace with your backend URL
         query: { userId: _id },
       });
       setSocket(socket);
