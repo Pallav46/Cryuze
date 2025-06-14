@@ -11,7 +11,7 @@ const Messagesprov = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const { authToken } = useAuth();
-  const { _id } = authToken.user;
+  const _id = authToken?.user?._id;
   const messagesEndRef = useRef(null);
 
   const {
